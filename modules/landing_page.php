@@ -217,7 +217,7 @@
             height: 100%;
             position: fixed;
             top: 0;
-            display: none;
+            display: flex;
             flex-wrap: wrap;
             justify-content: center;
             align-items: center;
@@ -244,7 +244,7 @@
             height: 100%;
             position: fixed;
             top: 0;
-            display: none;
+            display: flex;
             flex-wrap: wrap;
             justify-content: center;
             align-items: center;
@@ -1005,45 +1005,10 @@
                         <h5 class="forPass" style="cursor: pointer; font-weight: bolder; padding-top: 20px" x-on:click="show_forgotPass_form = true">Forgot your password?</h5>
                         <hr style="margin-top: 34px;">
                         <!--<a href="" class="loginB" id="loginB" style="position: relative; text-decoration: none; z-index: 1" name="login">LOGIN</a>-->
-                        <button class="loginB" id="loginB" type="submit" name="login" x-ref="login_button" x-on:click="login">LOGIN</button>
+                        <button class="loginB" type="button" style="position: relative; text-decoration: none; z-index: 1; cursor: pointer" x-ref="login_button" x-on:click="login">LOGIN</button>
                         <!--<button class="loginB" id="loginB" type="submit" name="login" class="btn btn-success">Login</button>-->
-                        <button type="button" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em"  x-on:click="exit_login">X</button>
+                        <button type="button" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="exit_login">X</button>
                         <button type="button" class="closeB" style="position: relative; text-decoration: none; z-index: 1; cursor: pointer" x-on:click="exit_login">CLOSE</button>
-                    
-                    <?php
-                        if(isset($_POST["login"]))
-                        {
-                            $username=mysqli_real_escape_string($link, $_POST["username"]);
-                            $password=mysqli_real_escape_string($link, $_POST["password"]);
-                        
-                            $count=0;
-                            $res=mysqli_query($link,"SELECT * FROM user_registration WHERE username='$username' && password='$password' && role='user' && status='active'");
-                            $count=mysqli_num_rows($res);
-                            if($count>0){
-                                ?>
-                                <script type="text/javascript">
-                                    //window.location="demo_admin.php";
-                                    window.open("farmer_dash_body.php", '_blank') || window.location.replace("farmer_dash_body.php");
-                                </script>
-                                <?php
-                            }
-                            else{
-                                ?>
-                                <div class="alert alert-danger" style="margin-top: 10px">
-                                    <strong>Warning!</strong> Invalid username or password.
-                                    <script type="text/javascript">
-                                        const popup = document.querySelector('.popup');
-                                        window.onload = function(){
-                                        setTimeout(function(){
-                                            popup.style.display = "flex";
-                                            }, 1000)
-                                        }
-                                    </script>
-                                </div>
-                                <?php
-                            }
-                        }
-                    ?>
                 </div>
                 <div class="popup-child2">
                     <img src="<?php echo IMAGES; ?>Image.png" width="380" height="280" style="border-radius: 0.6em">
@@ -1241,32 +1206,44 @@
                             <div class="row" style="text-align: left">
                                 <div class="col-xs-12 col-sm-6 col-md-12">
                                     <div class="form-group">
-                                            <label for="farm_area">Total farm area:</label>
-                                            <input type="number" name="farm_area" id="farm_area" x-ref="farm_area" class="form-control input-lg" placeholder="Total farm area">
+                                        <label for="farm_area">Total farm area:</label>
+                                        <input type="number" name="farm_area" id="farm_area" x-ref="farm_area" class="form-control input-lg" placeholder="Total farm area">
                                     </div>
                                 </div>
                             </div>
                             <h3 style="font-weight: bold">Farmers Account</h3>
                             <hr>
                             <div class="row" style="text-align: left">
-                                <div class="column">
+                                <!-- <div class="column">
                                     <div class="col-xs-12 col-sm-6 col-md-12">
                                             <div class="form-group" >
                                             <label for="username">Username:</label>
                                                 <input type="text" name="username" id="username" x-ref="username" class="form-control input-lg" placeholder="Username">
                                             </div>
                                     </div>
-                                </div>
+                                </div> -->
                                 <div class="col-xs-12 col-sm-6 col-md-6">
                                     <div class="form-group">
-                                            <label for="password">Password:</label>
-                                            <input type="password" name="password" id="password" x-ref="password" class="form-control input-lg" placeholder="Password">
+                                        <label for="username">Username:</label>
+                                        <input type="username" name="username" id="username" x-ref="username" class="form-control input-lg" placeholder="Username">
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-6 col-md-6">
                                     <div class="form-group">
-                                            <label for="confirmPassword">Confirm Password:</label>
-                                            <input type="password" name="confirmPassword" id="confirmPassword" x-ref="confirmPassword" class="form-control input-lg" placeholder="Confirm Password">
+                                        <label for="secret_phrase">Secret Phrase: (Use to change Password)</label>
+                                        <input type="secret_phrase" name="secret_phrase" id="secret_phrase" x-ref="secret_phrase" class="form-control input-lg" placeholder="Secret Phrase">
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <label for="password">Password:</label>
+                                        <input type="password" name="password" id="password" x-ref="password" class="form-control input-lg" placeholder="Password">
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <label for="confirmPassword">Confirm Password:</label>
+                                        <input type="password" name="confirmPassword" id="confirmPassword" x-ref="confirmPassword" class="form-control input-lg" placeholder="Confirm Password">
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-6 col-md-6" style="display: none">
@@ -1392,7 +1369,7 @@
                                 <label for="terms1"> I agree to the privacy policy</label>
                             </div>
                             <br>
-                            <button type="button" class="loginB" style="width: 50%" disabled x-ref="submit_farmer_button" x-on:click="submit_farmer_form" >Submit</button>
+                            <button type="button" class="loginB" style="width: 50%" disabled x-ref="submit_farmer_button" x-on:click="submit_farmer_form">Submit</button>
                             <br>
                             <br>
                         </div>
@@ -1433,70 +1410,29 @@
                 <div class="popup-child1" style="margin-bottom: 5px">
                     <h1>Welcome Back!</h1>
                     <p>Let us verify your account.</p>
-                    <form name="form" action="#" method="post" autocomplete="off">
-                        <div class="input-box">
-                            <i class="fas fa-envelope"></i><input type="text" placeholder="Username" class="popIn" name="username" required>
-                        </div>
-                        <div class="input-box">
-                            <i class="fas fa-key"></i><input type="password" placeholder="Password" class="popIn" name="password" id="inPassReqLog" required>
-                            <span class="eye" onclick="myFunctionReqLog()">
-                                <i id="hideReqLog1" class="fas fa-eye" style="cursor: pointer"></i>
-                                <i id="hideReqLog2" class="fas fa-eye-slash" style="cursor: pointer"></i>
-                            </span>
-                        </div>
-                        <hr style="margin-top: 34px;">
-                        <!--<a href="" class="loginB" id="loginB" style="position: relative; text-decoration: none; z-index: 1" name="login">LOGIN</a>-->
-                        <input class="loginReqLog" id="lloginReqLog" type="submit" name="loginReqLog" value="LOGIN">
-                        <!--<button class="loginB" id="loginB" type="submit" name="login" class="btn btn-success">Login</button>-->
-                        <button type="button" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="exit_login_request">X</a>
-                        <button type="button" style="position: relative; text-decoration: none; z-index: 1; cursor: pointer" x-on:click="exit_login_request">CLOSE</a>
-                    </form>
-                    <?php
-                        if(isset($_POST["loginReqLog"]))
-                        {
-                            $username=mysqli_real_escape_string($link, $_POST["username"]);
-                            $password=mysqli_real_escape_string($link, $_POST["password"]);
-                        
-                            $count=0;
-                            $res=mysqli_query($link,"SELECT * FROM user_registration WHERE username='$username' && password='$password' && role='user' && status='active'");
-                            $count=mysqli_num_rows($res);
-                            if($count>0){
-                                ?>
-                                <div class="alert alert-danger" style="margin-top: 10px">
-                                    <script type="text/javascript">
-                                        const popupSelect = document.querySelector('.popupAdSelect');
-                                        window.onload = function(){
-                                        setTimeout(function(){
-                                            popupSelect.style.display = "flex";
-                                            }, 1000)
-                                        }
-                                    </script>
-                                </div>
-                                <?php
-                            }
-                            else{
-                                ?>
-                                <div class="alert alert-danger" style="margin-top: 10px">
-                                    <strong>Warning!</strong> Invalid username or password.
-                                    <script type="text/javascript">
-                                        const popupAd = document.querySelector('.popupReqLog');
-                                        window.onload = function(){
-                                        setTimeout(function(){
-                                            popupAd.style.display = "flex";
-                                            }, 1000)
-                                        }
-                                    </script>
-                                </div>
-                                <?php
-                            }
-                        }
-                    ?>
+                    <span>
+                        <h3 style="color: red" x-text="landing_page_msg"></h3>
+                    </span>
+                    <div class="input-box">
+                        <i class="fas fa-envelope"></i><input type="text" placeholder="Username" class="popIn" name="username_request" x-ref="username_request" required="">
+                    </div>
+                    <div class="input-box">
+                        <i class="fas fa-key"></i><input type="password" placeholder="Password" class="popIn" name="password_request" x-ref="password_request" required="">
+                        <span class="eye" onclick="myFunctionReqLog()">
+                            <i id="hideReqLog1" class="fas fa-eye" style="cursor: pointer"></i>
+                            <i id="hideReqLog2" class="fas fa-eye-slash" style="cursor: pointer"></i>
+                        </span>
+                    </div>
+                    <hr style="margin-top: 34px;">
+                    <button type="button" class="loginReqLog" style="position: relative; text-decoration: none; z-index: 1; cursor: pointer" x-on:click="verify_user_process">VERIFY</button>
+                    <button type="button" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="exit_login_request">X</button>
+                    <button type="button" class="loginReqLog" style="position: relative; text-decoration: none; z-index: 1; cursor: pointer" x-on:click="exit_login_request">CLOSE</button>
                 </div>
             </div>
         </div>
 
         <!-- REQUEST FORM -->
-        <div class="popupAdSelect" x-show="show_request_form" style="display: none">
+        <div class="popupAdSelect" x-show="show_services_form" style="display: none">
             <div class="popup-contentAdSelect">
                 <div class="popup-child1" style="margin-bottom: 5px">
                     <form role="form">
@@ -1512,16 +1448,107 @@
                                 <hr>
                                     <div class="row" style="text-align: center">
                                         <div class="col-xs-12 col-sm-12 col-md-12" style="margin: 10px 0 10px;">
-                                            <a href="#"><button type="button" class="btn btn-success reqCrop" style="width: 80%; margin-left: 20px" id="submitCrop"><h5>Request Crops</h5></button></a>
+                                            
+                                            <a href="#"><button type="button" class="btn btn-success reqCrop" style="width: 80%; margin-left: 20px" id="submitCrop" x-on:click="show_requestCrops_form = true"><h5>Request Crops</h5></button></a>
                                         </div>
                                         <div class="col-xs-12 col-sm-12 col-md-12" style="margin: 10px 0 10px;">
-                                            <a href="#"><button type="button" class="btn btn-success reqRequest" style="width: 80%; margin-left: 20px" id="submitRequest"><h5>Request Services</h5></button></a>
+                                            <a href="#"><button type="button" class="btn btn-success reqRequest" style="width: 80%; margin-left: 20px" id="submitRequest" x-on:click="show_requestServices_form = true"><h5>Request Services</h5></button></a>
                                         </div>
                                     </div>
-                                <a type="button" id="closeB" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em">X</a>
+                                <a type="button" id="closeB" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="exit_services">X</a>
                             </div>
                         </div>
                     </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Request Crops -->
+        <div class="popup3crops" x-show="show_requestCrops_form" style="display: none">
+            <div class="popup-content3crops">
+                <div class="popup-child3">
+                    <form role="form">
+                        <div class="formG" style="display: flex; flex-direction: row; gap: 40px; justify-content: center">
+                            <div style="width: 100%">
+                            <h2 style="font-weight: bold">Request for crops</h2>
+                            <hr>
+                            <div class="row" style="text-align: left; display: flex; justify-content: center">
+                                <div class="column">
+                                <div class="col-xs-12 col-sm-6 col-md-12" style="margin: 10px 0 10px;">
+                                    <label for="cropSel" style="font-weight: bold">Crops: </label>
+                                    <select name="cropSel" style="width: 100%; height: auto; margin-bottom: 0; padding: 10px; border-radius: 3px">
+                                        <option selected>Choose crop</option>
+                                        <option value="1">Mustasa seed</option>
+                                        <option value="2">Pechay seed</option>
+                                        <option value="3">Calabasa seed</option>
+                                        <option value="4">Corn seed</option>
+                                        <option value="5">Rice seed</option>
+                                        <option value="6">Stringbeans seed</option>
+                                        <option value="7">Eggplant seed</option>
+                                    </select>
+                                </div>
+                                </div>
+                                <div class="column">
+                                    <div class="col-xs-12 col-sm-6 col-md-12" style="margin: 10px 0 10px;">
+                                        <div class="form-group" >
+                                            <label for="last_name" style="font-weight: bold">Kilo:</label>
+                                                <input type="number" name="last_name" id="last_name" class="form-control input-lg" placeholder="Kilo">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                                <br>
+                                <div class="column" style="text-align: center">
+                                    <a href=""><button type="button" class="loginB" style="width: 50%" id="submitBdec">Submit</button></a>
+                                </div>
+                                <hr>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="popup-child2">
+                    <a type="button" href="" id="closeDecB" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="exit_services">X</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Request Crops end -->
+        <div class="popup4services" x-show="show_requestServices_form" style="display: none">
+            <div class="popup-content4services">
+                <div class="popup-child3">
+                    <form role="form">
+                        <div class="formG" style="display: flex; flex-direction: row; gap: 40px; justify-content: center">
+                            <div style="width: 100%">
+                            <h2 style="font-weight: bold">Request for services</h2>
+                            <hr>
+                            <div style="text-align: left; display: flex; justify-content: center; flex-direction: column; gap: 20px">
+                                <div>
+                                    <label for="selectD" style="font-weight: bold">Services:</label>
+                                    <select class="selectD" style="width: 100%; height: auto; margin-bottom: 0; padding: 5px; border-radius: 3px">
+                                        <option selected>Choose service</option>
+                                        <option value="1">Soil Sampling</option>
+                                        <option value="2">Technical Assistance</option>
+                                        <option value="3">Financial Assistance</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <div style="text-align: left; display: flex; flex-direction: column">
+                                        <label for="selectD" style="font-weight: bold">Purpose of Request:</label>
+                                        <textarea name="selectD" id="selectD" cols="65" rows="5" style="display: block">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Odit nesciunt quasi quibusdam officiis magnam numquam quae nostrum fugiat reiciendis tenetur ut, velit, quod beatae perferendis earum dolor maiores soluta quisquam?</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                                <br>
+                                <div class="column" style="text-align: center">
+                                    <a href=""><button type="button" class="loginB" style="width: 50%" id="submitBdec">Submit</button></a>
+                                </div>
+                                <hr>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="popup-child2">
+                    <a type="button" href="" id="closeDecB" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="exit_services">X</a>
                 </div>
             </div>
         </div>
@@ -1531,19 +1558,19 @@
             <div class="popup-content-2">
                 <div class="popup-child1-2" style="margin-top: 40px">
                     <h1>Forgot your password?</h1><h3 class="xB-2" id="xB-2" style="position: absolute; top: 0px; right: 20px; cursor: pointer" x-on:click="exit_forgot_pass">X</h3>
-                        <p>Enter your secret phrase to reset your password.</p>
-                        <form>
-                            <div class="input-box">
-                                <i id="key" class="fas fa-mask"></i><input type="password" placeholder="Secretphrase" id="inPass2" class="popIn-2" name="username2" required>
-                                <span class="eye2" onclick="myFunction2()">
-                                    <i id="hide1-2" class="fas fa-eye" style="cursor: pointer; display: none"></i>
-                                    <i id="hide2-2" class="fas fa-eye-slash" style="cursor: pointer"></i>
-                                </span>
-                            </div>
-                            <hr style="margin-top: 30px;">
-                            <!-- <a type="button" x-on:click="show_changePass_form = true">Confirm</button> -->
-                            <button type="button" class="registerB" style="text-decoration: none; margin-bottom: 20px" x-on:click="show_changePass_form = true">Confirm</button>
-                        </form>
+                    <p>Enter your secret phrase to reset your password.</p>
+                    <form>
+                        <div class="input-box">
+                            <i id="key" class="fas fa-mask"></i><input type="password" placeholder="Secretphrase" id="inPass2" class="popIn-2" name="username2" required>
+                            <span class="eye2" onclick="myFunction2()">
+                                <i id="hide1-2" class="fas fa-eye" style="cursor: pointer; display: none"></i>
+                                <i id="hide2-2" class="fas fa-eye-slash" style="cursor: pointer"></i>
+                            </span>
+                        </div>
+                        <hr style="margin-top: 30px;">
+                        <!-- <a type="button" x-on:click="show_changePass_form = true">Confirm</button> -->
+                        <button type="button" class="registerB" style="text-decoration: none; margin-bottom: 20px" x-on:click="show_changePass_form = true">Confirm</button>
+                    </form>
                 </div>
                 <div class="popup-child2-2">
                     <img src="<?php echo IMAGES; ?>thinking_out_loud.png" width="380" height="280" style="border-radius: 0.6em">
@@ -1557,22 +1584,22 @@
                 <div class="popup-child1-1">
                     <h1>Reset your password.</h1> <h3 class="xB-1" id="xB-1" style="position: absolute; top: 0px; right: 20px; cursor: pointer" x-on:click="exit_forgot_pass">X</h3>
                     <p>Enter a new password for your account.</p>
-                        <div class="input-box">
-                            <i class="fas fa-key"></i><input type="password" placeholder="New password" id="inPass1-1" class="popIn-1" name="newpass" required>
-                            <span class="eye2" onclick="myFunction1()">
-                                <i id="hide1-1" class="fas fa-eye" style="cursor: pointer; display: none"></i>
-                                <i id="hide2-1" class="fas fa-eye-slash" style="cursor: pointer"></i>
-                            </span>
-                        </div>
-                        <div class="input-box" style="margin-bottom: 15px">
-                            <i class="fas fa-key"></i><input type="password" placeholder="Confirm new password" id="inPass1-2" class="popIn-1" name="c_newpass" required>
-                            <span class="eye2" onclick="myFunction11()">
-                                <i id="hide1-12" class="fas fa-eye" style="cursor: pointer; display: none"></i>
-                                <i id="hide2-12" class="fas fa-eye-slash" style="cursor: pointer"></i>
-                            </span>
-                        </div>
-                        <hr>
-                        <input class="resetB-1" id="resetB-1" type="submit" name="update1" value="CHANGE PASSWORD">
+                    <div class="input-box">
+                        <i class="fas fa-key"></i><input type="password" placeholder="New password" id="inPass1-1" class="popIn-1" name="newpass" required>
+                        <span class="eye2" onclick="myFunction1()">
+                            <i id="hide1-1" class="fas fa-eye" style="cursor: pointer; display: none"></i>
+                            <i id="hide2-1" class="fas fa-eye-slash" style="cursor: pointer"></i>
+                        </span>
+                    </div>
+                    <div class="input-box" style="margin-bottom: 15px">
+                        <i class="fas fa-key"></i><input type="password" placeholder="Confirm new password" id="inPass1-2" class="popIn-1" name="c_newpass" required>
+                        <span class="eye2" onclick="myFunction11()">
+                            <i id="hide1-12" class="fas fa-eye" style="cursor: pointer; display: none"></i>
+                            <i id="hide2-12" class="fas fa-eye-slash" style="cursor: pointer"></i>
+                        </span>
+                    </div>
+                    <hr>
+                    <input class="resetB-1" id="resetB-1" type="submit" name="update1" value="CHANGE PASSWORD">
                 </div>
                 <div class="popup-child2-1">
                     <img src="<?php echo IMAGES; ?>forgot_password_img.png" width="420" height="320" style="border-radius: 0.6em">
@@ -1753,8 +1780,10 @@
                 show_login_requestForm: false,
                 show_request_form: false,
                 show_forgotPass_form: false,
+                show_services_form: false,
+                show_requestServices_form: false,
+                show_requestCrops_form: false,
                 
-
                 error_landing: false,
                 landing_page_msg: '',
 
@@ -1788,6 +1817,11 @@
                 exit_forgot_pass(){
                     this.show_changePass_form = false;
                     this.show_forgotPass_form = false;
+                },
+
+                exit_services(){
+                    this.show_requestServices_form = false;
+                    this.show_requestCrops_form = false;
                 },
 
                 check_me(){
@@ -1825,6 +1859,7 @@
                                 farm_barangay: this.$refs.farm_barangay.value,
                                 farm_municipality: this.$refs.farm_municipality.value,
                                 farm_area: this.$refs.farm_area.value,
+                                secret_phrase: this.$refs.secret_phrase.value,
                                 role: this.$refs.role.value,
                                 status: this.$refs.status.value,
 
@@ -1906,6 +1941,37 @@
                         }
                     });
                 },
+                async verify_user_process(){
+                    this.$refs.login_button.disabled = true;
+                    const options = {
+                        xsrfHeaderName: 'X-XSRF-TOKEN',
+                        xsrfCookieName: 'XSRF-TOKEN',
+                    }
+                    let data = {
+                        username: this.$refs.username_request.value,
+                        password: this.$refs.password_request.value,
+                    };
+
+                    await axios.post('controller/login/verify_user_process.php', data, options)
+                    .then((response) => {
+                        if (response.data == false) {
+                            this.landing_page_msg = 'Invalid Username or Password';
+                            
+                            setTimeout(() => {
+                                this.landing_page_msg = '';
+                            }, 2000);
+                        }
+                        else if(response.data == 'admin'){
+                            // window.location = '';
+                        }
+                        else if(response.data == 'user'){
+                            // window.location = '';
+                        }
+                        else if(response.data == 'farmer'){
+                            // window.location = '';
+                        }
+                    });
+                }
             }))
         })
     </script>

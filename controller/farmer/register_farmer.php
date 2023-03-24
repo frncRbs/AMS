@@ -33,8 +33,9 @@
         $farm_barangay = $obj['farm_barangay'];
         $farm_municipality = $obj['farm_municipality'];
         $farm_area = $obj['farm_area'];
-        $role = $obj['role'];
-        $status = $obj['status'];
+        $secret_phrase = $obj['secret_phrase'];
+        $role = 'Farmer';
+        $status = 'Pending';
 
         // $fields = array(
         //     'first_name' => $first_name,
@@ -76,7 +77,7 @@
         }
         else {
             // INSERT RECORD
-            $sql = $db->prepare("INSERT INTO user (first_name, middle_name, last_name, role_service, birth_date, civil_status, sex, contact_no, religion, birth_place, address_street, address_barangay, address_municipality, username, password, address_zip, guardian_fname, guardian_contact, farm_type, farm_barangay, farm_municipality, farm_area, role, status) VALUES (:first_name, :middle_name, :last_name, :role_service, :birth_date, :civil_status, :sex, :contact_no, :religion, :birth_place, :address_street, :address_barangay, :address_municipality, :username, :password, :address_zip, :guardian_fname, :guardian_contact, :farm_type, :farm_barangay, :farm_municipality, :farm_area, :role, :status)");
+            $sql = $db->prepare("INSERT INTO user (first_name, middle_name, last_name, role_service, birth_date, civil_status, sex, contact_no, religion, birth_place, address_street, address_barangay, address_municipality, username, password, address_zip, guardian_fname, guardian_contact, farm_type, farm_barangay, farm_municipality, farm_area, secret_phrase, role, status) VALUES (:first_name, :middle_name, :last_name, :role_service, :birth_date, :civil_status, :sex, :contact_no, :religion, :birth_place, :address_street, :address_barangay, :address_municipality, :username, :password, :address_zip, :guardian_fname, :guardian_contact, :farm_type, :farm_barangay, :farm_municipality, :farm_area, :secret_phrase, :role, :status)");
             //bind
             $sql->bindParam(':first_name', $first_name);
             $sql->bindParam(':middle_name', $middle_name);
@@ -100,6 +101,7 @@
             $sql->bindParam(':farm_barangay', $farm_barangay);
             $sql->bindParam(':farm_municipality', $farm_municipality);
             $sql->bindParam(':farm_area', $farm_area);
+            $sql->bindParam(':secret_phrase', $secret_phrase);
             $sql->bindParam(':role', $role);
             $sql->bindParam(':status', $status);
 

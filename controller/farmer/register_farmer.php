@@ -33,7 +33,7 @@
         $farm_barangay = $obj['farm_barangay'];
         $farm_municipality = $obj['farm_municipality'];
         $farm_area = $obj['farm_area'];
-        $secret_phrase = $obj['secret_phrase'];
+        $secret_phrase = encrypt_ams($obj['secret_phrase']);
         $role = 'Farmer';
         $status = 'Pending';
 

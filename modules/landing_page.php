@@ -899,6 +899,11 @@
 
         /* Change the background color of the dropdown button when the dropdown content is shown */
         .dropdown:hover .dropbtn {background-color: transparent;}
+
+        .buttonIn {
+            width: 300px;
+            position: relative;
+        }
     </style>
     <div x-data="landing_page">
         <header>
@@ -1002,7 +1007,7 @@
                                 <i id="hide2" class="fas fa-eye-slash" style="cursor: pointer"></i>
                             </span>
                         </div>
-                        <h5 class="forPass" style="cursor: pointer; font-weight: bolder; padding-top: 20px" x-on:click="show_forgotPass_form = true">Forgot your password?</h5>
+                        <h5 class="forPass" style="cursor: pointer; font-weight: bolder; padding-top: 20px" x-on:click="show_exit">Forgot your password?</h5>
                         <hr style="margin-top: 34px;">
                         <!--<a href="" class="loginB" id="loginB" style="position: relative; text-decoration: none; z-index: 1" name="login">LOGIN</a>-->
                         <button class="loginB" type="button" style="position: relative; text-decoration: none; z-index: 1; cursor: pointer" x-ref="login_button" x-on:click="login">LOGIN</button>
@@ -1039,7 +1044,7 @@
                                 <div class="col-xs-12 col-sm-6 col-md-12" style="margin-bottom: 10px;">
                                     <label for="role_service">Register for: </label>
                                     <select class="selectD" name="role_service" id="role_service" x-ref="role_service" style="width: 100%; height: auto; margin-bottom: 0; padding: 5px; border-radius: 3px">
-                                        <option selected>Choose Services</option>
+                                        <option value="" disabled selected hidden>Choose Services</option>
                                         <option value="1">High Value Crops</option>
                                         <option value="2">Corn Value Crop</option>
                                         <option value="3">Rice Crop</option>
@@ -1085,7 +1090,7 @@
                                     <div class="col-xs-12 col-sm-6 col-md-6">
                                     <label for="civil_status">Civil Status: </label>
                                     <select class="selectD" name="civil_status" id="civil_status" x-ref="civil_status" style="width: 100%; height: auto; margin-bottom: 0; padding: 5px; border-radius: 3px">
-                                        <option selected>Choose Status</option>
+                                        <option value="" disabled selected hidden>Choose Status</option>
                                         <option value="1">Married</option>
                                         <option value="2">Single</option>
                                         <option value="3">Widowed</option>
@@ -1096,7 +1101,7 @@
                                     <div class="col-xs-12 col-sm-6 col-md-6">
                                     <label for="sex">Sex: </label>
                                     <select class="selectD" name="sex" id="sex" x-ref="sex" style="width: 100%; height: auto; margin-bottom: 0; padding: 5px; border-radius: 3px">
-                                        <option selected>Choose Sex</option>
+                                        <option value="" disabled selected hidden>Choose Sex</option>
                                         <option value="1">Male</option>
                                         <option value="2">Female</option>
                                     </select>
@@ -1183,7 +1188,7 @@
                                 <div class="col-xs-12 col-sm-6 col-md-12">
                                     <label for="farm_type">Farm Type: </label>
                                     <select class="selectD" name="farm_type" id="farm_type" x-ref="farm_type" style="width: 100%; height: auto; margin-bottom: 10px; padding: 5px; border-radius: 3px">
-                                        <option selected>Choose Services</option>
+                                        <option value="" disabled selected hidden>Choose Services</option>
                                         <option value="1">High Value Crops</option>
                                         <option value="2">Corn Value Crop</option>
                                         <option value="3">Rice Crop</option>
@@ -1231,7 +1236,14 @@
                                 <div class="col-xs-12 col-sm-6 col-md-6">
                                     <div class="form-group">
                                         <label for="secret_phrase">Secret Phrase: (Use to change Password)</label>
-                                        <input type="secret_phrase" name="secret_phrase" id="secret_phrase" x-ref="secret_phrase" class="form-control input-lg" placeholder="Secret Phrase">
+                                        <!-- <div style="display: inline">
+                                            <input type="secret_phrase" name="secret_phrase" id="secret_phrase" x-ref="secret_phrase" style="display: inline" class="form-control input-lg" placeholder="Secret Phrase">
+                                            <button type="button" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em; display: inline">Generate</button>
+                                        </div> -->
+                                        <div class="buttonIn">
+                                            <input type="text" id="enter" name="secret_phrase" x-ref="secret_phrase" class="form-control input-lg" placeholder="Secret Phrase" autocomplete=off>
+                                            <button type="button" id="clear" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em; display: inline; margin-top: 6px" x-on:click="generate_secret_phrase" >Generate</button>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-6 col-md-6">
@@ -1424,7 +1436,7 @@
                         </span>
                     </div>
                     <hr style="margin-top: 34px;">
-                    <button type="button" class="loginReqLog" style="position: relative; text-decoration: none; z-index: 1; cursor: pointer" x-on:click="verify_user_process">VERIFY</button>
+                    <button type="button" class="loginReqLog" style="position: relative; text-decoration: none; z-index: 1; cursor: pointer" x-ref="verify_req_login_button" x-on:click="verify_user_process">VERIFY</button>
                     <button type="button" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="exit_login_request">X</button>
                     <button type="button" class="loginReqLog" style="position: relative; text-decoration: none; z-index: 1; cursor: pointer" x-on:click="exit_login_request">CLOSE</button>
                 </div>
@@ -1507,7 +1519,7 @@
                     </form>
                 </div>
                 <div class="popup-child2">
-                    <a type="button" href="" id="closeDecB" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="exit_services">X</a>
+                    <a type="button" id="closeDecB" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="exit_services">X</a>
                 </div>
             </div>
         </div>
@@ -1558,10 +1570,16 @@
             <div class="popup-content-2">
                 <div class="popup-child1-2" style="margin-top: 40px">
                     <h1>Forgot your password?</h1><h3 class="xB-2" id="xB-2" style="position: absolute; top: 0px; right: 20px; cursor: pointer" x-on:click="exit_forgot_pass">X</h3>
-                    <p>Enter your secret phrase to reset your password.</p>
+                    <p>Enter your username and secret phrase to reset your password.</p>
+                    <span>
+                        <h3 style="color: red" x-text="landing_page_msg"></h3>
+                    </span>
                     <form>
-                        <div class="input-box">
-                            <i id="key" class="fas fa-mask"></i><input type="password" placeholder="Secretphrase" id="inPass2" class="popIn-2" name="username2" required>
+                        <div class="input-box" style="width: 80%">
+                            <i id="key" class="fas fa-envelope"></i><input type="text" placeholder="Username" class="popIn-2" name="username" x-ref="username_secret_phrase" required>
+                        </div>
+                        <div class="input-box" style="width: 90%">
+                            <i id="key" class="fas fa-mask"></i><input type="password" placeholder="Secret Phrase" id="inPass2" class="popIn-2" name="secret_phrase" x-ref="gen_secret_phrase" required>
                             <span class="eye2" onclick="myFunction2()">
                                 <i id="hide1-2" class="fas fa-eye" style="cursor: pointer; display: none"></i>
                                 <i id="hide2-2" class="fas fa-eye-slash" style="cursor: pointer"></i>
@@ -1569,11 +1587,11 @@
                         </div>
                         <hr style="margin-top: 30px;">
                         <!-- <a type="button" x-on:click="show_changePass_form = true">Confirm</button> -->
-                        <button type="button" class="registerB" style="text-decoration: none; margin-bottom: 20px" x-on:click="show_changePass_form = true">Confirm</button>
+                        <button type="button" class="registerB" style="text-decoration: none; margin-bottom: 20px" x-ref="verify_secret_phrase_button" x-on:click="verify_secret_phrase">Verify</button>
                     </form>
                 </div>
                 <div class="popup-child2-2">
-                    <img src="<?php echo IMAGES; ?>thinking_out_loud.png" width="380" height="280" style="border-radius: 0.6em">
+                    <img src="<?php echo IMAGES; ?>thinking_out_loud.png" width="300" height="auto" style="border-radius: 0.6em">
                 </div>
             </div>
         </div>
@@ -1606,7 +1624,6 @@
                 </div>
             </div>
         </div>
-
     </div>
     
 
@@ -1787,6 +1804,10 @@
                 error_landing: false,
                 landing_page_msg: '',
 
+                show_exit(){
+                    this.show_forgotPass_form = true;
+                    this.show_farmer_loginForm = false;
+                },
 
                 next(){
                     if(this.info_no < 4){
@@ -1868,10 +1889,9 @@
                             await axios.post('controller/farmer/register_farmer.php', data, options)
                             .then((response) => {
                                 this.$refs.submit_farmer_button.disabled = false;
-                                console.log((response.data));
-                                if (response.data == 'false') {
+                                // console.log((response.data == false));
+                                if (response.data == false) {
                                     this.error_landing = true;
-                                    // console.log(response.data)
                                     this.landing_page_msg = 'Username already taken!';
                                     setTimeout(() => {
                                         this.error_landing = false;
@@ -1910,39 +1930,90 @@
                 },
 
                 async login(){
-                    this.$refs.login_button.disabled = true;
-                    const options = {
-                        xsrfHeaderName: 'X-XSRF-TOKEN',
-                        xsrfCookieName: 'XSRF-TOKEN',
-                    }
-                    let data = {
-                        username: this.$refs.login_username.value,
-                        password: this.$refs.login_password.value,
-                    };
+                    if(this.$refs.login_username.value || this.$refs.login_password.value){
+                        this.$refs.login_button.disabled = true;
+                        const options = {
+                            xsrfHeaderName: 'X-XSRF-TOKEN',
+                            xsrfCookieName: 'XSRF-TOKEN',
+                        }
+                        let data = {
+                            username: this.$refs.login_username.value,
+                            password: this.$refs.login_password.value,
+                        };
 
-                    await axios.post('controller/login/login_process.php', data, options)
-                    .then((response) => {
-                        
-                        if (response.data == false) {
-                            this.landing_page_msg = 'Invalid Username or Password';
+                        await axios.post('controller/login/login_process.php', data, options)
+                        .then((response) => {
                             
-                            setTimeout(() => {
-                                this.landing_page_msg = '';
-                            }, 2000);
-                        }
-                        else if(response.data == 'admin'){
-                            // window.location = '';
-                        }
-                        else if(response.data == 'user'){
-                            // window.location = '';
-                        }
-                        else if(response.data == 'farmer'){
-                            // window.location = '';
-                        }
-                    });
+                            if (response.data == false) {
+                                this.$refs.login_button.disabled = false;
+                                this.landing_page_msg = 'Invalid Username or Password';
+                                
+                                setTimeout(() => {
+                                    this.landing_page_msg = '';
+                                }, 2000);
+                            }
+                            else if(response.data == 'admin'){
+                                // window.location = '';
+                            }
+                            else if(response.data == 'user'){
+                                // window.location = '';
+                            }
+                            else if(response.data == 'farmer'){
+                                // window.location = '';
+                            }
+                        });
+                    }
+                    else{
+                        this.landing_page_msg = 'Please fill in all required fields!';
+                        setTimeout(() => {
+                            this.landing_page_msg = '';
+                        }, 2000);
+                    };
                 },
+
                 async verify_user_process(){
-                    this.$refs.login_button.disabled = true;
+                    if(this.$refs.username_request.value || this.$refs.password_request.value){
+                        this.$refs.verify_req_login_button.disabled = true;
+                        const options = {
+                            xsrfHeaderName: 'X-XSRF-TOKEN',
+                            xsrfCookieName: 'XSRF-TOKEN',
+                        }
+                        let data = {
+                            username: this.$refs.username_request.value,
+                            password: this.$refs.password_request.value,
+                        };
+
+                        await axios.post('controller/farmer/verify_user_process.php', data, options)
+                        .then((response) => {
+                            if (response.data == false) {
+                                this.$refs.verify_req_login_button.disabled = false;
+                                this.landing_page_msg = 'Invalid Username or Password';
+                                
+                                setTimeout(() => {
+                                    this.landing_page_msg = '';
+                                }, 2000);
+                            }
+                            else if(response.data == 'admin'){
+                                // window.location = '';
+                            }
+                            else if(response.data == 'user'){
+                                // window.location = '';
+                            }
+                            else if(response.data == 'farmer'){
+                                // window.location = '';
+                            }
+                        });
+                    }
+                    else{
+                        this.landing_page_msg = 'Please fill in all required fields!';
+                        setTimeout(() => {
+                            this.landing_page_msg = '';
+                        }, 2000);
+                    };
+                    
+                },
+
+                async generate_secret_phrase(){
                     const options = {
                         xsrfHeaderName: 'X-XSRF-TOKEN',
                         xsrfCookieName: 'XSRF-TOKEN',
@@ -1952,25 +2023,47 @@
                         password: this.$refs.password_request.value,
                     };
 
-                    await axios.post('controller/login/verify_user_process.php', data, options)
+                    await axios.get('controller/farmer/generate_secret_key.php')
                     .then((response) => {
-                        if (response.data == false) {
-                            this.landing_page_msg = 'Invalid Username or Password';
-                            
-                            setTimeout(() => {
-                                this.landing_page_msg = '';
-                            }, 2000);
-                        }
-                        else if(response.data == 'admin'){
-                            // window.location = '';
-                        }
-                        else if(response.data == 'user'){
-                            // window.location = '';
-                        }
-                        else if(response.data == 'farmer'){
-                            // window.location = '';
-                        }
+                        console.log(response.data);
+                        this.$refs.secret_phrase.value = response.data;
                     });
+                },
+
+                async verify_secret_phrase(){
+                    if(this.$refs.gen_secret_phrase.value){
+                        this.$refs.verify_secret_phrase_button.disabled = true;
+                        const options = {
+                            xsrfHeaderName: 'X-XSRF-TOKEN',
+                            xsrfCookieName: 'XSRF-TOKEN',
+                        }
+                        let data = {
+                            username: this.$refs.username_secret_phrase.value,
+                            secret_phrase: this.$refs.gen_secret_phrase.value,
+                        };
+                        await axios.post('controller/farmer/verify_secret_phrase.php', data, options)
+                        .then((response) => {
+                            // console.log(response.data);
+                            if (response.data == true) {
+                                this.$refs.verify_secret_phrase_button.disabled = false;
+                                this.show_changePass_form = true;
+                                this.show_forgotPass_form = false;
+                            }
+                            else {
+                                this.$refs.verify_secret_phrase_button.disabled = false;
+                                this.landing_page_msg = 'Invalid Secret Phrase or Username!';      
+                                setTimeout(() => {
+                                    this.landing_page_msg = '';
+                                }, 2000);
+                            }
+                        });
+                    }
+                    else{
+                        this.landing_page_msg = 'Please fill in all required fields!';
+                        setTimeout(() => {
+                            this.landing_page_msg = '';
+                        }, 2000);
+                    }
                 }
             }))
         })

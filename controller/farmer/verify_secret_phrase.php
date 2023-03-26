@@ -5,6 +5,7 @@
     $db = $database->open();
     $return_value = '';
     $user_secret = '';
+    $user_id = '';
 
     try {
         // Receive data from axios post
@@ -18,8 +19,9 @@
 
         if($users){
             $user_secret = decrypt_ams($users['secret_phrase']);
+            $user_id = $users['id'];
             if($user_secret == $secret_phrase){
-                $return_value = 'true';
+                $return_value = true;
             }
         }
 
@@ -29,5 +31,10 @@
     }
 
     $database->close();
-    echo $return_value;
+    $return_dic = [
+        'return_status' => $return_value,
+        'user_id' => $user_id,
+    ];
+
+    echo json_encode($return_dic);
 ?>

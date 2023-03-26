@@ -112,7 +112,7 @@
         position: fixed;
         top: 0;
         z-index: 10;
-        display: none;
+        display: flex;
         flex-wrap: wrap;
         justify-content: center;
         align-items: center;
@@ -1404,14 +1404,16 @@
 
         <!-- Error Prompt -->
 
-        <div class="popupError" x-show="show_login_requestForm">
+        <div class="popupError" x-show="show_successForm" style="display: none">
             <div class="popup-contentError">
                 <div class="popup-child1" style="margin-bottom: 5px">
-                    <h1>Error!</h1>
-                    <p>Let us verify your account.</p>
+                    <h1>Password Successfully Changed!</h1>
+                    <p>You can now try re-login your account</p>
                 </div>
+                <br>
+                <button type="button" class="loginB" style="width: 50%" x-on:click="confirm_reset">Confirm</button>
                 <div class="popup-child2">
-                    <a id="errorClose" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em">X</a>
+                    <a id="errorClose" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="confirm_reset">X</a>
                 </div>
             </div>
         </div>
@@ -1423,7 +1425,7 @@
                     <h1>Welcome Back!</h1>
                     <p>Let us verify your account.</p>
                     <span>
-                        <h3 style="color: red" x-text="landing_page_msg"></h3>
+                        <h2 style="color: red" x-text="landing_page_msg"></h2>
                     </span>
                     <div class="input-box">
                         <i class="fas fa-envelope"></i><input type="text" placeholder="Username" class="popIn" name="username_request" x-ref="username_request" required="">
@@ -1602,22 +1604,25 @@
                 <div class="popup-child1-1">
                     <h1>Reset your password.</h1> <h3 class="xB-1" id="xB-1" style="position: absolute; top: 0px; right: 20px; cursor: pointer" x-on:click="exit_forgot_pass">X</h3>
                     <p>Enter a new password for your account.</p>
+                    <span>
+                        <h3 style="color: red" x-text="landing_page_msg"></h3>
+                    </span>
                     <div class="input-box">
-                        <i class="fas fa-key"></i><input type="password" placeholder="New password" id="inPass1-1" class="popIn-1" name="newpass" required>
+                        <i class="fas fa-key"></i><input type="password" placeholder="New password" id="inPass1-1" class="popIn-1" name="" x-ref="confirm_password" required>
                         <span class="eye2" onclick="myFunction1()">
                             <i id="hide1-1" class="fas fa-eye" style="cursor: pointer; display: none"></i>
                             <i id="hide2-1" class="fas fa-eye-slash" style="cursor: pointer"></i>
                         </span>
                     </div>
                     <div class="input-box" style="margin-bottom: 15px">
-                        <i class="fas fa-key"></i><input type="password" placeholder="Confirm new password" id="inPass1-2" class="popIn-1" name="c_newpass" required>
+                        <i class="fas fa-key"></i><input type="password" placeholder="Confirm new password" id="inPass1-2" class="popIn-1" name="" x-ref="confirm_change_password" required>
                         <span class="eye2" onclick="myFunction11()">
                             <i id="hide1-12" class="fas fa-eye" style="cursor: pointer; display: none"></i>
                             <i id="hide2-12" class="fas fa-eye-slash" style="cursor: pointer"></i>
                         </span>
                     </div>
                     <hr>
-                    <input class="resetB-1" id="resetB-1" type="submit" name="update1" value="CHANGE PASSWORD">
+                    <button class="resetB-1" id="resetB-1" type="button" name="change_password_btn" x-ref="change_password_button" x-on:click="update_password">CHANGE PASSWORD</button>
                 </div>
                 <div class="popup-child2-1">
                     <img src="<?php echo IMAGES; ?>forgot_password_img.png" width="420" height="320" style="border-radius: 0.6em">
@@ -1800,9 +1805,11 @@
                 show_services_form: false,
                 show_requestServices_form: false,
                 show_requestCrops_form: false,
+                show_successForm: false,
                 
                 error_landing: false,
                 landing_page_msg: '',
+                user_id: 0,
 
                 show_exit(){
                     this.show_forgotPass_form = true;
@@ -1847,6 +1854,11 @@
 
                 check_me(){
                     this.$refs.submit_farmer_button.disabled = !true;
+                },
+
+                confirm_reset(){
+                    this.show_farmer_loginForm = true;
+                    this.show_successForm = false;
                 },
 
                 async submit_farmer_form(){
@@ -1943,7 +1955,6 @@
 
                         await axios.post('controller/login/login_process.php', data, options)
                         .then((response) => {
-                            
                             if (response.data == false) {
                                 this.$refs.login_button.disabled = false;
                                 this.landing_page_msg = 'Invalid Username or Password';
@@ -1952,14 +1963,20 @@
                                     this.landing_page_msg = '';
                                 }, 2000);
                             }
-                            else if(response.data == 'admin'){
+                            else if(response.data == 1){
                                 // window.location = '';
                             }
-                            else if(response.data == 'user'){
+                            else if(response.data == 2){
                                 // window.location = '';
                             }
-                            else if(response.data == 'farmer'){
+                            else if(response.data == 3){
                                 // window.location = '';
+                                this.$refs.login_button.disabled = false;
+                                this.landing_page_msg = 'Account successfully Login!';
+                                
+                                setTimeout(() => {
+                                    this.landing_page_msg = '';
+                                }, 2000);
                             }
                         });
                     }
@@ -2043,8 +2060,9 @@
                         };
                         await axios.post('controller/farmer/verify_secret_phrase.php', data, options)
                         .then((response) => {
-                            // console.log(response.data);
-                            if (response.data == true) {
+                            // console.log(response.data.return_status == true);
+                            if (response.data.return_status == true) {
+                                this.user_id = response.data.user_id;
                                 this.$refs.verify_secret_phrase_button.disabled = false;
                                 this.show_changePass_form = true;
                                 this.show_forgotPass_form = false;
@@ -2057,6 +2075,45 @@
                                 }, 2000);
                             }
                         });
+                    }
+                    else{
+                        this.landing_page_msg = 'Please fill in all required fields!';
+                        setTimeout(() => {
+                            this.landing_page_msg = '';
+                        }, 2000);
+                    }
+                },
+
+                async update_password(){
+                    if(this.$refs.confirm_password.value && this.$refs.confirm_change_password.value){
+                        
+                        if(this.$refs.confirm_password.value == this.$refs.confirm_change_password.value){
+                            this.$refs.change_password_button.disabled = true;
+                            
+                            const options = {
+                                xsrfHeaderName: 'X-XSRF-TOKEN',
+                                xsrfCookieName: 'XSRF-TOKEN',
+                            };
+                            let data = {
+                                confirm_password: this.$refs.confirm_password.value,
+                                user_id: this.user_id,
+                            };
+                            await axios.post('controller/farmer/reset_password.php', data, options)
+                            .then((response) => {
+                                // console.log(response.data);
+                                // this.user_id = 0;
+                                this.$refs.change_password_button.disabled = false;
+                                this.show_changePass_form = false;
+                                this.show_successForm = true;
+                            });
+                        }
+                        else{
+                            this.landing_page_msg = 'New Password and Confirm Password do not match!';
+                            setTimeout(() => {
+                                this.landing_page_msg = '';
+                            }, 2000);
+                        }
+                        
                     }
                     else{
                         this.landing_page_msg = 'Please fill in all required fields!';

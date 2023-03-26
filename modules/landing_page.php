@@ -1466,7 +1466,7 @@
                     <h1>Welcome Back!</h1>
                     <p>Let us verify your account.</p>
                     <span>
-                        <h2 style="color: red" x-text="landing_page_msg"></h2>
+                        <h3 style="color: red" x-text="landing_page_msg"></h3>
                     </span>
                     <div class="input-box">
                         <i class="fas fa-envelope"></i><input type="text" placeholder="Username" class="popIn" name="username_request" x-ref="username_request" required="">
@@ -1504,13 +1504,13 @@
                                     <div class="row" style="text-align: center">
                                         <div class="col-xs-12 col-sm-12 col-md-12" style="margin: 10px 0 10px;">
                                             
-                                            <a href="#"><button type="button" class="btn btn-success reqCrop" style="width: 80%; margin-left: 20px" id="submitCrop" x-on:click="show_requestCrops_form = true"><h5>Request Crops</h5></button></a>
+                                            <button type="button" class="btn btn-success reqCrop" style="width: 80%; margin-left: 20px" id="submitCrop" x-on:click="show_requestCrops_form = true"><h5>Request Crops</h5></button>
                                         </div>
                                         <div class="col-xs-12 col-sm-12 col-md-12" style="margin: 10px 0 10px;">
-                                            <a href="#"><button type="button" class="btn btn-success reqRequest" style="width: 80%; margin-left: 20px" id="submitRequest" x-on:click="show_requestServices_form = true"><h5>Request Services</h5></button></a>
+                                            <button type="button" class="btn btn-success reqRequest" style="width: 80%; margin-left: 20px" id="submitRequest" x-on:click="show_requestServices_form = true"><h5>Request Services</h5></button>
                                         </div>
                                     </div>
-                                <a type="button" id="closeB" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="exit_services">X</a>
+                                <button type="button" id="closeB" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="exit_services">X</button>
                             </div>
                         </div>
                     </form>
@@ -1554,7 +1554,7 @@
                             </div>
                                 <br>
                                 <div class="column" style="text-align: center">
-                                    <a href=""><button type="button" class="loginB" style="width: 50%" id="submitBdec">Submit</button></a>
+                                    <button type="button" class="loginB" style="width: 50%" id="submitBdec">Submit</button>
                                 </div>
                                 <hr>
                             </div>
@@ -1562,7 +1562,7 @@
                     </form>
                 </div>
                 <div class="popup-child2">
-                    <a type="button" id="closeDecB" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="exit_services">X</a>
+                    <button type="button" id="closeDecB" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="exit_services">X</button>
                 </div>
             </div>
         </div>
@@ -1595,7 +1595,7 @@
                             </div>
                                 <br>
                                 <div class="column" style="text-align: center">
-                                    <a href=""><button type="button" class="loginB" style="width: 50%" id="submitBdec">Submit</button></a>
+                                    <button type="button" class="loginB" style="width: 50%" id="submitBdec">Submit</button>
                                 </div>
                                 <hr>
                             </div>
@@ -1603,7 +1603,7 @@
                     </form>
                 </div>
                 <div class="popup-child2">
-                    <a type="button" href="" id="closeDecB" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="exit_services">X</a>
+                    <button type="button" id="closeDecB" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="exit_services">X</button>
                 </div>
             </div>
         </div>
@@ -1892,6 +1892,7 @@
                 exit_services(){
                     this.show_requestServices_form = false;
                     this.show_requestCrops_form = false;
+                    this.show_services_form = false;
                 },
 
                 check_me(){
@@ -1970,7 +1971,7 @@
                         }
                         else{
                             this.error_landing = true;
-                            this.landing_page_msg = 'Password do not matched!';
+                            this.landing_page_msg = 'Password do not match!';
                             this.$refs.submit_farmer_button.disabled = true;
                             setTimeout(() => {
                                 this.error_landing = false;
@@ -2020,7 +2021,7 @@
                             else if(response.data == 3){
                                 // window.location = '';
                                 this.$refs.login_button.disabled = false;
-                                this.landing_page_msg = 'Account successfully Login!';
+                                this.landing_page_msg = 'Account successfully Logged in!';
 
                                 setTimeout(() => {
                                     this.landing_page_msg = '';
@@ -2058,14 +2059,22 @@
                                     this.landing_page_msg = '';
                                 }, 2000);
                             }
-                            else if(response.data == 'admin'){
+                            else if(response.data == 1){
                                 // window.location = '';
                             }
-                            else if(response.data == 'user'){
+                            else if(response.data == 2){
                                 // window.location = '';
                             }
-                            else if(response.data == 'farmer'){
+                            else if(response.data == 3){
                                 // window.location = '';
+                                this.$refs.verify_req_login_button.disabled = false;
+                                this.landing_page_msg = 'Account successfully Logged in!';
+                                this.show_login_requestForm = false;
+                                this.show_services_form = true;
+                                
+                                setTimeout(() => {
+                                    this.landing_page_msg = '';
+                                }, 2000);
                             }
                         });
                     }

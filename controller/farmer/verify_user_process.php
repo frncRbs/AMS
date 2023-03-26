@@ -16,30 +16,30 @@
 
         $sql = $db->prepare("SELECT * FROM user WHERE username = :username");
         $sql->execute(array(':username' => $username));
-        $users = $sql->fetchAll();
+        $users = $sql->fetch();
         
-        foreach ($users as $key => $value) {
-            if(strtolower($username) == strtolower($value['username']) && strtolower($password) == decrypt_ams($value['password'])){
+        if($users){
+            if(strtolower($password) == decrypt_ams($users['password'])){
                 $user_exists = true;
-                $user_role = $value['role'];
-                break;
-            }
-        }
-
-        if($user_exists){
-            if($user_role == 'Admin'){
-                // $return_value = 'admin';
-            }
-            else if($user_role == 'User'){
-                // $return_value = 'user';
-            }
-            else {
-                // $return_value = 'farmer';
+                $user_role = $users['role'];
             }
         }
         else {
             $return_value = 'false';
         }
+
+        if($user_exists){
+            if($user_role == 'Admin'){
+                $return_value = 1; //Admin
+            }
+            else if($user_role == 'User'){
+                $return_value = 2; // User/Personnel
+            }
+            else {
+                $return_value = 3; // Farmer
+            }
+        }
+        
 
 
     } catch (PDOException $e) {

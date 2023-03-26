@@ -131,6 +131,32 @@
             border-radius: 5px;
             position: relative;
         }
+        .popupSuccess{
+            background: rgba(0, 0, 0, 0.6);
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            z-index: 10;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        .popup-contentSuccess{
+            height: auto;
+            width: 500px;
+            background: white;
+            display: flex;
+            padding: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            border-radius: 5px;
+            position: relative;
+        }
         .popupPrivacyP{
             background: rgba(0, 0, 0, 0.6);
             width: 100%;
@@ -1402,18 +1428,33 @@
             </div>
         </div>
 
-        <!-- Error Prompt -->
+        <!-- Success Password Reset Prompt -->
 
         <div class="popupError" x-show="show_successForm" style="display: none">
             <div class="popup-contentError">
                 <div class="popup-child1" style="margin-bottom: 5px">
-                    <h1>Password Successfully Changed!</h1>
+                    <h1>Password Successfully Updated!</h1>
                     <p>You can now try re-login your account</p>
                 </div>
                 <br>
                 <button type="button" class="loginB" style="width: 50%" x-on:click="confirm_reset">Confirm</button>
                 <div class="popup-child2">
                     <a id="errorClose" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="confirm_reset">X</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Success Registration Prompt -->
+        <div class="popupSuccess" x-show="show_success_registrationForm" style="display: none">
+            <div class="popup-contentSuccess">
+                <div class="popup-child1" style="margin-bottom: 5px">
+                    <h1>Account Successfully Created!</h1>
+                    <p>You can now try to login your account</p>
+                </div>
+                <br>
+                <button type="button" class="loginB" style="width: 50%" x-on:click="confirm_register_exit">Confirm</button>
+                <div class="popup-child2">
+                    <a id="errorClose" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="confirm_register_exit">X</a>
                 </div>
             </div>
         </div>
@@ -1806,6 +1847,7 @@
                 show_requestServices_form: false,
                 show_requestCrops_form: false,
                 show_successForm: false,
+                show_success_registrationForm: false,
                 
                 error_landing: false,
                 landing_page_msg: '',
@@ -1861,6 +1903,11 @@
                     this.show_successForm = false;
                 },
 
+                confirm_register_exit(){
+                    this.show_farmer_loginForm = true;
+                    this.show_success_registrationForm = false;
+                },
+
                 async submit_farmer_form(){
                     this.$refs.submit_farmer_button.disabled = true;
                     if(this.$refs.first_name.value && this.$refs.middle_name.value && this.$refs.last_name.value && this.$refs.role_service.value && this.$refs.birth_date.value && this.$refs.civil_status.value && this.$refs.sex.value && this.$refs.contact_no.value && this.$refs.religion.value && this.$refs.birth_place.value && this.$refs.address_street.value && this.$refs.address_barangay.value && this.$refs.address_municipality.value && this.$refs.username.value && this.$refs.password.value && this.$refs.address_zip.value && this.$refs.guardian_fname.value && this.$refs.guardian_contact.value && this.$refs.farm_type.value && this.$refs.farm_barangay.value && this.$refs.farm_municipality.value && this.$refs.farm_area.value){
@@ -1902,7 +1949,7 @@
                             .then((response) => {
                                 this.$refs.submit_farmer_button.disabled = false;
                                 // console.log((response.data == false));
-                                if (response.data == false) {
+                                if(response.data == false) {
                                     this.error_landing = true;
                                     this.landing_page_msg = 'Username already taken!';
                                     setTimeout(() => {
@@ -1913,6 +1960,7 @@
                                 else if(response.data == true){
                                     this.info_no = 1;
                                     this.show_farmer_registrationForm = false;
+                                    this.show_success_registrationForm = true;
                                 }
                             },
                             (error) => {
@@ -1973,7 +2021,7 @@
                                 // window.location = '';
                                 this.$refs.login_button.disabled = false;
                                 this.landing_page_msg = 'Account successfully Login!';
-                                
+
                                 setTimeout(() => {
                                     this.landing_page_msg = '';
                                 }, 2000);
@@ -2108,7 +2156,7 @@
                             });
                         }
                         else{
-                            this.landing_page_msg = 'New Password and Confirm Password do not match!';
+                            this.landing_page_msg = 'New Password do not match!';
                             setTimeout(() => {
                                 this.landing_page_msg = '';
                             }, 2000);

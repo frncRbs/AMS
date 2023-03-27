@@ -13,6 +13,7 @@
 
         $user_exists = false;
         $user_role = '';
+        $is_verified = '';
 
         $sql = $db->prepare("SELECT * FROM user WHERE username = :username");
         $sql->execute(array(':username' => $username));
@@ -21,6 +22,7 @@
         if($users){
             if(strtolower($password) == decrypt_ams($users['password'])){
                 $user_exists = true;
+                $is_verified = $users['status'];
                 $user_role = $users['role'];
             }
         }
@@ -29,18 +31,21 @@
         }
 
         if($user_exists){
-            if($user_role == 'Admin'){
-                $return_value = 1; //Admin
-            }
-            else if($user_role == 'User'){
-                $return_value = 2; // User/Personnel
+            if($is_verified){
+                if($user_role == 'Admin'){
+                    $return_value = 1; //Admin
+                }
+                else if($user_role == 'User'){
+                    $return_value = 2; // User/Personnel
+                }
+                else {
+                    $return_value = 3; // Farmer
+                }
             }
             else {
-                $return_value = 3; // Farmer
+                $return_value = 4; // Not verified
             }
         }
-        
-
 
     } catch (PDOException $e) {
         $return_value = $e->getMessage();

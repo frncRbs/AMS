@@ -1527,11 +1527,14 @@
                             <div style="width: 100%">
                             <h2 style="font-weight: bold">Request for crops</h2>
                             <hr>
+                            <span>
+                                <h3 style="color: red" x-text="landing_page_msg"></h3>
+                            </span>
                             <div class="row" style="text-align: left; display: flex; justify-content: center">
                                 <div class="column">
                                 <div class="col-xs-12 col-sm-6 col-md-12" style="margin: 10px 0 10px;">
                                     <label for="cropSel" style="font-weight: bold">Crops: </label>
-                                    <select name="cropSel" style="width: 100%; height: auto; margin-bottom: 0; padding: 10px; border-radius: 3px">
+                                    <select name="cropSel" style="width: 100%; height: auto; margin-bottom: 0; padding: 10px; border-radius: 3px" x-ref="crop_type">
                                         <option selected>Choose crop</option>
                                         <option value="1">Mustasa seed</option>
                                         <option value="2">Pechay seed</option>
@@ -1547,14 +1550,14 @@
                                     <div class="col-xs-12 col-sm-6 col-md-12" style="margin: 10px 0 10px;">
                                         <div class="form-group" >
                                             <label for="last_name" style="font-weight: bold">Kilo:</label>
-                                                <input type="number" name="last_name" id="last_name" class="form-control input-lg" placeholder="Kilo">
+                                                <input type="number" name="last_name" id="last_name" class="form-control input-lg" x-ref="crop_kilo" placeholder="Kilo">
                                         </div>
                                     </div>
                                 </div>
                             </div>
                                 <br>
                                 <div class="column" style="text-align: center">
-                                    <button type="button" class="loginB" style="width: 50%" id="submitBdec">Submit</button>
+                                    <button type="button" class="loginB" style="width: 50%" id="submitBdec" x-ref="request_crops_button" x-on:click="request_crops">Submit</button>
                                 </div>
                                 <hr>
                             </div>
@@ -1567,7 +1570,8 @@
             </div>
         </div>
 
-        <!-- Request Crops end -->
+        <!-- Request Service -->
+
         <div class="popup4services" x-show="show_requestServices_form" style="display: none">
             <div class="popup-content4services">
                 <div class="popup-child3">
@@ -1576,10 +1580,13 @@
                             <div style="width: 100%">
                             <h2 style="font-weight: bold">Request for services</h2>
                             <hr>
+                            <span>
+                                <h3 style="color: red" x-text="landing_page_msg"></h3>
+                            </span>
                             <div style="text-align: left; display: flex; justify-content: center; flex-direction: column; gap: 20px">
                                 <div>
                                     <label for="selectD" style="font-weight: bold">Services:</label>
-                                    <select class="selectD" style="width: 100%; height: auto; margin-bottom: 0; padding: 5px; border-radius: 3px">
+                                    <select class="selectD" style="width: 100%; height: auto; margin-bottom: 0; padding: 5px; border-radius: 3px" x-ref="service_type">
                                         <option selected>Choose service</option>
                                         <option value="1">Soil Sampling</option>
                                         <option value="2">Technical Assistance</option>
@@ -1589,13 +1596,13 @@
                                 <div>
                                     <div style="text-align: left; display: flex; flex-direction: column">
                                         <label for="selectD" style="font-weight: bold">Purpose of Request:</label>
-                                        <textarea name="selectD" id="selectD" cols="65" rows="5" style="display: block">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Odit nesciunt quasi quibusdam officiis magnam numquam quae nostrum fugiat reiciendis tenetur ut, velit, quod beatae perferendis earum dolor maiores soluta quisquam?</textarea>
+                                        <textarea name="selectD" id="selectD" cols="65" rows="5" style="display: block" x-ref="service_remark">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Odit nesciunt quasi quibusdam officiis magnam numquam quae nostrum fugiat reiciendis tenetur ut, velit, quod beatae perferendis earum dolor maiores soluta quisquam?</textarea>
                                     </div>
                                 </div>
                             </div>
                                 <br>
                                 <div class="column" style="text-align: center">
-                                    <button type="button" class="loginB" style="width: 50%" id="submitBdec">Submit</button>
+                                    <button type="button" class="loginB" style="width: 50%" id="submitBdec" x-ref="request_service_button" x-on:click="request_service">Submit</button>
                                 </div>
                                 <hr>
                             </div>
@@ -1893,6 +1900,7 @@
                     this.show_requestServices_form = false;
                     this.show_requestCrops_form = false;
                     this.show_services_form = false;
+                    this.user_id = 0;
                 },
 
                 check_me(){
@@ -1907,6 +1915,10 @@
                 confirm_register_exit(){
                     this.show_farmer_loginForm = true;
                     this.show_success_registrationForm = false;
+                },
+
+                clear_request(){
+                    
                 },
 
                 async submit_farmer_form(){
@@ -2027,6 +2039,14 @@
                                     this.landing_page_msg = '';
                                 }, 2000);
                             }
+                            else if(response.data == 4){
+                                this.$refs.login_button.disabled = false;
+                                this.landing_page_msg = 'Account is not yet verified!';
+
+                                setTimeout(() => {
+                                    this.landing_page_msg = '';
+                                }, 2000);
+                            }
                         });
                     }
                     else{
@@ -2038,7 +2058,7 @@
                 },
 
                 async verify_user_process(){
-                    if(this.$refs.username_request.value || this.$refs.password_request.value){
+                    if(this.$refs.username_request.value && this.$refs.password_request.value){
                         this.$refs.verify_req_login_button.disabled = true;
                         const options = {
                             xsrfHeaderName: 'X-XSRF-TOKEN',
@@ -2051,31 +2071,38 @@
 
                         await axios.post('controller/farmer/verify_user_process.php', data, options)
                         .then((response) => {
-                            if (response.data == false) {
-                                this.$refs.verify_req_login_button.disabled = false;
-                                this.landing_page_msg = 'Invalid Username or Password';
+                            this.$refs.verify_req_login_button.disabled = false;
+                            if (response.data.return_status == false) {
+                                this.landing_page_msg = 'Invalid Username or Password!';
                                 
                                 setTimeout(() => {
                                     this.landing_page_msg = '';
                                 }, 2000);
                             }
-                            else if(response.data == 1){
-                                // window.location = '';
-                            }
-                            else if(response.data == 2){
-                                // window.location = '';
-                            }
-                            else if(response.data == 3){
-                                // window.location = '';
-                                this.$refs.verify_req_login_button.disabled = false;
+                            else if(response.data.return_status == true){
                                 this.landing_page_msg = 'Account successfully Logged in!';
                                 this.show_login_requestForm = false;
                                 this.show_services_form = true;
+                                this.user_id = response.data.user_id; 
+                                setTimeout(() => {
+                                    this.landing_page_msg = '';
+                                }, 2000);
+                            }
+                            else if(response.data.return_status == 2){
+                                this.landing_page_msg = 'You are not allowed to request!';
                                 
                                 setTimeout(() => {
                                     this.landing_page_msg = '';
                                 }, 2000);
                             }
+                            else if(response.data.return_status == 3){
+                                this.landing_page_msg = 'You are not yet verified!';
+                                
+                                setTimeout(() => {
+                                    this.landing_page_msg = '';
+                                }, 2000);
+                            }
+                            console.log(response.data)
                         });
                     }
                     else{
@@ -2178,7 +2205,69 @@
                             this.landing_page_msg = '';
                         }, 2000);
                     }
+                },
+
+                async request_crops(){
+                    if(this.$refs.crop_type.value && this.$refs.crop_kilo.value){
+                        this.$refs.request_crops_button.disabled = true;
+                        const options = {
+                            xsrfHeaderName: 'X-XSRF-TOKEN',
+                            xsrfCookieName: 'XSRF-TOKEN',
+                        }
+                        let data = {
+                            crop_type: this.$refs.crop_type.value,
+                            crop_kilo: this.$refs.crop_kilo.value,
+                        };
+                        await axios.post('controller/farmer/request_crop.php', data, options)
+                        .then((response) => {
+                            this.$refs.request_crops_button.disabled = false;
+                            // console.log(response.data)
+                            this.landing_page_msg = (response.data);
+                            setTimeout(() => {
+                                this.landing_page_msg = '';
+                            }, 2000);
+                            
+                        });
+                    }
+                    else{
+                        this.landing_page_msg = 'Please fill in all required fields!';
+                        setTimeout(() => {
+                            this.landing_page_msg = '';
+                        }, 2000);
+                    }
+                },
+
+                async request_service(){
+                    if(this.$refs.service_type.value && this.$refs.service_remark.value){
+                        this.$refs.request_service_button.disabled = true;
+                        const options = {
+                            xsrfHeaderName: 'X-XSRF-TOKEN',
+                            xsrfCookieName: 'XSRF-TOKEN',
+                        }
+                        let data = {
+                            crop_type: this.$refs.crop_type.value,
+                            crop_kilo: this.$refs.crop_kilo.value,
+                        };
+                        await axios.post('controller/farmer/request_service.php', data, options)
+                        .then((response) => {
+                            this.$refs.request_service_button.disabled = false;
+                            // console.log(response.data)
+                            this.landing_page_msg = (response.data);
+                            setTimeout(() => {
+                                this.landing_page_msg = '';
+                            }, 2000);
+                            
+                        });
+                    }
+                    else{
+                        this.landing_page_msg = 'Please fill in all required fields!';
+                        setTimeout(() => {
+                            this.landing_page_msg = '';
+                        }, 2000);
+                    }
                 }
+
+                
             }))
         })
     </script>

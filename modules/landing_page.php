@@ -931,7 +931,7 @@
             position: relative;
         }
     </style>
-    <div x-data="landing_page">
+    <div x-data="landing_page" x-init="get_services_crops">
         <header>
             <nav class="navbar navbar-default navbar-fixed-top navbar-inverse">
                 <div class="container">
@@ -1534,15 +1534,18 @@
                                 <div class="column">
                                 <div class="col-xs-12 col-sm-6 col-md-12" style="margin: 10px 0 10px;">
                                     <label for="cropSel" style="font-weight: bold">Crops: </label>
-                                    <select name="cropSel" style="width: 100%; height: auto; margin-bottom: 0; padding: 10px; border-radius: 3px" x-ref="crop_type">
-                                        <option selected>Choose crop</option>
-                                        <option value="1">Mustasa seed</option>
+                                    <select name="cropSel" style="width: 100%; height: auto; margin-bottom: 0; padding: 10px; border-radius: 3px" x-ref="crop_type" >
+                                        <option disabled selected hidden>Choose crop</option>
+                                        <template x-for="crop in crops">
+                                            <option :value="crop.crop_id" x-text="crop.crop_name" x-ref="crop_value"></option>
+                                        </template>
+                                        <!-- <option value="1">Mustasa seed</option>
                                         <option value="2">Pechay seed</option>
                                         <option value="3">Calabasa seed</option>
                                         <option value="4">Corn seed</option>
                                         <option value="5">Rice seed</option>
                                         <option value="6">Stringbeans seed</option>
-                                        <option value="7">Eggplant seed</option>
+                                        <option value="7">Eggplant seed</option> -->
                                     </select>
                                 </div>
                                 </div>
@@ -1557,7 +1560,7 @@
                             </div>
                                 <br>
                                 <div class="column" style="text-align: center">
-                                    <button type="button" class="loginB" style="width: 50%" id="submitBdec" x-ref="request_crops_button" x-on:click="request_crops">Submit</button>
+                                    <button type="button" class="loginB" style="width: 50%" id="submitBdec" x-ref="request_crops_button" x-on:click="add_crops_services">Submit</button>
                                 </div>
                                 <hr>
                             </div>
@@ -1587,10 +1590,14 @@
                                 <div>
                                     <label for="selectD" style="font-weight: bold">Services:</label>
                                     <select class="selectD" style="width: 100%; height: auto; margin-bottom: 0; padding: 5px; border-radius: 3px" x-ref="service_type">
-                                        <option selected>Choose service</option>
+                                        <option disabled selected hidden>Choose services</option>
+                                        <template x-for="service in services">
+                                            <option :value="service.service_id" x-text="service.service_name"></option>
+                                        </template>
+                                        <!-- <option selected>Choose service</option>
                                         <option value="1">Soil Sampling</option>
                                         <option value="2">Technical Assistance</option>
-                                        <option value="3">Financial Assistance</option>
+                                        <option value="3">Financial Assistance</option> -->
                                     </select>
                                 </div>
                                 <div>
@@ -1860,6 +1867,9 @@
                 landing_page_msg: '',
                 user_id: 0,
 
+                crops: [],
+                services: [],
+
                 show_exit(){
                     this.show_forgotPass_form = true;
                     this.show_farmer_loginForm = false;
@@ -1915,10 +1925,6 @@
                 confirm_register_exit(){
                     this.show_farmer_loginForm = true;
                     this.show_success_registrationForm = false;
-                },
-
-                clear_request(){
-                    
                 },
 
                 async submit_farmer_form(){
@@ -2115,15 +2121,6 @@
                 },
 
                 async generate_secret_phrase(){
-                    const options = {
-                        xsrfHeaderName: 'X-XSRF-TOKEN',
-                        xsrfCookieName: 'XSRF-TOKEN',
-                    }
-                    let data = {
-                        username: this.$refs.username_request.value,
-                        password: this.$refs.password_request.value,
-                    };
-
                     await axios.get('controller/farmer/generate_secret_key.php')
                     .then((response) => {
                         console.log(response.data);
@@ -2265,9 +2262,90 @@
                             this.landing_page_msg = '';
                         }, 2000);
                     }
-                }
+                },
 
-                
+                async get_services_crops(){
+                    await axios.get("controller/farmer/get_crops_services.php")
+                    .then((response)=>{
+                        this.crops = (response.data.crops);
+                        this.services = (response.data.services);
+                        
+                    });
+                },
+
+                async add_crops(){
+                    if(this.$refs.gen_secret_phrase.value){
+                        this.$refs.verify_secret_phrase_button.disabled = true;
+                        const options = {
+                            xsrfHeaderName: 'X-XSRF-TOKEN',
+                            xsrfCookieName: 'XSRF-TOKEN',
+                        }
+                        let data = {
+                            username: this.$refs.username_secret_phrase.value,
+                            secret_phrase: this.$refs.gen_secret_phrase.value,
+                        };
+                        await axios.post('controller/farmer/verify_secret_phrase.php', data, options)
+                        .then((response) => {
+                            // console.log(response.data.return_status == true);
+                            if (response.data.return_status == true) {
+                                this.user_id = response.data.user_id;
+                                this.$refs.verify_secret_phrase_button.disabled = false;
+                                this.show_changePass_form = true;
+                                this.show_forgotPass_form = false;
+                            }
+                            else {
+                                this.$refs.verify_secret_phrase_button.disabled = false;
+                                this.landing_page_msg = 'Invalid Secret Phrase or Username!';      
+                                setTimeout(() => {
+                                    this.landing_page_msg = '';
+                                }, 2000);
+                            }
+                        });
+                    }
+                    else{
+                        this.landing_page_msg = 'Please fill in all required fields!';
+                        setTimeout(() => {
+                            this.landing_page_msg = '';
+                        }, 2000);
+                    }
+                },
+
+                async  (){
+                    if(this.$refs.gen_secret_phrase.value){
+                        this.$refs.verify_secret_phrase_button.disabled = true;
+                        const options = {
+                            xsrfHeaderName: 'X-XSRF-TOKEN',
+                            xsrfCookieName: 'XSRF-TOKEN',
+                        }
+                        let data = {
+                            username: this.$refs.username_secret_phrase.value,
+                            secret_phrase: this.$refs.gen_secret_phrase.value,
+                        };
+                        await axios.post('controller/farmer/verify_secret_phrase.php', data, options)
+                        .then((response) => {
+                            // console.log(response.data.return_status == true);
+                            if (response.data.return_status == true) {
+                                this.user_id = response.data.user_id;
+                                this.$refs.verify_secret_phrase_button.disabled = false;
+                                this.show_changePass_form = true;
+                                this.show_forgotPass_form = false;
+                            }
+                            else {
+                                this.$refs.verify_secret_phrase_button.disabled = false;
+                                this.landing_page_msg = 'Invalid Secret Phrase or Username!';      
+                                setTimeout(() => {
+                                    this.landing_page_msg = '';
+                                }, 2000);
+                            }
+                        });
+                    }
+                    else{
+                        this.landing_page_msg = 'Please fill in all required fields!';
+                        setTimeout(() => {
+                            this.landing_page_msg = '';
+                        }, 2000);
+                    }
+                }
             }))
         })
     </script>

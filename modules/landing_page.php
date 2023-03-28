@@ -4,6 +4,12 @@
         if($_SESSION["user_role"] == 'Admin'){
             header("location:".LOCATION."modules/admin/admin_dash_body.php");
         }
+        elseif($_SESSION["user_role"] == 'Personnel'){
+            header("location:".LOCATION."modules/personnel/personnel_dash_body.php");
+        }
+        else{
+            header("location:".LOCATION);
+        }
         
     }
 
@@ -2045,13 +2051,13 @@
                                 // window.location = '';
                             }
                             else if(response.data == 3){
-                                // window.location = '';
-                                this.$refs.login_button.disabled = false;
-                                this.landing_page_msg = 'Account successfully Logged in!';
+                                window.location = 'modules/personnel/personnel_dash_body.php';
+                                // this.$refs.login_button.disabled = false;
+                                // this.landing_page_msg = 'Account successfully Logged in!';
 
-                                setTimeout(() => {
-                                    this.landing_page_msg = '';
-                                }, 2000);
+                                // setTimeout(() => {
+                                //     this.landing_page_msg = '';
+                                // }, 2000);
                             }
                             else if(response.data == 4){
                                 this.$refs.login_button.disabled = false;

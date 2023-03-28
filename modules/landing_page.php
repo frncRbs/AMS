@@ -1534,10 +1534,10 @@
                                 <div class="column">
                                 <div class="col-xs-12 col-sm-6 col-md-12" style="margin: 10px 0 10px;">
                                     <label for="cropSel" style="font-weight: bold">Crops: </label>
-                                    <select name="cropSel" style="width: 100%; height: auto; margin-bottom: 0; padding: 10px; border-radius: 3px" x-ref="crop_type" >
+                                    <select name="cropSel" style="width: 100%; height: auto; margin-bottom: 0; padding: 10px; border-radius: 3px" x-ref="crop_id" >
                                         <option disabled selected hidden>Choose crop</option>
                                         <template x-for="crop in crops">
-                                            <option :value="crop.crop_id" x-text="crop.crop_name" x-ref="crop_value"></option>
+                                            <option :value="crop.crop_id" x-text="crop.crop_name" x-ref="crop_type"></option>
                                         </template>
                                         <!-- <option value="1">Mustasa seed</option>
                                         <option value="2">Pechay seed</option>
@@ -1560,7 +1560,7 @@
                             </div>
                                 <br>
                                 <div class="column" style="text-align: center">
-                                    <button type="button" class="loginB" style="width: 50%" id="submitBdec" x-ref="request_crops_button" x-on:click="add_crops_services">Submit</button>
+                                    <button type="button" class="loginB" style="width: 50%" id="submitBdec" x-ref="request_crop_button" x-on:click="request_crop">Submit</button>
                                 </div>
                                 <hr>
                             </div>
@@ -1589,7 +1589,7 @@
                             <div style="text-align: left; display: flex; justify-content: center; flex-direction: column; gap: 20px">
                                 <div>
                                     <label for="selectD" style="font-weight: bold">Services:</label>
-                                    <select class="selectD" style="width: 100%; height: auto; margin-bottom: 0; padding: 5px; border-radius: 3px" x-ref="service_type">
+                                    <select class="selectD" style="width: 100%; height: auto; margin-bottom: 0; padding: 5px; border-radius: 3px" x-ref="service_id">
                                         <option disabled selected hidden>Choose services</option>
                                         <template x-for="service in services">
                                             <option :value="service.service_id" x-text="service.service_name"></option>
@@ -1603,13 +1603,13 @@
                                 <div>
                                     <div style="text-align: left; display: flex; flex-direction: column">
                                         <label for="selectD" style="font-weight: bold">Purpose of Request:</label>
-                                        <textarea name="selectD" id="selectD" cols="65" rows="5" style="display: block" x-ref="service_remark">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Odit nesciunt quasi quibusdam officiis magnam numquam quae nostrum fugiat reiciendis tenetur ut, velit, quod beatae perferendis earum dolor maiores soluta quisquam?</textarea>
+                                        <textarea name="selectD" id="selectD" cols="65" rows="5" style="display: block" x-ref="service_remarks"></textarea>
                                     </div>
                                 </div>
                             </div>
                                 <br>
                                 <div class="column" style="text-align: center">
-                                    <button type="button" class="loginB" style="width: 50%" id="submitBdec" x-ref="request_service_button" x-on:click="request_service">Submit</button>
+                                    <button type="button" class="loginB" style="width: 50%" x-ref="request_service_button" x-on:click="request_service">Submit</button>
                                 </div>
                                 <hr>
                             </div>
@@ -2204,25 +2204,31 @@
                     }
                 },
 
-                async request_crops(){
-                    if(this.$refs.crop_type.value && this.$refs.crop_kilo.value){
-                        this.$refs.request_crops_button.disabled = true;
+                async request_crop(){
+                    if(this.$refs.crop_id.value && this.$refs.crop_kilo.value){
+                        this.$refs.request_crop_button.disabled = true;
                         const options = {
                             xsrfHeaderName: 'X-XSRF-TOKEN',
                             xsrfCookieName: 'XSRF-TOKEN',
                         }
                         let data = {
-                            crop_type: this.$refs.crop_type.value,
+                            crop_id: this.$refs.crop_id.value,
+                            service_id: null,
                             crop_kilo: this.$refs.crop_kilo.value,
+                            user_id: this.user_id,
+                            service_remarks: 'Null',
+                            request_type: 'Crop',
                         };
                         await axios.post('controller/farmer/request_crop.php', data, options)
                         .then((response) => {
-                            this.$refs.request_crops_button.disabled = false;
+                            this.$refs.request_crop_button.disabled = false;
                             // console.log(response.data)
-                            this.landing_page_msg = (response.data);
+                            this.landing_page_msg = 'Crops Successfully Requested!';
                             setTimeout(() => {
                                 this.landing_page_msg = '';
-                            }, 2000);
+                                this.show_requestCrops_form = false;
+                                this.show_services_form = true;
+                            }, 4000);
                             
                         });
                     }
@@ -2235,24 +2241,30 @@
                 },
 
                 async request_service(){
-                    if(this.$refs.service_type.value && this.$refs.service_remark.value){
+                    if(this.$refs.service_id.value && this.$refs.service_remarks.value){
                         this.$refs.request_service_button.disabled = true;
                         const options = {
                             xsrfHeaderName: 'X-XSRF-TOKEN',
                             xsrfCookieName: 'XSRF-TOKEN',
                         }
                         let data = {
-                            crop_type: this.$refs.crop_type.value,
-                            crop_kilo: this.$refs.crop_kilo.value,
+                            service_id: this.$refs.service_id.value,
+                            crop_id: null,
+                            crop_kilo: null,
+                            service_remarks: this.$refs.service_remarks.value,
+                            user_id: this.user_id,
+                            request_type: 'Service',
                         };
                         await axios.post('controller/farmer/request_service.php', data, options)
                         .then((response) => {
                             this.$refs.request_service_button.disabled = false;
                             // console.log(response.data)
-                            this.landing_page_msg = (response.data);
+                            this.landing_page_msg = 'Service Successfully Requested!';
                             setTimeout(() => {
                                 this.landing_page_msg = '';
-                            }, 2000);
+                                this.show_requestServices_form = false;
+                                this.show_services_form = true;
+                            }, 4000);
                             
                         });
                     }
@@ -2273,44 +2285,7 @@
                     });
                 },
 
-                async add_crops(){
-                    if(this.$refs.gen_secret_phrase.value){
-                        this.$refs.verify_secret_phrase_button.disabled = true;
-                        const options = {
-                            xsrfHeaderName: 'X-XSRF-TOKEN',
-                            xsrfCookieName: 'XSRF-TOKEN',
-                        }
-                        let data = {
-                            username: this.$refs.username_secret_phrase.value,
-                            secret_phrase: this.$refs.gen_secret_phrase.value,
-                        };
-                        await axios.post('controller/farmer/verify_secret_phrase.php', data, options)
-                        .then((response) => {
-                            // console.log(response.data.return_status == true);
-                            if (response.data.return_status == true) {
-                                this.user_id = response.data.user_id;
-                                this.$refs.verify_secret_phrase_button.disabled = false;
-                                this.show_changePass_form = true;
-                                this.show_forgotPass_form = false;
-                            }
-                            else {
-                                this.$refs.verify_secret_phrase_button.disabled = false;
-                                this.landing_page_msg = 'Invalid Secret Phrase or Username!';      
-                                setTimeout(() => {
-                                    this.landing_page_msg = '';
-                                }, 2000);
-                            }
-                        });
-                    }
-                    else{
-                        this.landing_page_msg = 'Please fill in all required fields!';
-                        setTimeout(() => {
-                            this.landing_page_msg = '';
-                        }, 2000);
-                    }
-                },
-
-                async  (){
+                async verify_secret_phrase(){
                     if(this.$refs.gen_secret_phrase.value){
                         this.$refs.verify_secret_phrase_button.disabled = true;
                         const options = {

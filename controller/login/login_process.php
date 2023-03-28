@@ -1,6 +1,7 @@
 <?php
     require_once('../../settings/config.php');
     require_once('../../settings/database.php');
+
     $database = new Connection();
     $db = $database->open();
     $return_value = '';
@@ -24,6 +25,11 @@
                 $user_exists = true;
                 $is_verified = $users['status'];
                 $user_role = $users['role'];
+
+                // Set session variable for logged user
+                $_SESSION["login_user_id"] = $users['id'];
+                $_SESSION["login_username"] = $users['username'];
+                $_SESSION["user_role"] = $users['role'];
             }
         }
         else {

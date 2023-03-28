@@ -1,4 +1,12 @@
 <?php
+    // Redirect to dashboard if user is logged in
+    if(isset($_SESSION["login_user_id"])){
+        if($_SESSION["user_role"] == 'Admin'){
+            header("location:".LOCATION."modules/admin/admin_dash_body.php");
+        }
+        
+    }
+
     $database = new Connection();
     $db = $database->open();
     $sql_query = 'SELECT * FROM home_imgs';
@@ -2031,7 +2039,7 @@
                                 }, 2000);
                             }
                             else if(response.data == 1){
-                                // window.location = '';
+                                window.location = 'modules/admin/admin_dash_body.php';
                             }
                             else if(response.data == 2){
                                 // window.location = '';
@@ -2228,6 +2236,7 @@
                                 this.landing_page_msg = '';
                                 this.show_requestCrops_form = false;
                                 this.show_services_form = true;
+                                this.user_id = 0;
                             }, 4000);
                             
                         });
@@ -2264,6 +2273,7 @@
                                 this.landing_page_msg = '';
                                 this.show_requestServices_form = false;
                                 this.show_services_form = true;
+                                this.user_id = 0;
                             }, 4000);
                             
                         });

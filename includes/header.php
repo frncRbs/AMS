@@ -1,6 +1,8 @@
 <?php
     require_once('../../settings/config.php');
     require_once('../../settings/database.php');
+    require_once('../../controller/farmer/farmer_details.php');
+    $farmer = new Farmer();
 
     // Avoid bypass when no user is login
     if(!isset($_SESSION["login_user_id"])) {
@@ -68,6 +70,32 @@
             .popup-contentDeactCon{
                 height: auto;
                 width: 400px;
+                background: white;
+                display: flex;
+                padding: 20px;
+                flex-wrap: wrap;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                border-radius: 5px;
+                position: relative;
+            }
+            .popupSuccess{
+                background: rgba(0, 0, 0, 0.6);
+                width: 100%;
+                height: 100%;
+                position: fixed;
+                top: 0;
+                z-index: 10;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+            }
+            .popup-contentSuccess{
+                height: 500px;
+                width: 700px;
                 background: white;
                 display: flex;
                 padding: 20px;
@@ -150,12 +178,16 @@
                 height: 100%;
                 position: fixed;
                 top: 0;
-                display: none;
+                z-index: 10;
+                display: flex;
                 flex-wrap: wrap;
                 justify-content: center;
                 align-items: center;
                 text-align: center;
-                z-index: 120;
+            }
+            .buttonIn {
+                width: 300px;
+                position: relative;
             }
             .popup-child4{
                 display: flex;
@@ -163,7 +195,7 @@
             }
             .popup-content3{
                 height: auto;
-                width: 550px;
+                width: 700px;
                 background: white;
                 display: flex;
                 padding: 20px;
@@ -693,7 +725,9 @@
             </label>
             <div class="left_area">
                 <h3>Admin<span> Dashboard</span></h3>
-                <h3><?php echo $_SESSION["login_username"]; ?></h3>
+
+                <!-- FOR CURRENT LOGGED USER -->
+                <!-- <h3><?php echo $_SESSION["login_username"]; ?></h3> --> 
             </div>
 
             <div class="right_area">

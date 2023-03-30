@@ -19,6 +19,11 @@
             return $farmer['first_name'];
         }
 
+        public function getFirstName2($user_id){
+            $farmer = $this->get_details($user_id);
+            echo $farmer['first_name'];
+        }
+
         public function getLastName($user_id){
             $farmer = $this->get_details($user_id);
             return $farmer['last_name'];

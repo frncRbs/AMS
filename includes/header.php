@@ -22,6 +22,8 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
+
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
         <style>
             body{
                 margin: 0;
@@ -70,6 +72,32 @@
             .popup-contentDeactCon{
                 height: auto;
                 width: 400px;
+                background: white;
+                display: flex;
+                padding: 20px;
+                flex-wrap: wrap;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                border-radius: 5px;
+                position: relative;
+            }
+            .popupError{
+                background: rgba(0, 0, 0, 0.6);
+                width: 100%;
+                height: 100%;
+                position: fixed;
+                top: 0;
+                z-index: 10;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+            }
+            .popup-contentError{
+                height: auto;
+                width: 650px;
                 background: white;
                 display: flex;
                 padding: 20px;
@@ -725,7 +753,6 @@
             </label>
             <div class="left_area">
                 <h3>Admin<span> Dashboard</span></h3>
-
                 <!-- FOR CURRENT LOGGED USER -->
                 <!-- <h3><?php echo $_SESSION["login_username"]; ?></h3> --> 
             </div>

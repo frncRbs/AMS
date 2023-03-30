@@ -120,17 +120,17 @@
             position: relative;
         } */
         .popupError{
-        background: rgba(0, 0, 0, 0.6);
-        width: 100%;
-        height: 100%;
-        position: fixed;
-        top: 0;
-        z-index: 10;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
+            background: rgba(0, 0, 0, 0.6);
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            z-index: 10;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
         }
         .popup-contentError{
             height: auto;
@@ -2092,7 +2092,7 @@
                         await axios.post('controller/farmer/verify_user_process.php', data, options)
                         .then((response) => {
                             this.$refs.verify_req_login_button.disabled = false;
-                            if (response.data.return_status == false) {
+                            if (response.data.return_status == 'false') {
                                 this.landing_page_msg = 'Invalid Username or Password!';
                                 
                                 setTimeout(() => {
@@ -2242,7 +2242,7 @@
                                 this.landing_page_msg = '';
                                 this.show_requestCrops_form = false;
                                 this.show_services_form = true;
-                                this.user_id = 0;
+                                // this.user_id = 0;
                             }, 4000);
                             
                         });
@@ -2279,7 +2279,7 @@
                                 this.landing_page_msg = '';
                                 this.show_requestServices_form = false;
                                 this.show_services_form = true;
-                                this.user_id = 0;
+                                // this.user_id = 0;
                             }, 4000);
                             
                         });

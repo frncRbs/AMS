@@ -1,7 +1,8 @@
 <?php
     include_once('../../includes/header.php');
 ?>
-    <div x-data="admin_page">
+    <div x-data="admin_side">
+    <!-- <div> -->
         <div class="sidebar">
             <center>
                 <img src="<?php echo IMAGES; ?>LOGO.png" class="profile_image" alt="">
@@ -16,8 +17,8 @@
                         <li><a type="button" x-on:click="show_farmer_registrationForm = true" style="color: white"><i class="fas fa-user-plus"></i><span>Register Coordinator</span></a></li>
                         <li class="dash_two split"><a href="#"><i class="fas fa-plus-square"></i><span>Set Program</span></a>
                     <ul>
-                        <li><a href="admin_dash_add_crops.php"><i class="fas fa-plus-square"></i><span>Crops</span></a>
-                        <li><a href="admin_dash_add_services.php"><i class="fas fa-plus-square"></i><span>Services</span></a>
+                        <li><a type="button" x-on:click="show_successForm_crops = true" style="color: white"><i class="fas fa-plus-square"></i><span>Crops</span></a>
+                        <li><a type="button" x-on:click="show_successForm_services = true" style="color: white"><i class="fas fa-plus-square"></i><span>Services</span></a>
                     </ul>
                 </li>
                 <li><a href="admin_dash_search_farmer.php"><i class="fas fa-search"></i><span>Search Farmer</span></a></li>
@@ -31,21 +32,195 @@
             <ul>
                 <li class="dropdown">
                 <a href="#"><i class="fas fa-tools"></i><span>Home Features</span></a>
-                <ul>
-                    <li><a href="admin_dash_home_image.php"><i class="fas fa-wrench"></i><span>Customized Home Image</span></a></li>
-                    <li><a href="admin_dash_home_content.php"><i class="fas fa-wrench"></i><span>Customized Home Content</span></a></li>
-                </ul>
+                    <ul>
+                        <li><a href="admin_dash_home_image.php"><i class="fas fa-wrench"></i><span>Customized Home Image</span></a></li>
+                        <li><a href="admin_dash_home_content.php"><i class="fas fa-wrench"></i><span>Customized Home Content</span></a></li>
+                    </ul>
                 </li>
             </ul>
         </nav>
         </div>
 
-        <!-- Success Registration Prompt -->
+        <!-- Add Crops Prompt -->
+        <div class="popupError" x-show="show_successForm_crops" style="display: none">
+            <div class="popup-contentError">
+                <div class="popup-child1" style="margin-bottom: 5px">
+                    <div style="display: flex; flex-direction: column;">
+                        <h1 style="font-weight: bolder">Add Crops</h1>
+                        <hr>
+                        <div class="row-fluid" style="background-color: white; min-height: 400px; padding:10px;">
+                            <div class="span12">
+                                <div class="widget-box">
+                                    <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
+                                    </div>
+                                    <div class="widget-content nopadding">
+                                        <div class="column">
+                                            <div class="col-xs-12 col-sm-6 col-md-12" style="margin: 10px 0 10px;">
+                                                <div class="form-group" >
+                                                <label for="last_name" style="font-weight: bold">Crop:</label>
+                                                    <input type="text" name="last_name" id="last_name" class="form-control input-lg" placeholder="Crop">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="alert alert-danger" id="error" style="display: none;">
+                                            <strong>Warning!</strong> User Already Exist! Please Try Another.
+                                        </div>
+                                        <div class="form-actions" style="display: flex; justify-content: center; margin: 20px">
+                                            <button type="submit" name="submit1" class="btn btn-success" style="width: 25%">Add</button>
+                                        </div>
+                                        <div class="alert alert-success" id="success" style="display: none;">
+                                                <strong>Success!</strong> Record Inserted Successfully.
+                                        </div>
+                                    </div>
+                                </div>
+                            <div class="table-responsive">
+                                <table class="table table-hover table-sm" id="admintable" style="overflow-x:auto;">
+                                    <thead style="display:block">
+                                        <tr style="display:block">
+                                            <th>No.</th>
+                                            <th>Program</th>
+                                            <th>Date Requested</th>
+                                            <th>Remarks</th>
+                                            <th>Delete</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody style="display:block; overflow:auto; height:270px; width:100%">
+                                    <?php
+                                        $database = new Connection();
+                                        $db = $database->open();
+                                        try {
+                                            $sql = 'SELECT * FROM requests_registry';
+                                            $no = 0;
+                                            foreach ($db->query($sql) as $row) {
+                                                $no++;
+                                    ?>
+
+                                        <tr>
+                                            <th scope="row"><?php echo $no; ?></th>
+                                            <td><?php echo $farmer->getProgram($row['user_id']); ?></td>
+                                            <td><?php echo $farmer->getSex($row['user_id']); ?></td>
+                                            <td><?php echo $farmer->getProgram($row['user_id']); ?></td>
+                                            <td><?php echo date('F j, Y', strtotime($row['date_requested']))?></td>
+                                            <td><?php echo $row['service_remarks'] ? $row['service_remarks'] : '--'; ?></td>
+                                            <td><button class="btn btn-success" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" >Delete</button></td>
+                                        </tr>
+                                    <?php
+                                            }
+                                        }
+                                        catch(PDOException $e){
+                                                echo "There is some problem in connection: " . $e->getMessage();
+                                        }
+
+                                        $database->close();
+                                    ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+                <br>
+                <button type="button" class="btn btn-success" style="width: 50%" x-on:click="confirm_reset">Confirm</button>
+                <div class="popup-child2">
+                    <a id="errorClose" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="confirm_reset">X</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Add Services Prompt -->
+        <div class="popupError" x-show="show_successForm_services" style="display: none">
+            <div class="popup-contentError">
+                <div class="popup-child1" style="margin-bottom: 5px">
+                    <div style="display: flex; flex-direction: column;">
+                        <h1 style="font-weight: bolder">Add Service</h1>
+                        <hr>
+                        <div class="row-fluid" style="background-color: white; min-height: 400px; padding:10px;">
+                            <div class="span12">
+                                <div class="widget-box">
+                                    <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
+                                    </div>
+                                    <div class="widget-content nopadding">
+                                        <div class="column">
+                                            <div class="col-xs-12 col-sm-6 col-md-12" style="margin: 10px 0 10px;">
+                                                <div class="form-group" >
+                                                <label for="last_name" style="font-weight: bold">Service:</label>
+                                                    <input type="text" name="last_name" id="last_name" class="form-control input-lg" placeholder="Crop">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="alert alert-danger" id="error" style="display: none;">
+                                            <strong>Warning!</strong> User Already Exist! Please Try Another.
+                                        </div>
+                                        <div class="form-actions" style="display: flex; justify-content: center; margin: 20px">
+                                            <button type="submit" name="submit1" class="btn btn-success" style="width: 25%">Add</button>
+                                        </div>
+                                        <div class="alert alert-success" id="success" style="display: none;">
+                                                <strong>Success!</strong> Record Inserted Successfully.
+                                        </div>
+                                    </div>
+                                </div>
+                            <div class="table-responsive">
+                                <table class="table table-hover table-sm" id="admintable" style="overflow-x:auto;">
+                                    <thead style="display:block">
+                                        <tr style="display:block">
+                                            <th>No.</th>
+                                            <th>Program</th>
+                                            <th>Date Requested</th>
+                                            <th>Remarks</th>
+                                            <th>Delete</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody style="display:block; overflow:auto; height:270px; width:100%">
+                                    <?php
+                                        $database = new Connection();
+                                        $db = $database->open();
+                                        try {
+                                            $sql = 'SELECT * FROM requests_registry';
+                                            $no = 0;
+                                            foreach ($db->query($sql) as $row) {
+                                                $no++;
+                                    ?>
+
+                                        <tr>
+                                            <th scope="row"><?php echo $no; ?></th>
+                                            <td><?php echo $farmer->getProgram($row['user_id']); ?></td>
+                                            <td><?php echo $farmer->getSex($row['user_id']); ?></td>
+                                            <td><?php echo $farmer->getProgram($row['user_id']); ?></td>
+                                            <td><?php echo date('F j, Y', strtotime($row['date_requested']))?></td>
+                                            <td><?php echo $row['service_remarks'] ? $row['service_remarks'] : '--'; ?></td>
+                                            <td><button class="btn btn-success" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" >Delete</button></td>
+                                        </tr>
+                                    <?php
+                                            }
+                                        }
+                                        catch(PDOException $e){
+                                                echo "There is some problem in connection: " . $e->getMessage();
+                                        }
+
+                                        $database->close();
+                                    ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+                <br>
+                <button type="button" class="btn btn-success" style="width: 50%" x-on:click="confirm_reset">Confirm</button>
+                <div class="popup-child2">
+                    <a id="errorClose" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="confirm_reset">X</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Farmer Request Prompt -->
         <div class="popupSuccess" x-show="show_success_registrationForm" style="display: none">
             <div class="popup-contentSuccess">
                 <div class="popup-child1" style="margin-bottom: 5px">
                     <div style="display: flex; flex-direction: column;">
-                        <h1>Farmer Requests!</h1>
+                        <h1 style="font-weight: bolder">Farmer Requests!</h1>
                             <hr>
                             <div class="table-responsive">
                                 <table class="table table-hover table-sm" id="admintable" style="overflow-x:auto;">
@@ -230,7 +405,7 @@
                                             <label for="secret_phrase">Secret Phrase:</label>
                                             <div class="buttonIn">
                                                 <input type="text" id="enter" name="secret_phrase" x-ref="secret_phrase" class="form-control input-lg" placeholder="Secret Phrase" autocomplete=off>
-                                                <button type="button" id="clear" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em; display: inline; margin-top: 6px" x-on:click="generate_secret_phrase" >Generate</button>
+                                                <button type="button" id="clear" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em; display: inline" x-on:click="generate_secret_phrase">Generate</button>
                                             </div>
                                         </div>
                                     </div>
@@ -308,7 +483,6 @@
                                                 <!-- <a href="#" class="card-box-footer">View More <i class="fa fa-arrow-circle-right"></i></a> -->
                                             </div>
                                         </div>
-
                                         <div class="col-lg-3 col-sm-6">
                                             <div class="card-box bg-green">
                                                 <div class="inner">
@@ -370,12 +544,11 @@
                                             $database = new Connection();
                                             $db = $database->open();
                                             try {
-                                                $sql = 'SELECT * FROM requests_registry';
+                                                $sql = 'SELECT * FROM requests_registry GROUP BY user_id';
                                                 $no = 0;
                                                 foreach ($db->query($sql) as $row) {
                                                     $no++;
                                         ?>
-
                                             <tr>
                                                 <th scope="row"><?php echo $no; ?></th>
                                                 <td><?php echo $farmer->getFirstName($row['user_id']); ?></td>
@@ -386,8 +559,12 @@
                                                 <td><?php echo $farmer->getProgram($row['user_id']); ?></td>
                                                 <td><?php echo date('F j, Y', strtotime($row['date_requested']))?></td>
                                                 <td><?php echo $row['service_remarks'] ? $row['service_remarks'] : '--'; ?></td>
-                                                <td><button class="btn btn-success" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="show_success_registrationForm = true">View</button></td>
-                                                <td><button class="btn btn-success" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" >Delete</button></td>
+                                                <td>
+                                                    <button class="btn btn-success" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="show_success_registrationForm = true, (user_id = '<?php echo $row['user_id']; ?>'), get_farmer_details">View</button>
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-success" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" >Delete</button>
+                                                </td>
                                             </tr>
                                         <?php
                                                 }
@@ -395,7 +572,6 @@
                                             catch(PDOException $e){
                                                     echo "There is some problem in connection: " . $e->getMessage();
                                             }
-
                                             $database->close();
                                         ?>
                                         </tbody>
@@ -410,11 +586,14 @@
     </div>
     <script>
         document.addEventListener('alpine:init', () => {
-        Alpine.data('admin_page', () => ({
+        Alpine.data('admin_side', () => ({
                 show_farmer_registrationForm: false,
+                show_successForm_crops: false,
+                show_successForm_services: false,
                 show_success_registrationForm: false,
                 admin_landing_page_msg: '',
                 info_no: 1,
+                user_id: 0,
 
                 next(){
                     if(this.info_no < 2){
@@ -434,23 +613,43 @@
                 },
 
                 confirm_register_exit(){
-                    this.show_farmer_loginForm = true;
+                    this.user_id = 0;
                     this.show_success_registrationForm = false;
                 },
+
+                confirm_reset(){
+                    this.show_successForm_crops = false;
+                    this.show_successForm_services = false;
+                },
+
                 async generate_secret_phrase(){
-                    await axios.get('controller/admin/generate_secret_key.php')
+                    await axios.get('../../controller/admin/generate_secret_key.php')
                     .then((response) => {
                         console.log(response.data);
-                        // this.$refs.secret_phrase.value = response.data;
+                        this.$refs.secret_phrase.value = response.data;
                     }); 
                     // console.log("Working!");
                 },
 
+                async get_farmer_details(){
+                    // console.log(this.user_id);
+                    const options = {
+                        xsrfHeaderName: 'X-XSRF-TOKEN',
+                        xsrfCookieName: 'XSRF-TOKEN',
+                    };
+                    let data = {
+                        confirm_password: this.$refs.confirm_password.value,
+                        user_id: this.user_id,
+                    };
+                    await axios.post('../../controller/admin/get_farmer_details.php', data, options)
+                    .then((response) => {
+                        console.log(response.data);
+                    }); 
+                }
             }));
         });
     </script>
     <script>
-
         function myFunction2() {
             var input, filter, table, tr, td, i;
             input = document.getElementById("mylist2");
@@ -499,6 +698,26 @@
           document.querySelector(".popup2").style.display = "none";
       })
     </script>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
+    <!-- <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script> -->
+
+    <script>
+        $(document).ready(function () {
+            $('#admintable').DataTable({
+                "aaSorting": [],
+                columnDefs: [{
+                orderable: false,
+                targets: [0,1,2,3,4,5,6,7,8,9]
+                }]
+            });
+            $('.dataTables_length').addClass('bs-select');
+        });
+ 		</script>
 
 <?php
     include_once('../../includes/footer.php');

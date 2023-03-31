@@ -10,11 +10,11 @@
     try {
         // Receive data from axios post
         $obj = json_decode(file_get_contents('php://input'), TRUE);
-        $user_id = $obj['user_id'];
+        $crop_id = $obj['crop_id'];
 
-        $sql = $db->prepare("SELECT * FROM requests_registry WHERE user_id = :user_id");
-        $sql->execute(array(':user_id' => $user_id));
-        $records = $sql->fetchAll();
+        $sql = $db->prepare("SELECT crop_name FROM crops WHERE crop_id = :crop_id");
+        $sql->execute(array(':crop_id' => $crop_id));
+        $records = $sql->fetch();
 
         if($records){
             $flag = true;
@@ -28,9 +28,9 @@
     $database->close();
     
     if($flag){
-        echo json_encode($records);
+        echo $records['crop_name'];
     }
     else {
-        echo 'false';
+        echo false;
     }
 ?>

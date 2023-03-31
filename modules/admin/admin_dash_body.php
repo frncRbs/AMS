@@ -228,40 +228,26 @@
                                         <tr style="display:block">
                                             <th>No.</th>
                                             <th>Program</th>
+                                            <th>Program Name</th>
                                             <th>Date Requested</th>
                                             <th>Remarks</th>
                                             <th>Delete</th>
                                         </tr>
                                     </thead>
                                     <tbody style="display:block; overflow:auto; height:270px; width:100%">
-                                    <?php
-                                        $database = new Connection();
-                                        $db = $database->open();
-                                        try {
-                                            $sql = 'SELECT * FROM requests_registry';
-                                            $no = 0;
-                                            foreach ($db->query($sql) as $row) {
-                                                $no++;
-                                    ?>
-
-                                        <tr>
-                                            <th scope="row"><?php echo $no; ?></th>
-                                            <td><?php echo $farmer->getProgram($row['user_id']); ?></td>
-                                            <td><?php echo $farmer->getSex($row['user_id']); ?></td>
-                                            <td><?php echo $farmer->getProgram($row['user_id']); ?></td>
-                                            <td><?php echo date('F j, Y', strtotime($row['date_requested']))?></td>
-                                            <td><?php echo $row['service_remarks'] ? $row['service_remarks'] : '--'; ?></td>
-                                            <td><button class="btn btn-success" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" >Delete</button></td>
-                                        </tr>
-                                    <?php
-                                            }
-                                        }
-                                        catch(PDOException $e){
-                                                echo "There is some problem in connection: " . $e->getMessage();
-                                        }
-
-                                        $database->close();
-                                    ?>
+                                        <template x-if="farmer_records">
+                                            <template x-for="(row, index) in farmer_records">
+                                                <tr>
+                                                    <th scope="row"><span x-text="(index + 1)"></span></th>
+                                                    <td><span x-text="row.request_type"></span></td>
+                                                    <td><span x-text="get_crop_name(row.crop_id)"></span></td>
+                                                    <td><span x-text="row.date_requested"></span></td>
+                                                    <td>
+                                                        <button class="btn btn-success" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="delete_request(row.request_id, row.user_id, 'Crop')">Delete</button>
+                                                    </td>
+                                                </tr>
+                                            </template>
+                                        </template>
                                     </tbody>
                                 </table>
                             </div>
@@ -560,7 +546,7 @@
                                                 <td><?php echo date('F j, Y', strtotime($row['date_requested']))?></td>
                                                 <td><?php echo $row['service_remarks'] ? $row['service_remarks'] : '--'; ?></td>
                                                 <td>
-                                                    <button class="btn btn-success" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="show_success_registrationForm = true, (user_id = '<?php echo $row['user_id']; ?>'), get_farmer_details">View</button>
+                                                    <button class="btn btn-success" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="show_success_registrationForm = true, get_farmer_records('<?php echo $row['user_id'];  ?>')">View</button>
                                                 </td>
                                                 <td>
                                                     <button class="btn btn-success" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" >Delete</button>
@@ -593,7 +579,7 @@
                 show_success_registrationForm: false,
                 admin_landing_page_msg: '',
                 info_no: 1,
-                user_id: 0,
+                farmer_records: [],
 
                 next(){
                     if(this.info_no < 2){
@@ -613,7 +599,6 @@
                 },
 
                 confirm_register_exit(){
-                    this.user_id = 0;
                     this.show_success_registrationForm = false;
                 },
 
@@ -631,21 +616,59 @@
                     // console.log("Working!");
                 },
 
-                async get_farmer_details(){
-                    // console.log(this.user_id);
+                async get_farmer_records(user_id){
+                    // console.log(user_id);
                     const options = {
                         xsrfHeaderName: 'X-XSRF-TOKEN',
                         xsrfCookieName: 'XSRF-TOKEN',
                     };
                     let data = {
-                        confirm_password: this.$refs.confirm_password.value,
-                        user_id: this.user_id,
+                        user_id: user_id
                     };
                     await axios.post('../../controller/admin/get_farmer_details.php', data, options)
                     .then((response) => {
                         console.log(response.data);
+                        this.farmer_records = response.data;
                     }); 
+                },
+
+                async get_crop_name(crop_id){
+                    let crop_name = '';
+                    const options = {
+                        xsrfHeaderName: 'X-XSRF-TOKEN',
+                        xsrfCookieName: 'XSRF-TOKEN',
+                    };
+                    let data = {
+                        crop_id: crop_id
+                    };
+                    await axios.post('../../controller/admin/get_crop_name.php', data, options)
+                    .then((response) => {
+                        // console.log(response.data);
+                        crop_name = response.data;
+                    }); 
+                    return crop_name ? crop_name : '';
+                    // return response.data;
+                },
+                async delete_request(request_id, user_id, request_type){
+                    console.log(request_id);
+                    const options = {
+                        xsrfHeaderName: 'X-XSRF-TOKEN',
+                        xsrfCookieName: 'XSRF-TOKEN',
+                    };
+                    let data = {
+                        request_id: request_id,
+                        user_id: user_id,
+                        request_type: request_type,
+                    };
+                    await axios.post('../../controller/admin/delete_farmer_request.php', data, options)
+                    .then((response) => {
+                        // console.log(response.data);
+                        // crop_name = response.data;
+                        this.farmer_records = response.data.requests;
+                    }); 
+                    // return crop_name ? crop_name : '';
                 }
+
             }));
         });
     </script>
@@ -706,7 +729,7 @@
     <!-- <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script> -->
 
-    <script>
+    <!-- <script>
         $(document).ready(function () {
             $('#admintable').DataTable({
                 "aaSorting": [],
@@ -717,7 +740,7 @@
             });
             $('.dataTables_length').addClass('bs-select');
         });
- 		</script>
+    </script> -->
 
 <?php
     include_once('../../includes/footer.php');

@@ -21,7 +21,7 @@
 
         // Retrieve updated record
         $sql = $db->prepare("SELECT * FROM requests_registry WHERE user_id = :user_id");
-        $sql->execute(array(':user_id' => $user_id, ':request_type' => $request_type));
+        $sql->execute(array(':user_id' => $user_id));
         $records = $sql->fetchAll();
 
     } catch (PDOException $e) {

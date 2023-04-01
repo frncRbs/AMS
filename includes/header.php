@@ -23,7 +23,8 @@
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
 
-        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+        <!-- <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css"> -->
         <style>
             body{
                 margin: 0;
@@ -98,6 +99,32 @@
             .popup-contentError{
                 height: auto;
                 width: 650px;
+                background: white;
+                display: flex;
+                padding: 20px;
+                flex-wrap: wrap;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                border-radius: 5px;
+                position: relative;
+            }
+            .popupSuccessRegistration{
+                background: rgba(0, 0, 0, 0.6);
+                width: 100%;
+                height: 100%;
+                position: fixed;
+                top: 0;
+                z-index: 10;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+            }
+            .popup-contentSuccessRegistration{
+                height: 500px;
+                width: 700px;
                 background: white;
                 display: flex;
                 padding: 20px;
@@ -767,4 +794,5 @@
                 <a href="<?php echo LOCATION;?>settings/logout.php"  class="logout_btn">Logout</a>
             </div>
         </header>
+
         <!--header area end-->

@@ -14,11 +14,11 @@
                 <li class="dash" style="z-index: 10;">
                     <a href="#"><i class="fas fa-cogs"></i><span>Features</span></a>
                     <ul>
-                        <li><a type="button" x-on:click="show_personnel_registration_form = true"  style="color: white"><i class="fas fa-user-plus"></i><span>Register Coordinator</span></a></li>
+                        <li><a type="button" x-on:click="show_farmer_registrationForm = true" style="color: white"><i class="fas fa-user-plus"></i><span>Register Coordinator</span></a></li>
                         <li class="dash_two split"><a href="#"><i class="fas fa-plus-square"></i><span>Set Program</span></a>
                     <ul>
-                        <li><a type="button" x-on:click="show_crops_form = true" style="color: white"><i class="fas fa-plus-square"></i><span>Crops</span></a>
-                        <li><a type="button" x-on:click="show_services_form = true" style="color: white"><i class="fas fa-plus-square"></i><span>Services</span></a>
+                        <li><a type="button" x-on:click="show_successForm_crops = true" style="color: white"><i class="fas fa-plus-square"></i><span>Crops</span></a>
+                        <li><a type="button" x-on:click="show_successForm_services = true" style="color: white"><i class="fas fa-plus-square"></i><span>Services</span></a>
                     </ul>
                 </li>
                 <li><a href="admin_dash_search_farmer.php"><i class="fas fa-search"></i><span>Search Farmer</span></a></li>
@@ -41,8 +41,145 @@
         </nav>
         </div>
 
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row-fluid" style="background-color: white; min-height: 600px; padding:10px;">
+                    <div class="span12">
+                            <div class="printGrp" style="display: flex; flex-direction: row; gap: 20px; justify-content: flex-end; border: 2px solid black;
+                                padding: 15px 0 15px 0; margin-top: 10px; flex-wrap: wrap; background-color: rgba(0, 128, 0, 0.7); position: relative">
+                                <div style="left: 10px; position: absolute">
+                                    <h3 style="font-weight: bolder; color: white">Dashboard</h3>
+                                </div>
+                                    <div style="margin: 0 10px 0 0">
+                                        <label for="drpProg" style="font-weight: bold">Program:</label>
+                                        <select id="mylist2" onchange="myFunction2()" style="width: 150px; height: auto; padding: 2.5px" class="drpProg">
+                                            <option value="">None</option>
+                                            <option value="HVC">High Value Crops(HVC)</option>
+                                            <option value="Rice">Rice Program(Rice)</option>
+                                            <option value="Corn">Corn Program(Corn)</option>
+                                        </select>
+                                    </div>
+                                <div style="margin: 0 10px 0 0">
+                                    <a href="#"><button class="logout_btn" style="margin: 0 10px 0 0; border-radius: 3px; width: 100%">Print</button></a>
+                                </div>
+                                </div>
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-lg-3 col-sm-6">
+                                            <div class="card-box bg-blue">
+                                                <div class="inner">
+                                                    <h3> 13436 </h3>
+                                                    <p> Total Number of Farmers </p>
+                                                </div>
+                                                <div class="icon">
+                                                    <i class="fa fa-users" aria-hidden="true"></i>
+                                                </div>
+                                                <!-- <a href="#" class="card-box-footer">View More <i class="fa fa-arrow-circle-right"></i></a> -->
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-sm-6">
+                                            <div class="card-box bg-green">
+                                                <div class="inner">
+                                                    <h3> 185358 </h3>
+                                                    <p> Total Number of Approved Request </p>
+                                                </div>
+                                                <div class="icon">
+                                                    <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                                                </div>
+                                                <!-- <a href="#" class="card-box-footer">View More <i class="fa fa-arrow-circle-right"></i></a> -->
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-sm-6">
+                                            <div class="card-box bg-orange">
+                                                <div class="inner">
+                                                    <h3> 5464 </h3>
+                                                    <p> Total Number of Pending Request </p>
+                                                </div>
+                                                <div class="icon">
+                                                    <i class="fas fa-hourglass-start" aria-hidden="true"></i>
+                                                </div>
+                                                <!-- <a href="#" class="card-box-footer">View More <i class="fa fa-arrow-circle-right"></i></a> -->
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-sm-6">
+                                            <div class="card-box bg-red">
+                                                <div class="inner">
+                                                    <h3> 723 </h3>
+                                                    <p> Total Number of Declined Request </p>
+                                                </div>
+                                                <div class="icon">
+                                                    <i class="fas fa-user-minus"></i>
+                                                </div>
+                                                <!-- <a href="#" class="card-box-footer">View More <i class="fa fa-arrow-circle-right"></i></a> -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="table-responsive">
+                                    <table class="table table-hover table-sm" id="admintable">
+                                        <thead>
+                                            <tr>
+                                                <th>No.</th>
+                                                <th>First Name</th>
+                                                <th>Middle Name</th>
+                                                <th>Last Name</th>
+                                                <th>Commodity</th>
+                                                <th>Sex</th>
+                                                <th>Program</th>
+                                                <th>Date Requested</th>
+                                                <th>Remarks</th>
+                                                <th>View</th>
+                                                <th>Delete</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        <?php
+                                            $database = new Connection();
+                                            $db = $database->open();
+                                            try {
+                                                $sql = 'SELECT * FROM requests_registry GROUP BY user_id';
+                                                $no = 0;
+                                                foreach ($db->query($sql) as $row) {
+                                                    $no++;
+                                        ?>
+                                            <tr>
+                                                <th scope="row"><?php echo $no; ?></th>
+                                                <td><?php echo $farmer->getFirstName($row['user_id']); ?></td>
+                                                <td><?php echo $farmer->getMiddleName($row['user_id']); ?></td>
+                                                <td><?php echo $farmer->getLastName($row['user_id']); ?></td>
+                                                <td><?php echo $farmer->getProgram($row['user_id']); ?></td>
+                                                <td><?php echo $farmer->getSex($row['user_id']); ?></td>
+                                                <td><?php echo $farmer->getProgram($row['user_id']); ?></td>
+                                                <td><?php echo date('F j, Y', strtotime($row['date_requested']))?></td>
+                                                <td><?php echo $row['service_remarks'] ? $row['service_remarks'] : '--'; ?></td>
+                                                <td>
+                                                    <button class="btn btn-success" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="show_farmer_requestForm = true, get_farmer_records('<?php echo $row['user_id'];  ?>')">View</button>
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-success" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" >Delete</button>
+                                                </td>
+                                            </tr>
+                                        <?php
+                                                }
+                                            }
+                                            catch(PDOException $e){
+                                                    echo "There is some problem in connection: " . $e->getMessage();
+                                            }
+                                            $database->close();
+                                        ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Add Crops Prompt -->
-        <div class="popupError" x-show="show_crops_form" style="display: none">
+        <div class="popupError" x-show="show_successForm_crops" style="display: none">
             <div class="popup-contentError">
                 <div class="popup-child1" style="margin-bottom: 5px">
                     <div style="display: flex; flex-direction: column;">
@@ -129,7 +266,7 @@
         </div>
         
         <!-- Add Services Prompt -->
-        <div class="popupError" x-show="show_services_form" style="display: none">
+        <div class="popupError" x-show="show_successForm_services" style="display: none">
             <div class="popup-contentError">
                 <div class="popup-child1" style="margin-bottom: 5px">
                     <div style="display: flex; flex-direction: column;">
@@ -216,34 +353,32 @@
         </div>
 
         <!-- Farmer Request Prompt -->
-        <div class="popupSuccess" x-show="show_farmer_request_form" style="display: none">
+        <div class="popupSuccess" x-show="show_farmer_requestForm" style="display: none">
             <div class="popup-contentSuccess">
                 <div class="popup-child1" style="margin-bottom: 5px">
                     <div style="display: flex; flex-direction: column;">
-                        <h1 style="font-weight: bolder">Farmer Requests! RRRER</h1>
+                        <h1 style="font-weight: bolder">Farmer Requests!</h1>
                             <hr>
                             <div class="table-responsive">
-                                <table class="table table-hover table-sm" id="admintable">
-                                    <thead>
-                                        <tr>
+                                <table class="table table-hover table-sm" id="admintable" style="overflow-x:auto;">
+                                    <thead style="display:block">
+                                        <tr style="display:block">
                                             <th>No.</th>
                                             <th>Program</th>
-                                            <th>Service Type</th>
+                                            <th>Program Name</th>
                                             <th>Date Requested</th>
                                             <th>Remarks</th>
                                             <th>Delete</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody style="display:block; overflow:auto; height:270px; width:100%">
                                         <template x-if="farmer_records">
                                             <template x-for="(row, index) in farmer_records">
                                                 <tr>
                                                     <th scope="row"><span x-text="(index + 1)"></span></th>
                                                     <td><span x-text="row.request_type"></span></td>
-                                                    <td><span x-text="get_service_name(row.crop_id, row.service_id)"></span></td>
+                                                    <td><span x-text="get_crop_name(row.crop_id)"></span></td>
                                                     <td><span x-text="row.date_requested"></span></td>
-                                                    <!-- <td><span x-text="row.service_remarks"></span></td> -->
-                                                    <td>asdasdasd</td>
                                                     <td>
                                                         <button class="btn btn-success" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="delete_request(row.request_id, row.user_id, 'Crop')">Delete</button>
                                                     </td>
@@ -264,7 +399,7 @@
         </div>
 
         <!-- Farmer Registration Form -->      
-        <div class="popup3" x-show="show_personnel_registration_form" style="display: none;">
+        <div class="popup3" x-show="show_personnel_registrationForm" style="display: none;">
             <div class="popup-content3">
                 <div class="popup-child1">
                     <form>
@@ -423,7 +558,6 @@
                                     </div>
                                 </div>
                                 <br>
-
                             </div>
                             <button type="button" class="btn btn-success" style="width: 50%" x-ref="submit_personnel_button" x-on:click="submit_personnel_form">Submit</button>
                             <br>
@@ -446,151 +580,35 @@
                 </div>
             </div>
         </div>
-
-        <div class="content">
-            <div class="container-fluid">
-                <div class="row-fluid" style="background-color: white; min-height: 600px; padding:10px;">
-                    <div class="span12">
-                            <div class="printGrp" style="display: flex; flex-direction: row; gap: 20px; justify-content: flex-end; border: 2px solid black;
-                                padding: 15px 0 15px 0; margin-top: 10px; flex-wrap: wrap; background-color: rgba(0, 128, 0, 0.7); position: relative">
-                                <div style="left: 10px; position: absolute">
-                                    <h3 style="font-weight: bolder; color: white">Dashboard</h3>
-                                </div>
-                                    <div style="margin: 0 10px 0 0">
-                                        <label for="drpProg" style="font-weight: bold">Program:</label>
-                                            <select id="mylist2" onchange="myFunction2()" style="width: 150px; height: auto; padding: 2.5px" class="drpProg">
-                                                <option value="">None</option>
-                                                <option value="HVC">High Value Crops(HVC)</option>
-                                                <option value="Rice">Rice Program(Rice)</option>
-                                                <option value="Corn">Corn Program(Corn)</option>
-                                            </select>
-                                    </div>
-                                <div style="margin: 0 10px 0 0">
-                                    <a href="#"><button class="logout_btn" style="margin: 0 10px 0 0; border-radius: 3px; width: 100%">Print</button></a>
-                                </div>
-                                </div>
-                                <div class="container">
-                                    <div class="row">
-                                        <div class="col-lg-3 col-sm-6">
-                                            <div class="card-box bg-blue">
-                                                <div class="inner">
-                                                    <h3> 13436 </h3>
-                                                    <p> Total Number of Farmers </p>
-                                                </div>
-                                                <div class="icon">
-                                                    <i class="fa fa-users" aria-hidden="true"></i>
-                                                </div>
-                                                <!-- <a href="#" class="card-box-footer">View More <i class="fa fa-arrow-circle-right"></i></a> -->
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3 col-sm-6">
-                                            <div class="card-box bg-green">
-                                                <div class="inner">
-                                                    <h3> 185358 </h3>
-                                                    <p> Total Number of Approved Request </p>
-                                                </div>
-                                                <div class="icon">
-                                                    <i class="fa fa-thumbs-up" aria-hidden="true"></i>
-                                                </div>
-                                                <!-- <a href="#" class="card-box-footer">View More <i class="fa fa-arrow-circle-right"></i></a> -->
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3 col-sm-6">
-                                            <div class="card-box bg-orange">
-                                                <div class="inner">
-                                                    <h3> 5464 </h3>
-                                                    <p> Total Number of Pending Request </p>
-                                                </div>
-                                                <div class="icon">
-                                                    <i class="fas fa-hourglass-start" aria-hidden="true"></i>
-                                                </div>
-                                                <!-- <a href="#" class="card-box-footer">View More <i class="fa fa-arrow-circle-right"></i></a> -->
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3 col-sm-6">
-                                            <div class="card-box bg-red">
-                                                <div class="inner">
-                                                    <h3> 723 </h3>
-                                                    <p> Total Number of Declined Request </p>
-                                                </div>
-                                                <div class="icon">
-                                                    <i class="fas fa-user-minus"></i>
-                                                </div>
-                                                <!-- <a href="#" class="card-box-footer">View More <i class="fa fa-arrow-circle-right"></i></a> -->
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <hr>
-                                <div class="table-responsive">
-                                    <table class="table table-hover table-sm" id="admintable">
-                                        <thead>
-                                            <tr>
-                                                <th>No.</th>
-                                                <th>First Name</th>
-                                                <th>Middle Name</th>
-                                                <th>Last Name</th>
-                                                <th>Commodity</th>
-                                                <th>Sex</th>
-                                                <th>Program</th>
-                                                <th>Date Requested</th>
-                                                <th>Remarks</th>
-                                                <th>View</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        <?php
-                                            $database = new Connection();
-                                            $db = $database->open();
-                                            try {
-                                                $sql = 'SELECT * FROM requests_registry GROUP BY user_id';
-                                                $no = 0;
-                                                foreach ($db->query($sql) as $row) {
-                                                    $no++;
-                                        ?>
-                                            <tr>
-                                                <th scope="row"><?php echo $no; ?></th>
-                                                <td><?php echo $farmer->getFirstName($row['user_id']); ?></td>
-                                                <td><?php echo $farmer->getMiddleName($row['user_id']); ?></td>
-                                                <td><?php echo $farmer->getLastName($row['user_id']); ?></td>
-                                                <td><?php echo $farmer->getProgram($row['user_id']); ?></td>
-                                                <td><?php echo $farmer->getSex($row['user_id']); ?></td>
-                                                <td><?php echo $farmer->getProgram($row['user_id']); ?></td>
-                                                <td><?php echo date('F j, Y', strtotime($row['date_requested']))?></td>
-                                                <td><?php echo $row['service_remarks'] ? $row['service_remarks'] : '--'; ?></td>
-                                                <td>
-                                                    <button class="btn btn-success" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="show_farmer_request_form = true, get_farmer_records('<?php echo $row['user_id'];  ?>')">View</button>
-                                                </td>
-                                            </tr>
-                                        <?php
-                                                }
-                                            }
-                                            catch(PDOException $e){
-                                                    echo "There is some problem in connection: " . $e->getMessage();
-                                            }
-                                            $database->close();
-                                        ?>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+        
+        <!-- Success Registration Prompt -->
+        <div class="popupSuccessRegistration" x-show="show_success_registrationForm" style="display: none">
+            <div class="popup-contentSuccessRegistration">
+                <div class="popup-child1" style="margin-bottom: 5px">
+                    <h1>Account Successfully Created!</h1>
+                    <p>You can now try to login your account</p>
+                </div>
+                <br>
+                <button type="button" class="loginB" style="width: 50%" x-on:click="confirm_register_exit">Confirm</button>
+                <div class="popup-child2">
+                    <a id="errorClose" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="confirm_register_exit">X</a>
                 </div>
             </div>
         </div>
     </div>
+
     <script>
         document.addEventListener('alpine:init', () => {
         Alpine.data('admin_side', () => ({
-                show_personnel_registration_form: false,
-                show_crops_form: false,
-                show_services_form: false,
-                show_personnel_requestForm: false,
-                show_farmer_request_form: false,
+                show_personnel_registrationForm: false,
+                show_successForm_crops: false,
+                show_successForm_services: false,
+                show_farmer_requestForm: false,
+                show_personnel_requestForm
+                show_success_registrationForm: false,
                 admin_landing_page_msg: '',
 
-                error_admin: false,
+                error_landing: false,
                 info_no: 1,
                 farmer_records: [],
 
@@ -608,21 +626,20 @@
 
                 exit_register(){
                     this.info_no = 1;
-                    this.show_personnel_registration_form = false;
+                    this.show_personnel_registrationForm = false;
                 },
 
                 confirm_farmer_request_exit(){
-                    this.show_personnel_requestForm = false;
-                    this.show_farmer_request_form = false;
+                    this.show_farmer_requestForm = false;
                 },
 
                 confirm_reset(){
-                    this.show_crops_form = false;
-                    this.show_services_form = false;
+                    this.show_successForm_crops = false;
+                    this.show_successForm_services = false;
                 },
 
                 async submit_personnel_form(){
-                    this.$refs.submit_personnel_button.disabled = false;
+                    // this.$refs.submit_personnel_button.disabled = true;
                     if(this.$refs.first_name.value && this.$refs.middle_name.value && this.$refs.last_name.value && this.$refs.role_service.value && this.$refs.birth_date.value && this.$refs.sex.value && this.$refs.contact_no.value && this.$refs.religion.value && this.$refs.birth_place.value && this.$refs.address_street.value && this.$refs.address_barangay.value && this.$refs.address_municipality.value && this.$refs.username.value && this.$refs.password.value){
                         if(this.$refs.password.value == this.$refs.confirmPassword.value){
                             const options = {
@@ -653,21 +670,19 @@
                             .then((response) => {
                                 // console.log(response.data);
                                 this.$refs.submit_personnel_button.disabled = false;
-                                // console.log('Kini: ' + (response.data == true));
-                                if(response.data == false) {
-                                    this.error_admin = true;
+                                // console.log((response.data == false));
+                                if(response.data == 'false') {
+                                    this.error_landing = true;
                                     this.admin_landing_page_msg = 'Username already taken!';
                                     setTimeout(() => {
-                                        this.error_admin = false;
+                                        this.error_landing = false;
                                         this.admin_landing_page_msg = '';
                                     }, 2000);
                                 }
-                                else if(response.data == true){
-                                    this.$refs.submit_personnel_button.disabled = true;
+                                else if(response.data == 'true'){
                                     this.info_no = 1;
-                                    
-                                    this.show_personnel_registration_form = false;
-                                    this.show_farmer_request_form = true;
+                                    this.show_personnel_registrationForm = false;
+                                    this.show_success_registrationForm = true;
                                 }
                             },
                             (error) => {
@@ -676,33 +691,25 @@
 
                         }
                         else{
-                            this.error_admin = true;
+                            this.error_landing = true;
                             this.admin_landing_page_msg = 'Password do not match!';
-                            this.$refs.submit_personnel_button.disabled = false;
+                            this.$refs.submit_personnel_button.disabled = true;
                             setTimeout(() => {
-                                this.error_admin = false;
+                                this.error_landing = false;
                                 this.admin_landing_page_msg = '';
                             }, 2000);
                         }
                     }
                     else{
-                        this.error_admin = true;
-                        this.$refs.submit_personnel_button.disabled = false;
+                        this.error_landing = true;
+                        this.$refs.submit_personnel_button.disabled = true;
                         this.admin_landing_page_msg = 'Please fill in all required fields!';
 
                         setTimeout(() => {
-                            this.error_admin = false;
+                            this.error_landing = false;
                             this.admin_landing_page_msg = '';
                         }, 2000);
                     }
-                },
-
-                async generate_secret_phrase(){
-                    await axios.get('../../controller/admin/generate_secret_key.php')
-                    .then((response) => {
-                        console.log(response.data);
-                        this.$refs.secret_phrase.value = response.data;
-                    });
                 },
 
                 async get_farmer_records(user_id){
@@ -716,28 +723,28 @@
                     };
                     await axios.post('../../controller/admin/get_farmer_details.php', data, options)
                     .then((response) => {
-                        // console.log(response.data);
+                        console.log(response.data);
                         this.farmer_records = response.data;
                     }); 
                 },
 
-                async get_service_name(crop_id, service_id){
+                async get_crop_name(crop_id){
+                    let crop_name = '';
                     const options = {
                         xsrfHeaderName: 'X-XSRF-TOKEN',
                         xsrfCookieName: 'XSRF-TOKEN',
                     };
                     let data = {
-                        crop_id: crop_id,
-                        service_id: service_id,
+                        crop_id: crop_id
                     };
-                    await axios.post('../../controller/admin/get_service_name.php', data, options)
+                    await axios.post('../../controller/admin/get_crop_name.php', data, options)
                     .then((response) => {
                         // console.log(response.data);
-                        service_name = response.data;
+                        crop_name = response.data;
                     }); 
-                    return service_name ? service_name : '';
+                    return crop_name ? crop_name : '';
                     // return response.data;
-                }, // return response.data;
+                },
 
                 async delete_request(request_id, user_id, request_type){
                     console.log(request_id);
@@ -752,14 +759,9 @@
                     };
                     await axios.post('../../controller/admin/delete_farmer_request.php', data, options)
                     .then((response) => {
-                        // console.log(response.data.requests);
-                        if(response.data.requests.length == 0){
-                            window.location = '<?php echo LOCATION; ?>modules/admin/admin_dash_body.php';
-                        }
-                        else{
-                            this.farmer_records = response.data.requests;
-                        }
-                        
+                        // console.log(response.data);
+                        // crop_name = response.data;
+                        this.farmer_records = response.data.requests;
                     }); 
                     // return crop_name ? crop_name : '';
                 }

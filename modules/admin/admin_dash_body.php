@@ -1,7 +1,9 @@
 <?php
     include_once('../../includes/header.php');
 ?>
-    <div x-data="admin_side">
+    <div x-data="admin_side" x-init="initialize_registry()">
+    <?php include('show_farmer_request_modal.php'); ?>
+
     <!-- <div> -->
         <div class="sidebar">
             <center>
@@ -40,6 +42,22 @@
             </ul>
         </nav>
         </div>
+        
+        <!-- Success Registration Prompt -->
+        <div class="popupSuccess_register" x-show="show_success_registration_form" style="display: none">
+            <div class="popup-contentSuccess_register">
+                <div class="popup-child1" style="margin-bottom: 5px">
+                    <div style="display: flex;  ">
+                        <h1 style="font-weight: bolder">Account Successfully Created!</h1>
+                    </div>
+                </div>
+                <br>
+                <button type="button" class="btn btn-success" style="width: 50%" x-on:click="confirm_reset">Confirm</button>
+                <div class="popup-child2">
+                    <a id="errorClose" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="confirm_reset">X</a>
+                </div>
+            </div>
+        </div>
 
         <!-- Add Crops Prompt -->
         <div class="popupError" x-show="show_crops_form" style="display: none">
@@ -61,15 +79,6 @@
                                                     <input type="text" name="last_name" id="last_name" class="form-control input-lg" placeholder="Crop">
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="alert alert-danger" id="error" style="display: none;">
-                                            <strong>Warning!</strong> User Already Exist! Please Try Another.
-                                        </div>
-                                        <div class="form-actions" style="display: flex; justify-content: center; margin: 20px">
-                                            <button type="submit" name="submit1" class="btn btn-success" style="width: 25%">Add</button>
-                                        </div>
-                                        <div class="alert alert-success" id="success" style="display: none;">
-                                                <strong>Success!</strong> Record Inserted Successfully.
                                         </div>
                                     </div>
                                 </div>
@@ -149,34 +158,24 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="alert alert-danger" id="error" style="display: none;">
-                                            <strong>Warning!</strong> User Already Exist! Please Try Another.
-                                        </div>
-                                        <div class="form-actions" style="display: flex; justify-content: center; margin: 20px">
-                                            <button type="submit" name="submit1" class="btn btn-success" style="width: 25%">Add</button>
-                                        </div>
-                                        <div class="alert alert-success" id="success" style="display: none;">
-                                                <strong>Success!</strong> Record Inserted Successfully.
-                                        </div>
                                     </div>
                                 </div>
                             <div class="table-responsive">
-                                <table class="table table-hover table-sm" id="admintable" style="overflow-x:auto;">
-                                    <thead style="display:block">
-                                        <tr style="display:block">
+                                <table class="table table-hover table-sm">
+                                    <thead>
+                                        <tr>
                                             <th>No.</th>
                                             <th>Program</th>
-                                            <th>Date Requested</th>
-                                            <th>Remarks</th>
+                                            <th>Date Created</th>
                                             <th>Delete</th>
                                         </tr>
                                     </thead>
-                                    <tbody style="display:block; overflow:auto; height:270px; width:100%">
+                                    <tbody>
                                     <?php
                                         $database = new Connection();
                                         $db = $database->open();
                                         try {
-                                            $sql = 'SELECT * FROM requests_registry';
+                                            $sql = 'SELECT * FROM services';
                                             $no = 0;
                                             foreach ($db->query($sql) as $row) {
                                                 $no++;
@@ -184,11 +183,8 @@
 
                                         <tr>
                                             <th scope="row"><?php echo $no; ?></th>
-                                            <td><?php echo $farmer->getProgram($row['user_id']); ?></td>
-                                            <td><?php echo $farmer->getSex($row['user_id']); ?></td>
-                                            <td><?php echo $farmer->getProgram($row['user_id']); ?></td>
-                                            <td><?php echo date('F j, Y', strtotime($row['date_requested']))?></td>
-                                            <td><?php echo $row['service_remarks'] ? $row['service_remarks'] : '--'; ?></td>
+                                            <td><?php echo $farmer->getProgram($row['service_name']); ?></td>
+                                            <td><?php echo $farmer->getSex($row['date_created']); ?></td>
                                             <td><button class="btn btn-success" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" >Delete</button></td>
                                         </tr>
                                     <?php
@@ -214,55 +210,7 @@
                 </div>
             </div>
         </div>
-
-        <!-- Farmer Request Prompt -->
-        <div class="popupSuccess" x-show="show_farmer_request_form" style="display: none">
-            <div class="popup-contentSuccess">
-                <div class="popup-child1" style="margin-bottom: 5px">
-                    <div style="display: flex; flex-direction: column;">
-                        <h1 style="font-weight: bolder">Farmer Requests! RRRER</h1>
-                            <hr>
-                            <div class="table-responsive">
-                                <table class="table table-hover table-sm" id="admintable">
-                                    <thead>
-                                        <tr>
-                                            <th>No.</th>
-                                            <th>Program</th>
-                                            <th>Service Type</th>
-                                            <th>Date Requested</th>
-                                            <th>Remarks</th>
-                                            <th>Delete</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <template x-if="farmer_records">
-                                            <template x-for="(row, index) in farmer_records">
-                                                <tr>
-                                                    <th scope="row"><span x-text="(index + 1)"></span></th>
-                                                    <td><span x-text="row.request_type"></span></td>
-                                                    <td><span x-text="get_service_name(row.crop_id, row.service_id)"></span></td>
-                                                    <td><span x-text="row.date_requested"></span></td>
-                                                    <!-- <td><span x-text="row.service_remarks"></span></td> -->
-                                                    <td>asdasdasd</td>
-                                                    <td>
-                                                        <button class="btn btn-success" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="delete_request(row.request_id, row.user_id, 'Crop')">Delete</button>
-                                                    </td>
-                                                </tr>
-                                            </template>
-                                        </template>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                </div>
-                <br>
-                <button type="button" class="btn btn-success" style="width: 50%; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="confirm_farmer_request_exit">Confirm</button>
-                <div class="popup-child2">
-                    <a id="errorClose" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="confirm_farmer_request_exit">X</a>
-                </div>
-            </div>
-        </div>
-
+        
         <!-- Farmer Registration Form -->      
         <div class="popup3" x-show="show_personnel_registration_form" style="display: none;">
             <div class="popup-content3">
@@ -452,20 +400,11 @@
                 <div class="row-fluid" style="background-color: white; min-height: 600px; padding:10px;">
                     <div class="span12">
                             <div class="printGrp" style="display: flex; flex-direction: row; gap: 20px; justify-content: flex-end; border: 2px solid black;
-                                padding: 15px 0 15px 0; margin-top: 10px; flex-wrap: wrap; background-color: rgba(0, 128, 0, 0.7); position: relative">
+                                padding: 15px 0 15px 0; margin-top: 10px; flex-wrap: wrap; background: #2f323a; position: relative; border-radius: 5px">
                                 <div style="left: 10px; position: absolute">
                                     <h3 style="font-weight: bolder; color: white">Dashboard</h3>
-                                </div>
-                                    <div style="margin: 0 10px 0 0">
-                                        <label for="drpProg" style="font-weight: bold">Program:</label>
-                                            <select id="mylist2" onchange="myFunction2()" style="width: 150px; height: auto; padding: 2.5px" class="drpProg">
-                                                <option value="">None</option>
-                                                <option value="HVC">High Value Crops(HVC)</option>
-                                                <option value="Rice">Rice Program(Rice)</option>
-                                                <option value="Corn">Corn Program(Corn)</option>
-                                            </select>
-                                    </div>
-                                <div style="margin: 0 10px 0 0">
+                                </div> 
+                                <div style="margin: 0 10px 0 0;">
                                     <a href="#"><button class="logout_btn" style="margin: 0 10px 0 0; border-radius: 3px; width: 100%">Print</button></a>
                                 </div>
                                 </div>
@@ -522,6 +461,10 @@
                                     </div>
                                 </div>
                                 <hr>
+                                <div style="display: flex; align-self: flex-end">
+                                    <input type="search_farmer" placeholder="Search Request">
+                                </div>
+                                <br>
                                 <div class="table-responsive">
                                     <table class="table table-hover table-sm" id="admintable">
                                         <thead>
@@ -534,7 +477,6 @@
                                                 <th>Sex</th>
                                                 <th>Program</th>
                                                 <th>Date Requested</th>
-                                                <th>Remarks</th>
                                                 <th>View</th>
                                             </tr>
                                         </thead>
@@ -557,7 +499,6 @@
                                                 <td><?php echo $farmer->getSex($row['user_id']); ?></td>
                                                 <td><?php echo $farmer->getProgram($row['user_id']); ?></td>
                                                 <td><?php echo date('F j, Y', strtotime($row['date_requested']))?></td>
-                                                <td><?php echo $row['service_remarks'] ? $row['service_remarks'] : '--'; ?></td>
                                                 <td>
                                                     <button class="btn btn-success" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="show_farmer_request_form = true, get_farmer_records('<?php echo $row['user_id'];  ?>')">View</button>
                                                 </td>
@@ -572,6 +513,13 @@
                                         ?>
                                         </tbody>
                                     </table>
+                                    
+                                    <div style="display: flex; flex-direction: row; justify-content: space-evenly">
+                                        <button class="btn btn-success">Back</button>
+                                        <button class="btn btn-success">Next</button>
+                                    </div>
+
+                                    <hr>
                                 </div>
                             </div>
                         </div>
@@ -585,6 +533,7 @@
         Alpine.data('admin_side', () => ({
                 show_personnel_registration_form: false,
                 show_crops_form: false,
+                show_success_registration_form: false,
                 show_services_form: false,
                 show_personnel_requestForm: false,
                 show_farmer_request_form: false,
@@ -593,7 +542,24 @@
                 error_admin: false,
                 info_no: 1,
                 farmer_records: [],
+                registry_records: [],
 
+                initialize_registry(){
+                    this.registry_records  = '<?php  
+                        $database = new Connection();
+                        $db = $database->open();
+                        $sql = $db->prepare("SELECT * FROM requests_registry GROUP BY user_id");
+                        $sql->execute();
+                        $results = $sql->fetchAll();
+                        $database->close();
+
+                        echo json_encode($results);
+                    ;?>';
+
+                    setTimeout(() => {
+                        console.log(JSON.parse(this.registry_records));
+                    }, 1500);
+                },
                 next(){
                     if(this.info_no < 2){
                         this.info_no = (this.info_no + 1);
@@ -619,6 +585,7 @@
                 confirm_reset(){
                     this.show_crops_form = false;
                     this.show_services_form = false;
+                    this.show_success_registration_form = false;
                 },
 
                 async submit_personnel_form(){
@@ -665,9 +632,8 @@
                                 else if(response.data == true){
                                     this.$refs.submit_personnel_button.disabled = true;
                                     this.info_no = 1;
-                                    
                                     this.show_personnel_registration_form = false;
-                                    this.show_farmer_request_form = true;
+                                    this.show_success_registration_form = true;
                                 }
                             },
                             (error) => {
@@ -739,6 +705,24 @@
                     // return response.data;
                 }, // return response.data;
 
+                async get_service_remarks(crop_id, service_id){
+                    const options = {
+                        xsrfHeaderName: 'X-XSRF-TOKEN',
+                        xsrfCookieName: 'XSRF-TOKEN',
+                    };
+                    let data = {
+                        crop_id: crop_id,
+                        service_id: service_id,
+                    };
+                    await axios.post('../../controller/admin/get_service_remarks.php', data, options)
+                    .then((response) => {
+                        // console.log(response.data);
+                        service_remarks = response.data;
+                    }); 
+                    return service_remarks ? service_remarks : '';
+                    // return response.data;
+                },
+
                 async delete_request(request_id, user_id, request_type){
                     console.log(request_id);
                     const options = {
@@ -762,7 +746,7 @@
                         
                     }); 
                     // return crop_name ? crop_name : '';
-                }
+                },
 
             }));
         });

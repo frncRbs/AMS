@@ -28,7 +28,7 @@
         $password = encrypt_ams($obj['password']);
         $secret_phrase = encrypt_ams($obj['secret_phrase']);
         $role = 'Personnel';
-        $status = 'Activate';
+        $status = true;
 
         $sql = $db->prepare("SELECT * FROM user WHERE username = :username");
         $sql->execute(array(':username' => $username));

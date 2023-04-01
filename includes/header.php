@@ -135,6 +135,34 @@
                 border-radius: 5px;
                 position: relative;
             }
+
+            .popupSuccess_register{
+                background: rgba(0, 0, 0, 0.6);
+                width: 100%;
+                height: 100%;
+                position: fixed;
+                top: 0;
+                z-index: 10;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+            }
+            .popup-contentSuccess_register{
+                height: auto;
+                width: 500px;
+                background: white;
+                display: flex;
+                padding: 20px;
+                flex-wrap: wrap;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                border-radius: 5px;
+                position: relative;
+            }
+
             .popupSuccess{
                 background: rgba(0, 0, 0, 0.6);
                 width: 100%;
@@ -149,7 +177,7 @@
                 text-align: center;
             }
             .popup-contentSuccess{
-                height: 500px;
+                height: 475px;
                 width: 700px;
                 background: white;
                 display: flex;

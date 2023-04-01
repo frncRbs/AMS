@@ -35,38 +35,7 @@
         $farm_area = $obj['farm_area'];
         $secret_phrase = encrypt_ams($obj['secret_phrase']);
         $role = 'Farmer';
-        $status = 'Pending';
-
-        // $fields = array(
-        //     'first_name' => $first_name,
-        //     'middle_name' => $middle_name,
-        //     'last_name' => $last_name,
-        //     'role_service' => $role_service,
-        //     'birth_date' => $birth_place,
-        //     'civil_status' => $civil_status,
-        //     'sex' => $sex,
-        //     'contact_no' => $contact_no,
-        //     'religion' => $religion,
-        //     'birth_place' => $birth_place,
-        //     'address_street' => $address_street,
-        //     'address_barangay' => $address_barangay,
-        //     'address_municipality' => $address_municipality,
-        //     'username' => $username,
-        //     'password' => $password,
-        //     'address_zip' => $address_zip,
-        //     'guardian_fname' => $guardian_fname,
-        //     'guardian_contact' => $guardian_contact,
-        //     'farm_type' => $farm_type,
-        //     'farm_barangay' => $farm_municipality,
-        //     'farm_municipality' => $farm_municipality,
-        //     'farm_area' => $farm_area,
-        //     'role' => $role,
-        //     'status' => $status
-        // );
-
-        // $process = new Process();
-        // $new_farmer = $process->insert_data($database, 'user', $fields);
-        // echo $new_farmer;
+        $status = false;
 
         $sql = $db->prepare("SELECT * FROM user WHERE username = :username");
         $sql->execute(array(':username' => $username));

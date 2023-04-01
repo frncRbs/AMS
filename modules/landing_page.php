@@ -2230,7 +2230,7 @@
                             service_id: null,
                             crop_kilo: this.$refs.crop_kilo.value,
                             user_id: this.user_id,
-                            service_remarks: 'Null',
+                            service_remarks: null,
                             request_type: 'Crop',
                         };
                         await axios.post('controller/farmer/request_crop.php', data, options)

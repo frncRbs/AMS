@@ -1,8 +1,10 @@
 <?php
     include_once('../../includes/header.php');
 ?>
-    <div x-data="admin_side" x-init="initialize_registry()">
+    <div x-data="admin_side" x-init="get_services_crops">
     <?php include('show_farmer_request_modal.php'); ?>
+    <?php include('add_crop_modal.php'); ?>
+    <?php include('add_service_modal.php'); ?>
 
     <!-- <div> -->
         <div class="sidebar">
@@ -58,158 +60,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- Add Crops Prompt -->
-        <div class="popupError" x-show="show_crops_form" style="display: none">
-            <div class="popup-contentError">
-                <div class="popup-child1" style="margin-bottom: 5px">
-                    <div style="display: flex; flex-direction: column;">
-                        <h1 style="font-weight: bolder">Add Crops</h1>
-                        <hr>
-                        <div class="row-fluid" style="background-color: white; min-height: 400px; padding:10px;">
-                            <div class="span12">
-                                <div class="widget-box">
-                                    <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
-                                    </div>
-                                    <div class="widget-content nopadding">
-                                        <div class="column">
-                                            <div class="col-xs-12 col-sm-6 col-md-12" style="margin: 10px 0 10px;">
-                                                <div class="form-group" >
-                                                <label for="last_name" style="font-weight: bold">Crop:</label>
-                                                    <input type="text" name="last_name" id="last_name" class="form-control input-lg" placeholder="Crop">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            <div class="table-responsive">
-                                <table class="table table-hover table-sm" id="admintable" style="overflow-x:auto;">
-                                    <thead style="display:block">
-                                        <tr style="display:block">
-                                            <th>No.</th>
-                                            <th>Program</th>
-                                            <th>Date Requested</th>
-                                            <th>Remarks</th>
-                                            <th>Delete</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody style="display:block; overflow:auto; height:270px; width:100%">
-                                    <?php
-                                        $database = new Connection();
-                                        $db = $database->open();
-                                        try {
-                                            $sql = 'SELECT * FROM requests_registry';
-                                            $no = 0;
-                                            foreach ($db->query($sql) as $row) {
-                                                $no++;
-                                    ?>
-
-                                        <tr>
-                                            <th scope="row"><?php echo $no; ?></th>
-                                            <td><?php echo $farmer->getProgram($row['user_id']); ?></td>
-                                            <td><?php echo $farmer->getSex($row['user_id']); ?></td>
-                                            <td><?php echo $farmer->getProgram($row['user_id']); ?></td>
-                                            <td><?php echo date('F j, Y', strtotime($row['date_requested']))?></td>
-                                            <td><?php echo $row['service_remarks'] ? $row['service_remarks'] : '--'; ?></td>
-                                            <td><button class="btn btn-success" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" >Delete</button></td>
-                                        </tr>
-                                    <?php
-                                            }
-                                        }
-                                        catch(PDOException $e){
-                                                echo "There is some problem in connection: " . $e->getMessage();
-                                        }
-
-                                        $database->close();
-                                    ?>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                </div>
-                <br>
-                <button type="button" class="btn btn-success" style="width: 50%" x-on:click="confirm_reset">Confirm</button>
-                <div class="popup-child2">
-                    <a id="errorClose" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="confirm_reset">X</a>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Add Services Prompt -->
-        <div class="popupError" x-show="show_services_form" style="display: none">
-            <div class="popup-contentError">
-                <div class="popup-child1" style="margin-bottom: 5px">
-                    <div style="display: flex; flex-direction: column;">
-                        <h1 style="font-weight: bolder">Add Service</h1>
-                        <hr>
-                        <div class="row-fluid" style="background-color: white; min-height: 400px; padding:10px;">
-                            <div class="span12">
-                                <div class="widget-box">
-                                    <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
-                                    </div>
-                                    <div class="widget-content nopadding">
-                                        <div class="column">
-                                            <div class="col-xs-12 col-sm-6 col-md-12" style="margin: 10px 0 10px;">
-                                                <div class="form-group" >
-                                                <label for="last_name" style="font-weight: bold">Service:</label>
-                                                    <input type="text" name="last_name" id="last_name" class="form-control input-lg" placeholder="Crop">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            <div class="table-responsive">
-                                <table class="table table-hover table-sm">
-                                    <thead>
-                                        <tr>
-                                            <th>No.</th>
-                                            <th>Program</th>
-                                            <th>Date Created</th>
-                                            <th>Delete</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    <?php
-                                        $database = new Connection();
-                                        $db = $database->open();
-                                        try {
-                                            $sql = 'SELECT * FROM services';
-                                            $no = 0;
-                                            foreach ($db->query($sql) as $row) {
-                                                $no++;
-                                    ?>
-
-                                        <tr>
-                                            <th scope="row"><?php echo $no; ?></th>
-                                            <td><?php echo $farmer->getProgram($row['service_name']); ?></td>
-                                            <td><?php echo $farmer->getSex($row['date_created']); ?></td>
-                                            <td><button class="btn btn-success" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" >Delete</button></td>
-                                        </tr>
-                                    <?php
-                                            }
-                                        }
-                                        catch(PDOException $e){
-                                                echo "There is some problem in connection: " . $e->getMessage();
-                                        }
-
-                                        $database->close();
-                                    ?>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                </div>
-                <br>
-                <button type="button" class="btn btn-success" style="width: 50%" x-on:click="confirm_reset">Confirm</button>
-                <div class="popup-child2">
-                    <a id="errorClose" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="confirm_reset">X</a>
-                </div>
-            </div>
-        </div>
         
         <!-- Farmer Registration Form -->      
         <div class="popup3" x-show="show_personnel_registration_form" style="display: none;">
@@ -227,16 +77,17 @@
                             <hr>
                             <div class="row" style="text-align: left">
                                 <div class="column">
-                                <div class="col-xs-12 col-sm-6 col-md-12" style="margin-bottom: 10px;">
-                                    <label for="role_service">Register for: </label>
-                                    <select class="selectD" name="role_service" id="role_service" x-ref="role_service" style="width: 100%; height: auto; margin-bottom: 0; padding: 5px; border-radius: 3px">
-                                        <option value="" disabled selected hidden>Choose Services</option>
-                                        <option value="1">High Value Crops</option>
-                                        <option value="2">Corn Value Crop</option>
-                                        <option value="3">Rice Crop</option>
-                                    </select>
+                                    <div class="col-xs-12 col-sm-6 col-md-12" style="margin-bottom: 10px;">
+                                        <label for="role_service">Register for: </label>
+                                        <select class="selectD" name="role_service" id="role_service" x-ref="role_service" style="width: 100%; height: auto; margin-bottom: 0; padding: 5px; border-radius: 3px">
+                                            <option value="" disabled selected hidden>Choose Services</option>
+                                            <option value="1">High Value Crops</option>
+                                            <option value="2">Corn Value Crop</option>
+                                            <option value="3">Rice Crop</option>
+                                        </select>
+                                    </div>
                                 </div>
-                                </div>
+                                <hr style="margin: 20px 0 20px 0">                               
                                 <div class="col-xs-12 col-sm-6 col-md-6">
                                     <div class="form-group">
                                         <label for="first_name">First Name:</label>
@@ -264,6 +115,8 @@
                                         </div>
                                     </div>
                                 </div>
+                                <br>
+                                <hr>
                                 <div class="row" style="text-align: left">
                                     <div class="col-xs-12 col-sm-6 col-md-6">
                                         <div class="inputC">
@@ -481,36 +334,53 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        <?php
-                                            $database = new Connection();
-                                            $db = $database->open();
-                                            try {
-                                                $sql = 'SELECT * FROM requests_registry GROUP BY user_id';
-                                                $no = 0;
-                                                foreach ($db->query($sql) as $row) {
-                                                    $no++;
-                                        ?>
-                                            <tr>
-                                                <th scope="row"><?php echo $no; ?></th>
-                                                <td><?php echo $farmer->getFirstName($row['user_id']); ?></td>
-                                                <td><?php echo $farmer->getMiddleName($row['user_id']); ?></td>
-                                                <td><?php echo $farmer->getLastName($row['user_id']); ?></td>
-                                                <td><?php echo $farmer->getProgram($row['user_id']); ?></td>
-                                                <td><?php echo $farmer->getSex($row['user_id']); ?></td>
-                                                <td><?php echo $farmer->getProgram($row['user_id']); ?></td>
-                                                <td><?php echo date('F j, Y', strtotime($row['date_requested']))?></td>
-                                                <td>
-                                                    <button class="btn btn-success" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="show_farmer_request_form = true, get_farmer_records('<?php echo $row['user_id'];  ?>')">View</button>
-                                                </td>
-                                            </tr>
-                                        <?php
+                                            <?php
+                                                $database = new Connection();
+                                                $db = $database->open();
+                                                try {
+                                                    $sql = 'SELECT * FROM requests_registry GROUP BY user_id';
+                                                    $no = 0;
+                                                    foreach ($db->query($sql) as $row) {
+                                                        $no++;
+                                            ?>
+                                                <tr>
+                                                    <th scope="row"><?php echo $no; ?></th>
+                                                    <td><?php echo $farmer->getFirstName($row['user_id']); ?></td>
+                                                    <td><?php echo $farmer->getMiddleName($row['user_id']); ?></td>
+                                                    <td><?php echo $farmer->getLastName($row['user_id']); ?></td>
+                                                    <td><?php echo $farmer->getProgram($row['user_id']); ?></td>
+                                                    <td><?php echo $farmer->getSex($row['user_id']); ?></td>
+                                                    <td><?php echo $farmer->getProgram($row['user_id']); ?></td>
+                                                    <td><?php echo date('F j, Y', strtotime($row['date_requested']))?></td>
+                                                    <td>
+                                                        <button class="btn btn-success" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="show_farmer_request_form = true, get_farmer_records('<?php echo $row['user_id'];  ?>')">View</button>
+                                                    </td>
+                                                </tr>
+                                            <?php
+                                                    }
                                                 }
-                                            }
-                                            catch(PDOException $e){
-                                                    echo "There is some problem in connection: " . $e->getMessage();
-                                            }
-                                            $database->close();
-                                        ?>
+                                                catch(PDOException $e){
+                                                        echo "There is some problem in connection: " . $e->getMessage();
+                                                }
+                                                $database->close();
+                                            ?>
+                                            <!-- <template x-if="get_farmer_records">
+                                                <template x-for="(row, index) in get_farmer_records">
+                                                    <tr>
+                                                        <th scope="row"><span x-text="(index + 1)"></span></th>
+                                                        <td><span x-text="row.first_name"></span></td>
+                                                        <td><span x-text="row.middle_name"></span></td>
+                                                        <td><span x-text="row.last_name"></span></td>
+                                                        <td><span x-text="get_service_name(row.crop_id, row.service_id)"></span></td>
+                                                        <td><span x-text="row.service_remarks ? row.service_remarks : 'N/A'"></span></td>
+                                                        <td><span x-text="row.crops_kilo ? row.crops_kilo : 'N/A'"></span></td>
+                                                        <td><span x-text="row.date_requested"></span></td>
+                                                        <td>
+                                                            <button class="btn btn-success" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="delete_request(row.request_id, row.user_id, 'Crop')">Delete</button>
+                                                        </td>
+                                                    </tr>
+                                                </template>
+                                            </template> -->
                                         </tbody>
                                     </table>
                                     
@@ -543,23 +413,26 @@
                 info_no: 1,
                 farmer_records: [],
                 registry_records: [],
+                crops: [],
+                services: [],
 
-                initialize_registry(){
-                    this.registry_records  = '<?php  
-                        $database = new Connection();
-                        $db = $database->open();
-                        $sql = $db->prepare("SELECT * FROM requests_registry GROUP BY user_id");
-                        $sql->execute();
-                        $results = $sql->fetchAll();
-                        $database->close();
+                // initialize_registry(){
+                //     this.registry_records  = '<?php  
+                //         $database = new Connection();
+                //         $db = $database->open();
+                //         $sql = $db->prepare("SELECT * FROM requests_registry GROUP BY user_id");
+                //         $sql->execute();
+                //         $results = $sql->fetchAll();
+                //         $database->close();
 
-                        echo json_encode($results);
-                    ;?>';
+                //         echo json_encode($results);
+                //     ;?>';
 
-                    setTimeout(() => {
-                        console.log(JSON.parse(this.registry_records));
-                    }, 1500);
-                },
+                //     setTimeout(() => {
+                //         console.log(JSON.parse(this.registry_records));
+                //     }, 1500);
+                // },
+                
                 next(){
                     if(this.info_no < 2){
                         this.info_no = (this.info_no + 1);
@@ -685,6 +558,15 @@
                         // console.log(response.data);
                         this.farmer_records = response.data;
                     }); 
+                },
+
+                async get_services_crops(){
+                    await axios.get("../../controller/farmer/get_crops_services.php")
+                    .then((response)=>{
+                        this.crops = (response.data.crops);
+                        this.services = (response.data.services);
+                        
+                    });
                 },
 
                 async get_service_name(crop_id, service_id){

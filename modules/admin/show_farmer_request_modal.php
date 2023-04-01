@@ -9,7 +9,7 @@
                         <input type="search_farmer_request" placeholder="Search Request">
                     </div>
                     <div class="table-responsive">
-                        <table class="table table-hover table-sm" id="admintable">
+                        <table class="table table-hover table-sm">
                             <thead>
                                 <tr>
                                     <!-- <th>No.</th> -->
@@ -40,14 +40,13 @@
                                 </template>
                             </tbody>
                         </table>
-                        <div style="display: flex; flex-direction: row; justify-content: space-evenly">
-                            <button class="btn btn-success" x-on:click="prevPage" :disabled="pageNumber==0" >Back</button>
-                            <button class="btn btn-success" x-on:click="nextPage" :disabled="pageNumber >= pageCount() -1">Next</button>
-                        </div>
-                        <hr>
-                        
+                    <div style="display: flex; flex-direction: row; justify-content: space-evenly">
+                        <button class="btn btn-success" x-on:click="prevPage" :disabled="pageNumber==0" >Back</button>
+                        <button class="btn btn-success" x-on:click="nextPage" :disabled="pageNumber >= pageCount() -1">Next</button>
                     </div>
+                    <hr>
                 </div>
+            </div>
         </div>
         <br>
         <button type="button" class="btn btn-success" style="width: 50%; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="confirm_farmer_request_exit">Confirm</button>

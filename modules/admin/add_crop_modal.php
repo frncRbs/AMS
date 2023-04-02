@@ -5,6 +5,8 @@
             <div style="display: flex; flex-direction: column;">
                 <h1 style="font-weight: bolder">Add Crops</h1>
                 <hr>
+                <h3 style="color: red" x-text="admin_error_msg"></h3>
+                <h3 style="color: green" x-text="admin_success_msg"></h3>
                 <div class="row-fluid" style="background-color: white; min-height: 400px; padding:10px;">
                     <div class="span12">
                         <div class="widget-box">
@@ -15,14 +17,14 @@
                                     <div class="col-xs-12 col-sm-6 col-md-12" style="margin: 10px 0 10px;">
                                         <div class="form-group" >
                                         <label for="crop_name" style="font-weight: bold">Crop:</label>
-                                            <input type="text" name="crop_name" id="crop_name" class="form-control input-lg" placeholder="Add Crop Name" required>
+                                            <input type="text" name="crop_name" id="crop_name" x-ref="register_crop_name" class="form-control input-lg" placeholder="Add Crop Name">
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <br>
-                        <button type="button" class="btn btn-success" style="width: 50%" x-on:click="confirm_reset">Confirm</button>
+                        <button type="button" class="btn btn-success" style="width: 50%" x-ref="submit_crop_button" x-on:click="submit_crop_form">Confirm</button>
                         <hr>
                         <br>
                         <div class="table-responsive">
@@ -30,7 +32,9 @@
                                 <thead>
                                     <tr>
                                         <th>Crop Name</th>
+                                        <th>Availability</th>
                                         <th>Date Created</th>
+                                        <th>Update</th>
                                         <th>Delete</th>
                                     </tr>
                                 </thead>
@@ -39,9 +43,17 @@
                                         <template x-for="(crop, index) in custom_pagination(crops)">
                                             <tr>
                                                 <td><span x-text="crop.crop_name"></span></td>
+                                                <td><span x-text="crop.is_available"></span></td>
                                                 <td><span x-text="crop.date_created"></span></td>
                                                 <td>
-                                                    <button class="btn btn-success" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="delete_request(row.request_id, row.user_id, 'Crop')">Delete</button>
+                                                <select class="selectD" name="is_available" id="is_available" x-ref="is_available" style="width: 100%; height: auto; margin-bottom: 0; padding: 5px; border-radius: 3px">
+                                                    <option value="" disabled selected hidden>Update</option>
+                                                    <option value="1">Available</option>
+                                                    <option value="0">Not availabe</option>
+                                                </select>
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-danger" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="delete_crops(crop.crop_id)">Delete</button>
                                                 </td>
                                             </tr>
                                         </template>

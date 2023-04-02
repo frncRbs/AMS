@@ -1,7 +1,7 @@
 <?php
     include_once('../../includes/header.php');
 ?>
-    <div x-data="admin_side" x-init="get_services_crops">
+    <div x-data="admin_side" x-init="get_services_crops, initialize_registry()">
     <?php include('show_farmer_request_modal.php'); ?>
     <?php include('add_crop_modal.php'); ?>
     <?php include('add_service_modal.php'); ?>
@@ -67,7 +67,7 @@
                 <div class="popup-child1">
                     <form>
                     <span>
-                        <h3 style="color: red" x-text="admin_landing_page_msg"></h3>
+                        <h3 style="color: red" x-text="admin_error_msg"></h3>
                     </span>
                     <h1 style="font-weight: bolder">Create Coordinators Account</h1>
                         <br>
@@ -334,53 +334,24 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php
-                                                $database = new Connection();
-                                                $db = $database->open();
-                                                try {
-                                                    $sql = 'SELECT * FROM requests_registry GROUP BY user_id';
-                                                    $no = 0;
-                                                    foreach ($db->query($sql) as $row) {
-                                                        $no++;
-                                            ?>
-                                                <tr>
-                                                    <th scope="row"><?php echo $no; ?></th>
-                                                    <td><?php echo $farmer->getFirstName($row['user_id']); ?></td>
-                                                    <td><?php echo $farmer->getMiddleName($row['user_id']); ?></td>
-                                                    <td><?php echo $farmer->getLastName($row['user_id']); ?></td>
-                                                    <td><?php echo $farmer->getProgram($row['user_id']); ?></td>
-                                                    <td><?php echo $farmer->getSex($row['user_id']); ?></td>
-                                                    <td><?php echo $farmer->getProgram($row['user_id']); ?></td>
-                                                    <td><?php echo date('F j, Y', strtotime($row['date_requested']))?></td>
-                                                    <td>
-                                                        <button class="btn btn-success" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="show_farmer_request_form = true, get_farmer_records('<?php echo $row['user_id'];  ?>')">View</button>
-                                                    </td>
-                                                </tr>
-                                            <?php
-                                                    }
-                                                }
-                                                catch(PDOException $e){
-                                                        echo "There is some problem in connection: " . $e->getMessage();
-                                                }
-                                                $database->close();
-                                            ?>
-                                            <!-- <template x-if="get_farmer_records">
-                                                <template x-for="(row, index) in get_farmer_records">
+                                            <template x-if="registry_records">
+                                                <template x-for="(row, index) in registry_records">
                                                     <tr>
                                                         <th scope="row"><span x-text="(index + 1)"></span></th>
-                                                        <td><span x-text="row.first_name"></span></td>
-                                                        <td><span x-text="row.middle_name"></span></td>
-                                                        <td><span x-text="row.last_name"></span></td>
-                                                        <td><span x-text="get_service_name(row.crop_id, row.service_id)"></span></td>
-                                                        <td><span x-text="row.service_remarks ? row.service_remarks : 'N/A'"></span></td>
-                                                        <td><span x-text="row.crops_kilo ? row.crops_kilo : 'N/A'"></span></td>
+                                                        <td><span x-text="get_farmer_first_name(row.user_id)"></span></td>
+                                                        <td><span x-text="get_farmer_middle_name(row.user_id)"></span></td>
+                                                        <td><span x-text="get_farmer_last_name(row.user_id)"></span></td>
+                                                        <td><span x-text="get_farmer_role_service(row.user_id)"></span></td>
+                                                        <td><span x-text="get_farmer_sex(row.user_id)"></span></td>
+                                                        <td><span x-text="get_farmer_role_service(row.user_id)"></span></td>
                                                         <td><span x-text="row.date_requested"></span></td>
                                                         <td>
-                                                            <button class="btn btn-success" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="delete_request(row.request_id, row.user_id, 'Crop')">Delete</button>
+                                                            <!-- <button class="btn btn-success" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="delete_request(row.request_id, row.user_id, 'Crop')">View</button> -->
+                                                            <button class="btn btn-success" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="show_farmer_request_form = true, get_farmer_records(row.user_id)">View</button>
                                                         </td>
                                                     </tr>
                                                 </template>
-                                            </template> -->
+                                            </template>
                                         </tbody>
                                     </table>
                                     
@@ -407,31 +378,33 @@
                 show_services_form: false,
                 show_personnel_requestForm: false,
                 show_farmer_request_form: false,
-                admin_landing_page_msg: '',
+                admin_error_msg: '',
+                admin_success_msg: '',
 
                 error_admin: false,
                 info_no: 1,
                 farmer_records: [],
                 registry_records: [],
+
                 crops: [],
                 services: [],
 
-                // initialize_registry(){
-                //     this.registry_records  = '<?php  
-                //         $database = new Connection();
-                //         $db = $database->open();
-                //         $sql = $db->prepare("SELECT * FROM requests_registry GROUP BY user_id");
-                //         $sql->execute();
-                //         $results = $sql->fetchAll();
-                //         $database->close();
+                initialize_registry(){
+                    this.registry_records  = '<?php  
+                        $database = new Connection();
+                        $db = $database->open();
+                        $sql = $db->prepare("SELECT * FROM requests_registry GROUP BY user_id");
+                        $sql->execute();
+                        $results = $sql->fetchAll();
+                        $database->close();
 
-                //         echo json_encode($results);
-                //     ;?>';
-
-                //     setTimeout(() => {
-                //         console.log(JSON.parse(this.registry_records));
-                //     }, 1500);
-                // },
+                        echo json_encode($results);
+                    ;?>';
+                    this.registry_records = JSON.parse(this.registry_records);
+                    // setTimeout(() => {
+                    //     console.log(JSON.parse(this.registry_records));
+                    // }, 1500);
+                },
                 
                 next(){
                     if(this.info_no < 2){
@@ -496,10 +469,10 @@
                                 // console.log('Kini: ' + (response.data == true));
                                 if(response.data == false) {
                                     this.error_admin = true;
-                                    this.admin_landing_page_msg = 'Username already taken!';
+                                    this.admin_error_msg = 'Username already taken!';
                                     setTimeout(() => {
                                         this.error_admin = false;
-                                        this.admin_landing_page_msg = '';
+                                        this.admin_error_msg = '';
                                     }, 2000);
                                 }
                                 else if(response.data == true){
@@ -516,32 +489,161 @@
                         }
                         else{
                             this.error_admin = true;
-                            this.admin_landing_page_msg = 'Password do not match!';
+                            this.admin_error_msg = 'Password do not match!';
                             this.$refs.submit_personnel_button.disabled = false;
                             setTimeout(() => {
                                 this.error_admin = false;
-                                this.admin_landing_page_msg = '';
+                                this.admin_error_msg = '';
                             }, 2000);
                         }
                     }
                     else{
                         this.error_admin = true;
                         this.$refs.submit_personnel_button.disabled = false;
-                        this.admin_landing_page_msg = 'Please fill in all required fields!';
+                        this.admin_error_msg = 'Please fill in all required fields!';
 
                         setTimeout(() => {
                             this.error_admin = false;
-                            this.admin_landing_page_msg = '';
+                            this.admin_error_msg = '';
                         }, 2000);
                     }
                 },
 
+                async submit_crop_form(){
+                    this.$refs.submit_crop_button.disabled = false;
+                    if(this.$refs.register_crop_name.value){
+                        const options = {
+                            xsrfHeaderName: 'X-XSRF-TOKEN',
+                            xsrfCookieName: 'XSRF-TOKEN',
+                        }
+                        let data = {
+                            crop_name: this.$refs.register_crop_name.value,
+                        }
+
+                        await axios.post('../../controller/admin/register_crop.php', data, options)
+                        .then((response) => {
+                            // console.log(response.data);
+                            this.$refs.submit_crop_button.disabled = false;
+                            // console.log('Kini: ' + (response.data == true));
+                            if(response.data == false) {
+                                this.error_admin = true;
+                                this.admin_error_msg = 'Crop is already registered!';
+                                setTimeout(() => {
+                                    this.error_admin = false;
+                                    this.admin_error_msg = '';
+                                }, 2000);
+                            }
+                            else if(response.data == true){
+                                this.admin_success_msg = 'Crop successfully registered!';
+
+                                setTimeout(() => {
+                                    this.error_admin = false;
+                                    this.admin_success_msg = '';
+                                }, 2000);
+                            }
+                        },
+                        (error) => {
+                            console.log(error);
+                        });
+                    }
+                    else{
+                        this.error_admin = true;
+                        this.$refs.submit_crop_button.disabled = false;
+                        this.admin_error_msg = 'Please fill in all required fields!';
+
+                        setTimeout(() => {
+                            this.error_admin = false;
+                            this.admin_error_msg = '';
+                        }, 2000);
+                    }
+                },
+                
                 async generate_secret_phrase(){
                     await axios.get('../../controller/admin/generate_secret_key.php')
                     .then((response) => {
                         console.log(response.data);
                         this.$refs.secret_phrase.value = response.data;
                     });
+                },
+
+                async get_farmer_first_name(user_id){
+                    const options = {
+                        xsrfHeaderName: 'X-XSRF-TOKEN',
+                        xsrfCookieName: 'XSRF-TOKEN',
+                    };
+                    let data = {
+                        user_id: user_id,
+                    };
+                    await axios.post('../../controller/admin/farmer_info/get_farmer_first_name.php', data, options)
+                    .then((response) => {
+                        // console.log(response.data);
+                        farmer_first_name = response.data;
+                    }); 
+                    return farmer_first_name ? farmer_first_name : '';
+                }, // return response.data;
+
+                async get_farmer_middle_name(user_id){
+                    const options = {
+                        xsrfHeaderName: 'X-XSRF-TOKEN',
+                        xsrfCookieName: 'XSRF-TOKEN',
+                    };
+                    let data = {
+                        user_id: user_id,
+                    };
+                    await axios.post('../../controller/admin/farmer_info/get_farmer_middle_name.php', data, options)
+                    .then((response) => {
+                        // console.log(response.data);
+                        farmer_middle_name = response.data;
+                    }); 
+                    return farmer_middle_name ? farmer_middle_name : '';
+                }, // return response.data;
+
+                async get_farmer_last_name(user_id){
+                    const options = {
+                        xsrfHeaderName: 'X-XSRF-TOKEN',
+                        xsrfCookieName: 'XSRF-TOKEN',
+                    };
+                    let data = {
+                        user_id: user_id,
+                    };
+                    await axios.post('../../controller/admin/farmer_info/get_farmer_last_name.php', data, options)
+                    .then((response) => {
+                        // console.log(response.data);
+                        farmer_last_name = response.data;
+                    }); 
+                    return farmer_last_name ? farmer_last_name : '';
+                }, // return response.data;
+
+                async get_farmer_role_service(user_id){
+                    const options = {
+                        xsrfHeaderName: 'X-XSRF-TOKEN',
+                        xsrfCookieName: 'XSRF-TOKEN',
+                    };
+                    let data = {
+                        user_id: user_id,
+                    };
+                    await axios.post('../../controller/admin/farmer_info/get_farmer_role_service.php', data, options)
+                    .then((response) => {
+                        // console.log(response.data);
+                        farmer_role_service = response.data;
+                    }); 
+                    return farmer_role_service ? farmer_role_service : '';
+                }, // return response.data;
+
+                async get_farmer_sex(user_id){
+                    const options = {
+                        xsrfHeaderName: 'X-XSRF-TOKEN',
+                        xsrfCookieName: 'XSRF-TOKEN',
+                    };
+                    let data = {
+                        user_id: user_id,
+                    };
+                    await axios.post('../../controller/admin/farmer_info/get_farmer_sex.php', data, options)
+                    .then((response) => {
+                        // console.log(response.data);
+                        farmer_sex = response.data;
+                    }); 
+                    return farmer_sex ? farmer_sex : '';
                 },
 
                 async get_farmer_records(user_id){
@@ -565,10 +667,9 @@
                     .then((response)=>{
                         this.crops = (response.data.crops);
                         this.services = (response.data.services);
-                        
                     });
                 },
-
+                
                 async get_service_name(crop_id, service_id){
                     const options = {
                         xsrfHeaderName: 'X-XSRF-TOKEN',
@@ -624,6 +725,37 @@
                         }
                         else{
                             this.farmer_records = response.data.requests;
+                        }
+                        
+                    }); 
+                    // return crop_name ? crop_name : '';
+                },
+
+                async delete_crops(crop_id){
+                    // console.log(crop_id);
+                    const options = {
+                        xsrfHeaderName: 'X-XSRF-TOKEN',
+                        xsrfCookieName: 'XSRF-TOKEN',
+                    };
+                    let data = {
+                        crop_id: crop_id,
+                    };
+                    await axios.post('../../controller/admin/delete_crop.php', data, options)
+                    .then((response) => {
+                        // console.log(response.data.requests);
+                        if(response.data.status != 'true'){
+                            this.admin_error_msg = response.data.status;
+                            setTimeout(() => {
+                                this.admin_error_msg = '';
+                            }, 2000);
+                        }
+                        else {
+                            if(response.data.crops.length == 0){
+                                window.location = '<?php echo LOCATION; ?>modules/admin/admin_dash_body.php';
+                            }
+                            else{
+                                this.crops = response.data.crops;
+                            }
                         }
                         
                     }); 

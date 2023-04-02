@@ -16,7 +16,6 @@
         $sql_services->execute();
         $services = $sql_services->fetchAll();
         $return_value_services = $services;
-
     }
     catch(PDOException $e) {
         $return_value = $e->getMessage();

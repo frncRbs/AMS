@@ -98,7 +98,7 @@
             }
             .popup-contentError{
                 height: auto;
-                width: 650px;
+                width: 500px;
                 background: white;
                 display: flex;
                 padding: 20px;

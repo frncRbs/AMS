@@ -28,7 +28,7 @@
                         <hr>
                         <br>
                         <div class="table-responsive">
-                            <table class="table table-hover table-sm">
+                            <table class="table table-hover table-sm" > 
                                 <thead>
                                     <tr>
                                         <th>Crop Name</th>
@@ -40,9 +40,9 @@
                                 </thead>
                                 <tbody>
                                     <template x-if="crops">
-                                        <template x-for="(crop, index) in custom_pagination(crops)">
-                                            <tr>
-                                                <td><span x-text="crop.crop_name"></span></td>
+                                        <template x-for="(crop, index) in custom_pagination(crops)" x-on:items-load.window="crops = $event.detail.crops">
+                                            <tr style="min-width: 150px; padding: 10px; text-align: center; border: 1px solid #ddd;">
+                                                <td ><span x-text="crop.crop_name"></span></td>
                                                 <td><span x-text="crop.is_available == 1 ? 'Available' : 'Not Available' "></span></td>
                                                 <td><span x-text="crop.date_created"></span></td>
                                                 <td>

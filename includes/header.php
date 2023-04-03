@@ -57,6 +57,84 @@
                 border-radius: 5px;
                 position: relative;
             }
+            .popupDecline_Account_Reg{
+                background: rgba(0, 0, 0, 0.6);
+                width: 100%;
+                height: 100%;
+                position: fixed;
+                top: 0;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                z-index: 120;
+            }
+            .popup-contentDecline_Account_Reg{
+                height: auto;
+                width: 550px;
+                background: white;
+                display: flex;
+                padding: 20px;
+                flex-wrap: wrap;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                border-radius: 5px;
+                position: relative;
+            }
+            .popupApprove_Account_Reg{
+                background: rgba(0, 0, 0, 0.6);
+                width: 100%;
+                height: 100%;
+                position: fixed;
+                top: 0;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                z-index: 120;
+            }
+            .popup-contentApprove_Account_Reg{
+                height: auto;
+                width: 550px;
+                background: white;
+                display: flex;
+                padding: 20px;
+                flex-wrap: wrap;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                border-radius: 5px;
+                position: relative;
+            }
+            .popupDecline_request{
+                background: rgba(0, 0, 0, 0.6);
+                width: 100%;
+                height: 100%;
+                position: fixed;
+                top: 0;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                z-index: 120;
+            }
+            .popup-contentDecline_request{
+                height: auto;
+                width: 550px;
+                background: white;
+                display: flex;
+                padding: 20px;
+                flex-wrap: wrap;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                border-radius: 5px;
+                position: relative;
+            }
             .popupDeactCon{
                 background: rgba(0, 0, 0, 0.6);
                 width: 100%;
@@ -73,6 +151,32 @@
             .popup-contentDeactCon{
                 height: auto;
                 width: 400px;
+                background: white;
+                display: flex;
+                padding: 20px;
+                flex-wrap: wrap;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                border-radius: 5px;
+                position: relative;
+            }
+            .popupActivate{
+                background: rgba(0, 0, 0, 0.6);
+                width: 100%;
+                height: 100%;
+                position: fixed;
+                top: 0;
+                z-index: 10;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+            }
+            .popup-contentActivate{
+                height: auto;
+                width: 1000px;
                 background: white;
                 display: flex;
                 padding: 20px;

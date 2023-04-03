@@ -1,10 +1,11 @@
 <?php
     include_once('../../includes/header.php');
 ?>
-    <div x-data="admin_side" x-init="get_services_crops, initialize_registry()">
+    <div x-data="admin_side" x-init="get_services_crops, initialize_registry(), initialize_user_details()">
     <?php include('show_farmer_request_modal.php'); ?>
     <?php include('add_crop_modal.php'); ?>
     <?php include('add_service_modal.php'); ?>
+    <?php include('activate_account_modal.php'); ?>
 
     <!-- <div> -->
         <div class="sidebar">
@@ -25,8 +26,8 @@
                         <li><a type="button" x-on:click="show_services_form = true" style="color: white"><i class="fas fa-plus-square"></i><span>Services</span></a>
                     </ul>
                 </li>
-                <li><a href="admin_dash_search_farmer.php"><i class="fas fa-search"></i><span>Search Farmer</span></a></li>
-                <li><a href="admin_dash_deactivate_account.php"><i class="fas fa-user-slash"></i><span>Activate Account</span></a></li>
+                <li><a href="admin_dash_search_farmer.php"><i class="fas fa-search"></i><span>Search Farmer</span></a>
+                <li><a type="button" x-on:click="show_activate_account_form = true" style="color: white"><i class="fas fa-user-slash"></i><span>Activate Account</span></a>
                 </ul>
                 </li>
             </ul>
@@ -248,6 +249,77 @@
             </div>
         </div>
 
+        <!-- Decline Farmer Service Request Prompt -->
+        <div class="popupDecline_request" x-show="show_decline_request_form" style="display: none">
+            <div class="popup-contentDecline_request">
+                <div class="popup-child1" style="margin-bottom: 5px; display: flex; flex-direction: column">
+                    <div>
+                        <h1 style="font-weight: bolder">Reason of Declination!</h1>
+                    </div>
+                    <hr>
+                    <div class="col-lg-12 col-md-12 col-sm-12 right">
+                        <div class="form-group">
+                            <textarea class="form-control form-control-lg" placeholder="Enter reason here..."></textarea>
+                        </div>
+                        <br>
+                    </div>
+                </div>
+                <br>
+                <button type="button" class="btn btn-success" style="width: 50%" x-on:click="delete_request(r_request_id, r_user_id, 'Crop')">Confirm</button>
+                <div class="popup-child2">
+                    <a id="errorClose" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="confirm_reset">X</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Decline Farmer Acccount Registration Prompt -->
+        <div class="popupDecline_Account_Reg" x-show="show_decline_account_regform" style="display: none">
+            <div class="popup-contentDecline_Account_Reg">
+                <div class="popup-child1" style="margin-bottom: 5px; display: flex; flex-direction: column">
+                    <div>
+                        <h1 style="font-weight: bolder">Reason of Declination!</h1>
+                    </div>
+                    <hr>
+                    <div class="col-lg-12 col-md-12 col-sm-12 right">
+                        <div class="form-group">
+                            <textarea class="form-control form-control-lg" placeholder="Enter reason here...">
+                        </textarea>
+                    </div>
+                    <br>
+                </div>
+                </div>
+                <br>
+                <button type="button" class="btn btn-success" style="width: 50%" x-on:click="">Confirm</button>
+                <div class="popup-child2">
+                    <a id="errorClose" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="confirm_reset">X</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Approve Farmer Acccount Registration  Prompt -->
+        <div class="popupApprove_Account_Reg" x-show="show_approve_account_regform" style="display: none">
+            <div class="popup-contentApprove_Account_Reg">
+                <div class="popup-child1" style="margin-bottom: 5px; display: flex; flex-direction: column">
+                    <div>
+                        <h1 style="font-weight: bolder">Reason of Declination!</h1>
+                    </div>
+                    <hr>
+                    <div class="col-lg-12 col-md-12 col-sm-12 right">
+                        <div class="form-group">
+                            <textarea class="form-control form-control-lg" placeholder="Enter reason here...">
+                        </textarea>
+                    </div>
+                    <br>
+                </div>
+                </div>
+                <br>
+                <button type="button" class="btn btn-success" style="width: 50%" x-on:click="">Confirm</button>
+                <div class="popup-child2">
+                    <a id="errorClose" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="confirm_reset">X</a>
+                </div>
+            </div>
+        </div>
+
         <div class="content">
             <div class="container-fluid">
                 <div class="row-fluid" style="background-color: white; min-height: 600px; padding:10px;">
@@ -372,18 +444,27 @@
         Alpine.data('admin_side', () => ({
                 show_personnel_registration_form: false,
                 show_crops_form: false,
+                show_activate_account_form: false,
                 show_success_registration_form: false,
                 show_services_form: false,
                 show_personnel_requestForm: false,
                 show_farmer_request_form: false,
+                show_decline_request_form: false,
+                show_decline_account_regform: false,
+                show_approve_account_regform: false,
                 admin_error_msg: '',
                 admin_success_msg: '',
-
+                
                 error_admin: false,
                 info_no: 1,
                 farmer_records: [],
                 registry_records: [],
                 registry_records_backup: [],
+                user_details: [],
+                user_details_backup: [],
+
+                r_request_id: 0,
+                r_user_id: 0,
 
                 crops: [],
                 services: [],
@@ -405,6 +486,24 @@
                     this.registry_records_backup = this.registry_records;
                     // setTimeout(() => {
                     //     console.log(JSON.parse(this.registry_records));
+                    // }, 1500);
+                },
+
+                initialize_user_details(){
+                    this.user_details  = '<?php  
+                        $database = new Connection();
+                        $db = $database->open();
+                        $sql = $db->prepare("SELECT * FROM user WHERE role = 'Farmer'");
+                        $sql->execute();
+                        $results = $sql->fetchAll();
+                        $database->close();
+
+                        echo json_encode($results);
+                    ;?>';
+                    this.user_details = JSON.parse(this.user_details);
+                    this.user_details_backup = this.user_details;
+                    // setTimeout(() => {
+                    //     console.log(JSON.parse(this.user_details));
                     // }, 1500);
                 },
                 
@@ -433,7 +532,14 @@
                 confirm_reset(){
                     this.show_crops_form = false;
                     this.show_services_form = false;
+                    this.show_services_form = false;
                     this.show_success_registration_form = false;
+                    this.show_decline_request_form = false;
+
+                },
+
+                confirm_activate_account_exit(){
+                    this.show_activate_account_form = false;
                 },
 
                 async submit_personnel_form(){
@@ -527,7 +633,7 @@
                             // console.log(response.data);
                             this.$refs.submit_crop_button.disabled = false;
                             // console.log('Kini: ' + (response.data == true));
-                            if(response.data == false) {
+                            if(response.data.status == false) {
                                 this.error_admin = true;
                                 this.admin_error_msg = 'Crop is already registered!';
                                 setTimeout(() => {
@@ -535,9 +641,12 @@
                                     this.admin_error_msg = '';
                                 }, 2000);
                             }
-                            else if(response.data == true){
+                            else if(response.data.status == 'true'){
                                 this.admin_success_msg = 'Crop successfully registered!';
-                                this.crops = (response.data.crops);
+                                // this.crops = [];
+                                this.crops = response.data.crops;
+                                // location.reload(); // Refresh current page
+                                // console.log('hehe');
                                 setTimeout(() => {
                                     this.error_admin = false;
                                     this.admin_success_msg = '';
@@ -776,6 +885,7 @@
                         }
                         else{
                             this.farmer_records = response.data.requests;
+                            this.show_decline_request_form = false;
                         }
                         
                     }); 

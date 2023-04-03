@@ -31,7 +31,6 @@
                             <table class="table table-hover table-sm">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
                                         <th>Service Name</th>
                                         <th>Availability</th>
                                         <th>Date Created</th>
@@ -45,7 +44,6 @@
                                             <tr>
                                                 <!-- <th scope="row"><span x-text="(index + 1)"></span></th> -->
                                                 <!-- <td><span x-text="row.request_id"></span></td> -->
-                                                <td><span x-text="service.service_id"></span></td>
                                                 <td><span x-text="service.service_name"></span></td>
                                                 <td><span x-text="service.is_available == 1 ? 'Available' : 'Not Available' "></span></td>
                                                 <td><span x-text="service.date_created"></span></td>

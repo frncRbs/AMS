@@ -18,7 +18,7 @@
                                     <th>Service Remarks</th>
                                     <th>Crops Kilo</th>
                                     <th>Date Requested</th>
-                                    <th>Delete</th>
+                                    <th>Decline</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -33,7 +33,8 @@
                                             <td><span x-text="row.crops_kilo ? row.crops_kilo : 'N/A'"></span></td>
                                             <td><span x-text="row.date_requested"></span></td>
                                             <td>
-                                                <button class="btn btn-danger" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="delete_request(row.request_id, row.user_id, 'Crop')">Delete</button>
+                                                <button class="btn btn-danger" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="show_decline_request_form = true, r_request_id = row.request_id, r_user_id = row.user_id">Decline</button>
+                                                <!-- <button class="btn btn-danger" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="delete_request(row.request_id, row.user_id, 'Crop')">Delete</button> -->
                                             </td>
                                         </tr>
                                     </template>

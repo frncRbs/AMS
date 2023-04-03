@@ -29,6 +29,8 @@
         echo $return_value;
     }
     $database->close();
+
+    
     
     $return_dict = [
         'status' => $return_value,

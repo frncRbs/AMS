@@ -5,8 +5,7 @@
     $db = $database->open();
     $return_value = '';
     $is_duplicate = false;
-    // $test = 'Working';
-    // require_once('../../settings/custom_sql.php');
+    $records = [];
     
     try {
         // Receive data from axios post
@@ -33,13 +32,23 @@
             $sql->bindParam(':is_available', $is_available);
 
             ($sql->execute()) ? $return_value = 'true' : $return_value = 'Something went wrong. Cannot saved record.';
+
+            // Retrieve updated record
+            $sql = $db->prepare("SELECT * FROM crops");
+            $sql->execute();
+            $records = $sql->fetchAll();
         }
         // echo $return_value = $test;
         
     } catch (PDOException $e) {
         $return_value = $e->getMessage();
-        echo $return_value;
     }
     $database->close();
-    echo $return_value;
+
+    $return_dict = [
+        'status' => $return_value,
+        'crops' => $records,
+    ];
+
+    echo json_encode($return_dict);
 ?>

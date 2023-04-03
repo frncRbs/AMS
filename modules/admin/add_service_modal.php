@@ -5,6 +5,8 @@
             <div style="display: flex; flex-direction: column;">
                 <h1 style="font-weight: bolder">Add Service</h1>
                 <hr>
+                <h3 style="color: red" x-text="admin_error_msg"></h3>
+                <h3 style="color: green" x-text="admin_success_msg"></h3>
                 <div class="row-fluid" style="background-color: white; min-height: 400px; padding:10px;">
                     <div class="span12">
                         <div class="widget-box">
@@ -14,23 +16,26 @@
                                 <div class="column">
                                     <div class="col-xs-12 col-sm-6 col-md-12" style="margin: 10px 0 10px;">
                                         <div class="form-group" >
-                                        <label for="last_name" style="font-weight: bold">Service:</label>
-                                            <input type="text" name="last_name" id="last_name" class="form-control input-lg" placeholder="Add service" required>
+                                        <label for="register_service" style="font-weight: bold">Service:</label>
+                                            <input type="text" name="register_service" id="register_service" class="form-control input-lg" x-ref="register_service_name" placeholder="Add service">
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <br>
-                        <button type="button" class="btn btn-success" style="width: 50%" x-on:click="confirm_reset">Confirm</button>
+                        <button type="button" class="btn btn-success" style="width: 50%" x-ref="submit_service_button" x-on:click="submit_service_form">Confirm</button>
                         <hr>
                         <br>
                         <div class="table-responsive">
                             <table class="table table-hover table-sm">
                                 <thead>
                                     <tr>
+                                        <th>ID</th>
                                         <th>Service Name</th>
+                                        <th>Availability</th>
                                         <th>Date Created</th>
+                                        <th>Update</th>
                                         <th>Delete</th>
                                     </tr>
                                 </thead>
@@ -40,10 +45,19 @@
                                             <tr>
                                                 <!-- <th scope="row"><span x-text="(index + 1)"></span></th> -->
                                                 <!-- <td><span x-text="row.request_id"></span></td> -->
+                                                <td><span x-text="service.service_id"></span></td>
                                                 <td><span x-text="service.service_name"></span></td>
+                                                <td><span x-text="service.is_available == 1 ? 'Available' : 'Not Available' "></span></td>
                                                 <td><span x-text="service.date_created"></span></td>
                                                 <td>
-                                                    <button class="btn btn-success" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="delete_request(row.request_id, row.user_id, 'Crop')">Delete</button>
+                                                    <select class="selectD" name="is_available" id="is_available" style="width: 100%; height: auto; margin-bottom: 0; padding: 5px; border-radius: 3px" x-on:change="update_program_status(service.service_id, document.getElementById('is_available').value, 'Services')">
+                                                        <option value="" disabled selected hidden> -- </option>
+                                                        <option value="1" >Available</option>
+                                                        <option value="0" >Not availabe</option>
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-danger" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="delete_services(service.service_id)">Delete</button>
                                                 </td>
                                             </tr>
                                         </template>

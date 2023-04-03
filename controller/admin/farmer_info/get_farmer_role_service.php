@@ -12,7 +12,7 @@
         $obj = json_decode(file_get_contents('php://input'), TRUE);
         $user_id = $obj['user_id'];
 
-        $sql = $db->prepare("SELECT role_service FROM user WHERE id = :user_id");
+        $sql = $db->prepare("SELECT farm_type FROM user WHERE id = :user_id");
         $sql->execute(array(':user_id' => $user_id));
         $records = $sql->fetch();
 
@@ -28,7 +28,7 @@
     $database->close();
     
     if($flag){
-        echo $records['role_service'];
+        echo $records['farm_type'];
     }
     else {
         echo false;

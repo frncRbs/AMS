@@ -14,7 +14,7 @@
                             </div>
                             <div class="widget-content nopadding">
                                 <div class="column">
-                                    <div class="col-xs-12 col-sm-6 col-md-12" style="margin: 10px 0 10px;">
+                                    <div class="col-xs-12 col-sm-6 col-md-12" style="margin: 3px 0 10px 0;">
                                         <div class="form-group" >
                                         <label for="crop_name" style="font-weight: bold">Crop:</label>
                                             <input type="text" name="crop_name" id="crop_name" x-ref="register_crop_name" class="form-control input-lg" placeholder="Add Crop Name">
@@ -43,14 +43,14 @@
                                         <template x-for="(crop, index) in custom_pagination(crops)">
                                             <tr>
                                                 <td><span x-text="crop.crop_name"></span></td>
-                                                <td><span x-text="crop.is_available"></span></td>
+                                                <td><span x-text="crop.is_available == 1 ? 'Available' : 'Not Available' "></span></td>
                                                 <td><span x-text="crop.date_created"></span></td>
                                                 <td>
-                                                <select class="selectD" name="is_available" id="is_available" x-ref="is_available" style="width: 100%; height: auto; margin-bottom: 0; padding: 5px; border-radius: 3px">
-                                                    <option value="" disabled selected hidden>Update</option>
-                                                    <option value="1">Available</option>
-                                                    <option value="0">Not availabe</option>
-                                                </select>
+                                                    <select class="selectD" name="is_available" id="is_available" style="width: 100%; height: auto; margin-bottom: 0; padding: 5px; border-radius: 3px" x-on:change="update_program_status(crop.crop_id, document.getElementById('is_available').value, 'Crops')">
+                                                        <option value="" disabled selected hidden> -- </option>
+                                                        <option value="1" >Available</option>
+                                                        <option value="0" >Not availabe</option>
+                                                    </select>
                                                 </td>
                                                 <td>
                                                     <button class="btn btn-danger" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="delete_crops(crop.crop_id)">Delete</button>

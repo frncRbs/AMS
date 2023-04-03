@@ -12,7 +12,6 @@
         $obj = json_decode(file_get_contents('php://input'), TRUE);
         $crop_id = $obj['crop_id'];
 
-
         // Delete record
         $sql_d = $db->prepare("DELETE FROM crops WHERE crop_id = :crop_id");
         $return_value = ($sql_d->execute(array(':crop_id' => $crop_id))) ? $return_value = 'true' : $return_value = 'Something went wrong. Cannot saved record.';

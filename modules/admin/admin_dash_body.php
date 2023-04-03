@@ -315,7 +315,7 @@
                                 </div>
                                 <hr>
                                 <div style="display: flex; align-self: flex-end">
-                                    <input type="search_farmer" placeholder="Search Request">
+                                    <input type="search_farmer" placeholder="Search Request" x-model="search_request" x-on:keyup="search_request_func()" x-on:keyup.backspace="search_request_func()">
                                 </div>
                                 <br>
                                 <div class="table-responsive">
@@ -328,7 +328,6 @@
                                                 <th>Last Name</th>
                                                 <th>Commodity</th>
                                                 <th>Sex</th>
-                                                <th>Program</th>
                                                 <th>Date Requested</th>
                                                 <th>View</th>
                                             </tr>
@@ -343,7 +342,6 @@
                                                         <td><span x-text="get_farmer_last_name(row.user_id)"></span></td>
                                                         <td><span x-text="get_farmer_role_service(row.user_id)"></span></td>
                                                         <td><span x-text="get_farmer_sex(row.user_id)"></span></td>
-                                                        <td><span x-text="get_farmer_role_service(row.user_id)"></span></td>
                                                         <td><span x-text="row.date_requested"></span></td>
                                                         <td>
                                                             <!-- <button class="btn btn-success" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="delete_request(row.request_id, row.user_id, 'Crop')">View</button> -->
@@ -385,9 +383,12 @@
                 info_no: 1,
                 farmer_records: [],
                 registry_records: [],
+                registry_records_backup: [],
 
                 crops: [],
                 services: [],
+
+                search_request: '',
 
                 initialize_registry(){
                     this.registry_records  = '<?php  
@@ -401,6 +402,7 @@
                         echo json_encode($results);
                     ;?>';
                     this.registry_records = JSON.parse(this.registry_records);
+                    this.registry_records_backup = this.registry_records;
                     // setTimeout(() => {
                     //     console.log(JSON.parse(this.registry_records));
                     // }, 1500);
@@ -535,7 +537,7 @@
                             }
                             else if(response.data == true){
                                 this.admin_success_msg = 'Crop successfully registered!';
-
+                                this.crops = (response.data.crops);
                                 setTimeout(() => {
                                     this.error_admin = false;
                                     this.admin_success_msg = '';
@@ -549,6 +551,55 @@
                     else{
                         this.error_admin = true;
                         this.$refs.submit_crop_button.disabled = false;
+                        this.admin_error_msg = 'Please fill in all required fields!';
+
+                        setTimeout(() => {
+                            this.error_admin = false;
+                            this.admin_error_msg = '';
+                        }, 2000);
+                    }
+                },
+
+                async submit_service_form(){
+                    this.$refs.submit_service_button.disabled = false;
+                    if(this.$refs.register_service_name.value){
+                        const options = {
+                            xsrfHeaderName: 'X-XSRF-TOKEN',
+                            xsrfCookieName: 'XSRF-TOKEN',
+                        }
+                        let data = {
+                            service_name: this.$refs.register_service_name.value,
+                        }
+
+                        await axios.post('../../controller/admin/register_service.php', data, options)
+                        .then((response) => {
+                            // console.log(response.data);
+                            this.$refs.submit_service_button.disabled = false;
+                            // console.log('Kini: ' + (response.data == true));
+                            if(response.data == false) {
+                                this.error_admin = true;
+                                this.admin_error_msg = 'Service is already registered!';
+                                setTimeout(() => {
+                                    this.error_admin = false;
+                                    this.admin_error_msg = '';
+                                }, 2000);
+                            }
+                            else if(response.data == true){
+                                this.admin_success_msg = 'Service successfully registered!';
+                                this.services = (response.data.services);
+                                setTimeout(() => {
+                                    this.error_admin = false;
+                                    this.admin_success_msg = '';
+                                }, 2000);
+                            }
+                        },
+                        (error) => {
+                            console.log(error);
+                        });
+                    }
+                    else{
+                        this.error_admin = true;
+                        this.$refs.submit_service_button.disabled = false;
                         this.admin_error_msg = 'Please fill in all required fields!';
 
                         setTimeout(() => {
@@ -625,9 +676,9 @@
                     await axios.post('../../controller/admin/farmer_info/get_farmer_role_service.php', data, options)
                     .then((response) => {
                         // console.log(response.data);
-                        farmer_role_service = response.data;
+                        farm_type = response.data;
                     }); 
-                    return farmer_role_service ? farmer_role_service : '';
+                    return farm_type == 1 ? 'High Value Crops' : (farm_type == 2 ? 'Corn Value Crop' : 'Rice Crop');
                 }, // return response.data;
 
                 async get_farmer_sex(user_id){
@@ -643,7 +694,7 @@
                         // console.log(response.data);
                         farmer_sex = response.data;
                     }); 
-                    return farmer_sex ? farmer_sex : '';
+                    return farmer_sex == 1 ? 'Male' : 'Female';
                 },
 
                 async get_farmer_records(user_id){
@@ -762,6 +813,88 @@
                     // return crop_name ? crop_name : '';
                 },
 
+                async delete_services(service_id){
+                    console.log(service_id);
+                    const options = {
+                        xsrfHeaderName: 'X-XSRF-TOKEN',
+                        xsrfCookieName: 'XSRF-TOKEN',
+                    };
+                    let data = {
+                        service_id: service_id,
+                    };
+                    await axios.post('../../controller/admin/delete_service.php', data, options)
+                    .then((response) => {
+                        console.log(response.data.services);
+                        if(response.data.status != 'true'){
+                            this.admin_error_msg = response.data.status;
+                            setTimeout(() => {
+                                this.admin_error_msg = '';
+                            }, 2000);
+                        }
+                        else {
+                            if(response.data.services.length == 0){
+                                window.location = '<?php echo LOCATION; ?>modules/admin/admin_dash_body.php';
+                            }
+                            else{
+                                this.services = response.data.services;
+                            }
+                        }
+                        
+                    }); 
+                    // return crop_name ? crop_name : '';
+                },
+
+                async search_request_func(){
+                    const preseve_rec = this.registry_records;
+                    this.registry_records = [];
+
+                    if(this.search_request != ''){
+                        for (const key in preseve_rec) {
+                            if (Object.hasOwnProperty.call(preseve_rec, key)) {
+                                const element = preseve_rec[key];
+                                let row_record = (await this.get_farmer_first_name(element.user_id) +' '+ await this.get_farmer_middle_name(element.user_id) +' '+ await this.get_farmer_last_name(element.user_id) +' '+ await this.get_farmer_role_service(element.user_id) +' '+ await this.get_farmer_sex(element.user_id)).toLowerCase();
+                                
+                                if(row_record.includes(this.search_request.toLowerCase())){
+                                    this.registry_records.push(element);
+                                };
+                            }
+                        }
+                    }
+                    else {
+                        this.registry_records = this.registry_records_backup;
+                    }
+                },
+
+                async update_program_status(program_id, status, type){
+                    const options = {
+                        xsrfHeaderName: 'X-XSRF-TOKEN',
+                        xsrfCookieName: 'XSRF-TOKEN',
+                    };
+                    let data = {
+                        program_id: program_id,
+                        type: type,
+                    };
+
+                    console.log(program_id, status, type);
+
+                    // await axios.post('../../controller/admin/update_program_status.php', data, options)
+                    // .then((response) => {
+                    //     // console.log(response.data.requests);
+                    //     if(response.data.requests.length == 0){
+                    //         window.location = '<?php echo LOCATION; ?>modules/admin/admin_dash_body.php';
+                    //     }
+                    //     else{
+                    //         this.farmer_records = response.data.requests;
+                    //         this.admin_success_msg = 'Crop successfully registered!';
+
+                    //             setTimeout(() => {
+                    //                 this.error_admin = false;
+                    //                 this.admin_success_msg = '';
+                    //             }, 2000);
+                    //     }
+                        
+                    // }); 
+                }
             }));
         });
     </script>

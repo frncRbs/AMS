@@ -30,7 +30,9 @@
     }
     $database->close();
 
+    // Pwede tu ki mn append el sms code after el delete query nuay pa iyo mn add table para donde mn insert el message etu ylng ase
     
+
     
     $return_dict = [
         'status' => $return_value,

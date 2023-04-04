@@ -1,32 +1,23 @@
 <!-- Add Services Prompt -->
 <div class="popupError" x-show="show_services_form" style="display: none">
     <div class="popup-contentError" x-data="add_service_modal">
-        <div class="popup-child1" style="margin-bottom: 5px">
+        <div class="popup-child1">
             <div style="display: flex; flex-direction: column;">
                 <h1 style="font-weight: bolder">Add Service</h1>
                 <hr>
                 <h3 style="color: red" x-text="admin_error_msg"></h3>
                 <h3 style="color: green" x-text="admin_success_msg"></h3>
-                <div class="row-fluid" style="background-color: white; min-height: 400px; padding:10px;">
-                    <div class="span12">
-                        <div class="widget-box">
-                            <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
-                            </div>
-                            <div class="widget-content nopadding">
-                                <div class="column">
-                                    <div class="col-xs-12 col-sm-6 col-md-12" style="margin: 10px 0 10px;">
-                                        <div class="form-group" >
-                                        <label for="register_service" style="font-weight: bold">Service:</label>
-                                            <input type="text" name="register_service" id="register_service" class="form-control input-lg" x-ref="register_service_name" placeholder="Add service">
-                                        </div>
-                                    </div>
-                                </div>
+                <div class="row-fluid span12" style="background-color: white; min-height: 400px; padding:10px;">
+                    <div class="column">
+                        <div class="col-xs-12 col-sm-6 col-md-12" style="margin: 3px 0 10px 0;">
+                            <div class="form-group" >
+                            <div style="display: flex; align-self: flex-end"><label class="control-label" style="font-weight: bold">Service :</label></div>
+                            <!-- <label for="register_service" style="font-weight: bold"></label> -->
+                                <input type="text" name="register_service" id="register_service" class="form-control input-lg" x-ref="register_service_name" placeholder="Add service">
                             </div>
                         </div>
-                        <br>
                         <button type="button" class="btn btn-success" style="width: 50%" x-ref="submit_service_button" x-on:click="submit_service_form">Confirm</button>
                         <hr>
-                        <br>
                         <div class="table-responsive">
                             <table class="table table-hover table-sm">
                                 <thead>
@@ -41,7 +32,7 @@
                                 <tbody>
                                     <template x-if="services">
                                         <template x-for="(service, index) in custom_pagination(services)">
-                                            <tr>
+                                            <tr style="min-width: 150px; padding: 10px; text-align: center; border: 1px solid #ddd;">
                                                 <!-- <th scope="row"><span x-text="(index + 1)"></span></th> -->
                                                 <!-- <td><span x-text="row.request_id"></span></td> -->
                                                 <td><span x-text="service.service_name"></span></td>
@@ -66,13 +57,11 @@
                                 <button class="btn btn-success" x-on:click="prevPage" :disabled="pageNumber==0" >Back</button>
                                 <button class="btn btn-success" x-on:click="nextPage" :disabled="pageNumber >= pageCount() -1">Next</button>
                             </div>
-                        <hr>
                     </div>
                 </div>
             </div>
         </div>
         </div>
-        <br>
         <div class="popup-child2">
             <a id="errorClose" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="confirm_reset">X</a>
         </div>
@@ -85,7 +74,7 @@
             // Pagination Javascript
             'search': "",
             'pageNumber': 0,
-            'size': 2,
+            'size': 3,
             'total': "",
 
             custom_pagination(paginate_records) {

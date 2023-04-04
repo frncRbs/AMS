@@ -5,8 +5,10 @@
     <?php include('show_farmer_request_modal.php'); ?>
     <?php include('add_crop_modal.php'); ?>
     <?php include('add_service_modal.php'); ?>
-    <?php include('activate_account_modal.php'); ?>
-    <?php include('customize_home_title_modal.php'); ?>
+    <?php include('manage_farmer_modal.php'); ?>
+    <?php include('manage_personnel_modal.php'); ?>
+    <?php include('edit_home_title_modal.php'); ?>
+    <?php include('edit_home_image_modal.php'); ?>
 
     <!-- <div> -->
         <div class="sidebar">
@@ -23,24 +25,24 @@
                         <li><a type="button" x-on:click="show_personnel_registration_form = true"  style="color: white"><i class="fas fa-user-plus"></i><span>Register Coordinator</span></a></li>
                         <li class="dash_two split"><a href="#"><i class="fas fa-plus-square"></i><span>Set Program</span></a>
                     <ul>
-                        <li><a type="button" x-on:click="show_crops_form = true" style="color: white"><i class="fas fa-plus-square"></i><span>Crops</span></a>
-                        <li><a type="button" x-on:click="show_services_form = true" style="color: white"><i class="fas fa-plus-square"></i><span>Services</span></a>
+                        <li><a type="button" x-on:click="show_crops_form = true" style="color: white"><i class="fas fa-plus-square"></i><span>Crops</span></a></li>
+                        <li><a type="button" x-on:click="show_services_form = true" style="color: white"><i class="fas fa-plus-square"></i><span>Services</span></a></li>
                     </ul>
                 </li>
-                <li><a type="button" x-on:click="show_activate_account_form = true" style="color: white"><i class="fas fa-search"></i><span>Search Farmer</span></a>
-                <li><a type="button" x-on:click="show_activate_account_form = true" style="color: white"><i class="fas fa-user-slash"></i><span>Farmers Account</span></a>
+                <li><a type="button" x-on:click="show_manage_personnel_form = true" style="color: white"><i class="fa fa-user-secret"></i><span style="font-size: 16px">Manage Personnels Account</span></a></li>
+                <li><a type="button" x-on:click="show_manage_farmer_form = true" style="color: white"><i class="fa fa-users"></i><span style="font-size: 16px">Manage Farmers Account</span></a></li>
                 </ul>
                 </li>
             </ul>
             <hr style="color: white">
-        </nav>
+            </nav>
         <nav class="nav2">
             <ul>
                 <li class="dropdown">
                 <a href="#"><i class="fas fa-tools"></i><span>Home Features</span></a>
                     <ul>
-                        <li><a type="button" x-on:click="show_home_content_form = true" style="color: white"><i class="fas fa-wrench"></i><span>Edit Home Image Content</span></a>
-                        <li><a type="button" x-on:click="show_home_content_form = true" style="color: white"><i class="fas fa-wrench"></i><span>Edit Home Title Content</span></a>
+                        <li><a type="button" x-on:click="show_home_image_form = true" style="color: white"><i class="fas fa-wrench"></i><span style="font-size: 14px">Manage Home Image Carousell</span></a></li>
+                        <li><a type="button" x-on:click="show_home_content_form = true" style="color: white"><i class="fas fa-wrench"></i><span style="font-size: 14px">Manage Home Title Content</span></a></li>
                     </ul>
                 </li>
             </ul>
@@ -74,11 +76,12 @@
                     <h1 style="font-weight: bolder">Create Coordinators Account</h1>
                         <br>
                         <div class="formG" style="display: flex; flex-direction: row; gap: 40px; justify-content: center" x-show="info_no == 1" style="display: none;">
-                            <div style="width: 100%">
+                            <div style="width: 100%; padding: 0 20px 0 20px">
                             <h3 style="font-weight: bold">Coordinators Information</h3>
-                            <hr>
+                            
                             <div class="row" style="text-align: left">
                                 <div class="column">
+                                <hr>
                                     <div class="col-xs-12 col-sm-6 col-md-12" style="margin-bottom: 10px;">
                                         <label for="role_service">Register for: </label>
                                         <select class="selectD" name="role_service" id="role_service" x-ref="role_service" style="width: 100%; height: auto; margin-bottom: 0; padding: 5px; border-radius: 3px">
@@ -88,8 +91,9 @@
                                             <option value="3">Rice Crop</option>
                                         </select>
                                     </div>
+                                <hr>
                                 </div>
-                                <hr style="margin: 20px 0 20px 0">                               
+                                
                                 <div class="col-xs-12 col-sm-6 col-md-6">
                                     <div class="form-group">
                                         <label for="first_name">First Name:</label>
@@ -103,6 +107,8 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                
                                 <div class="row" style="text-align: left">
                                     <div class="col-xs-12 col-sm-6 col-md-6">
                                         <div class="form-group">
@@ -117,8 +123,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <br>
                                 <hr>
+                                
                                 <div class="row" style="text-align: left">
                                     <div class="col-xs-12 col-sm-6 col-md-6">
                                         <div class="inputC">
@@ -135,6 +141,8 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                
                                 <div class="row" style="text-align: left">
                                     <div class="col-xs-12 col-sm-6 col-md-6">
                                     <label for="sex">Sex: </label>
@@ -151,12 +159,11 @@
                                         </div>
                                     </div>
                                 </div>
-                                <br>
                             </div>
                         </div>
                         <!-- PAGE 2 -->
                         <div class="formG" style="display: none; flex-direction: row; gap: 40px; justify-content: center" x-show="info_no == 2" style="display: none;">
-                            <div style="width: 100%">
+                            <div style="width: 100%; padding: 0 20px 0 20px">
                                 <h3 style="font-weight: bold">Coordinators Address</h3>
                                 <hr>
                                 <div class="row" style="text-align: left">
@@ -225,11 +232,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                <br>
-
+                            <br>
                             </div>
                             <button type="button" class="btn btn-success" style="width: 50%" x-ref="submit_personnel_button" x-on:click="submit_personnel_form">Submit</button>
-                            <br>
                             <br>
                         </div>
                         <hr>
@@ -325,13 +330,13 @@
             <div class="container-fluid">
                 <div class="row-fluid" style="background-color: white; min-height: 600px; padding:10px;">
                     <div class="span12">
-                            <div class="printGrp" style="display: flex; flex-direction: row; gap: 20px; justify-content: flex-end; border: 2px solid black;
-                                padding: 15px 0 15px 0; margin-top: 10px; flex-wrap: wrap; background: #2f323a; position: relative; border-radius: 5px">
+                            <div class="printGrp" style="display: flex; flex-direction: row; gap: 20px; justify-content: flex-end; padding: 15px 0 15px 0; 
+                            margin-top: 10px; flex-wrap: wrap; background: #2f323a; position: relative; border-radius: 5px">
                                 <div style="left: 10px; position: absolute">
-                                    <h3 style="font-weight: bolder; color: white">Dashboard</h3>
+                                    <h3 style="font-weight: bolder; color: white">WELCOME <?php echo strtoupper($_SESSION["login_username"]); ?></h3>
                                 </div> 
                                 <div style="margin: 0 10px 0 0;">
-                                    <a href="#"><button class="logout_btn" style="margin: 0 10px 0 0; border-radius: 3px; width: 100%">Print</button></a>
+                                    <button class="btn btn-success">Generate Report</button>
                                 </div>
                                 </div>
                                 <div class="container">
@@ -445,7 +450,8 @@
         Alpine.data('admin_side', () => ({
                 show_personnel_registration_form: false,
                 show_crops_form: false,
-                show_activate_account_form: false,
+                show_manage_farmer_form: false,
+                show_manage_personnel_form: false,
                 show_success_registration_form: false,
                 show_services_form: false,
                 show_personnel_requestForm: false,
@@ -454,6 +460,7 @@
                 show_decline_account_regform: false,
                 show_approve_account_regform: false,
                 show_home_content_form: false,
+                show_home_image_form: false,
                 admin_error_msg: '',
                 admin_success_msg: '',
                 
@@ -526,6 +533,11 @@
                     this.info_no = 1;
                     this.show_personnel_registration_form = false;
                 },
+                
+                exit_edit_home_features(){
+                    this.show_home_content_form = false;
+                    this.show_home_image_form = false;
+                },
 
                 confirm_farmer_request_exit(){
                     this.show_personnel_requestForm = false;
@@ -542,7 +554,8 @@
                 },
 
                 confirm_activate_account_exit(){
-                    this.show_activate_account_form = false;
+                    this.show_manage_farmer_form = false;
+                    this.show_manage_personnel_form = false;
                 },
 
                 async submit_personnel_form(){

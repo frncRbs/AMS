@@ -1,6 +1,6 @@
 <!-- Farmer Request Prompt -->
 <div class="popupSuccess" x-show="show_farmer_request_form" style="display: none">
-    <div class="popup-contentSuccess" x-data="show_farmer_request_modal">
+    <div class="popup-contentSuccess" x-data="show_farmer_request_modal" style="width: 900px;">
         <div class="popup-child1" style="margin-bottom: 5px">
             <div style="display: flex; flex-direction: column;">
                 <h1 style="font-weight: bolder">Farmer Requests</h1>
@@ -13,18 +13,18 @@
                         </select>
                     </div>
                     <br>
-                    <div class="table-responsive" style="max-width: 600px; max-height: auto; overflow: auto;">
+                    <div class="table-responsive" style="max-width: 830px; max-height: auto; overflow: auto;">
                         <table class="table table-hover table-sm" style="width: 100%;">
                             <thead>
                                 <tr>
                                     <!-- <th>No.</th> -->
-                                    <th style="min-width: 150px; padding: 0; text-align: center; border: 1px solid #ddd">Program</th>
-                                    <th style="min-width: 150px; padding: 0; text-align: center; border: 1px solid #ddd">Request Type</th>
-                                    <th style="min-width: 150px; padding: 0; text-align: center; border: 1px solid #ddd">Service Remarks</th>
-                                    <th style="min-width: 150px; padding: 0; text-align: center; border: 1px solid #ddd">Crops Kilo</th>
-                                    <th style="min-width: 150px; padding: 0; text-align: center; border: 1px solid #ddd">Date Requested</th>
-                                    <th style="min-width: 150px; padding: 0; text-align: center; border: 1px solid #ddd">Status</th>
-                                    <th style="min-width: 150px; padding: 0; text-align: center; border: 1px solid #ddd">Decline/Delete</th>
+                                    <th style="min-width: 150px; text-align: center">Program</th>
+                                    <th style="min-width: 150px; text-align: center">Request Type</th>
+                                    <th style="min-width: 150px; text-align: center">Service Remarks</th>
+                                    <th style="min-width: 150px; text-align: center">Crops Kilo</th>
+                                    <th style="min-width: 150px; text-align: center">Date Requested</th>
+                                    <th style="min-width: 150px; text-align: center">Status</th>
+                                    <th style="min-width: 150px; text-align: center">Decline/Delete</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -33,12 +33,12 @@
                                         <tr>
                                             <!-- <th scope="row"><span x-text="(index + 1)"></span></th> -->
                                             <!-- <td><span x-text="row.request_id"></span></td> -->
-                                            <td style="min-width: 150px; padding: 0; text-align: center; border: 1px solid #ddd"><span x-text="row.request_type"></span></td>
-                                            <td style="min-width: 150px; padding: 0; text-align: center; border: 1px solid #ddd"><span x-text="get_service_name(row.crop_id, row.service_id)"></span></td>
-                                            <td style="min-width: 150px; padding: 0; text-align: center; border: 1px solid #ddd"><span x-text="row.service_remarks ? row.service_remarks : 'N/A'"></span></td>
-                                            <td style="min-width: 150px; padding: 0; text-align: center; border: 1px solid #ddd"><span x-text="row.crops_kilo ? row.crops_kilo : 'N/A'"></span></td>
-                                            <td style="min-width: 150px; padding: 0; text-align: center; border: 1px solid #ddd"><span x-text="row.date_requested"></span></td>
-                                            <td style="min-width: 150px; padding: 0; text-align: center; border: 1px solid #ddd">
+                                            <td style="min-width: 150px; text-align: center"><span x-text="row.request_type"></span></td>
+                                            <td style="min-width: 150px; text-align: center"><span x-text="get_service_name(row.crop_id, row.service_id)"></span></td>
+                                            <td style="min-width: 150px; text-align: center"><span x-text="row.service_remarks ? row.service_remarks : 'N/A'"></span></td>
+                                            <td style="min-width: 150px; text-align: center"><span x-text="row.crops_kilo ? row.crops_kilo : 'N/A'"></span></td>
+                                            <td style="min-width: 150px; text-align: center"><span x-text="row.date_requested"></span></td>
+                                            <td style="min-width: 150px; text-align: center">
                                                 <template x-if="row.request_status == 0">
                                                     <button class="btn btn-success" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="">Approve</button>
                                                 </template>
@@ -46,7 +46,7 @@
                                                     <h4 style="color: green; font-weight: bold">Approved</h4>
                                                 </template>
                                             </td>
-                                            <td style="min-width: 150px; padding: 0; text-align: center; border: 1px solid #ddd">
+                                            <td style="min-width: 150px; text-align: center">
                                                 <template x-if="row.request_status == 1">
                                                     <button class="btn btn-danger" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="delete_request(row.request_id, row.user_id, 'Crop')">Delete</button>
                                                 </template>
@@ -60,9 +60,8 @@
                                 </template>
                             </tbody>
                         </table>
-                    <hr>
                 </div>
-                <br>
+                <hr>
                 <div style="display: flex; flex-direction: row; justify-content: space-evenly">
                     <button class="btn btn-success" x-on:click="prevPage" :disabled="pageNumber==0" >Back</button>
                     <button class="btn btn-success" x-on:click="nextPage" :disabled="pageNumber >= pageCount() -1">Next</button>
@@ -70,7 +69,6 @@
                 <br>
             </div>
         </div>
-        <br>
         <button type="button" class="btn btn-success" style="width: 50%; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="confirm_farmer_request_exit">Confirm</button>
         <div class="popup-child2">
             <a id="errorClose" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="confirm_farmer_request_exit">X</a>

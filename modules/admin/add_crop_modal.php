@@ -7,26 +7,17 @@
                 <hr>
                 <h3 style="color: red" x-text="admin_error_msg"></h3>
                 <h3 style="color: green" x-text="admin_success_msg"></h3>
-                <div class="row-fluid" style="background-color: white; min-height: 400px; padding:10px;">
-                    <div class="span12">
-                        <div class="widget-box">
-                            <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
-                            </div>
-                            <div class="widget-content nopadding">
-                                <div class="column">
-                                    <div class="col-xs-12 col-sm-6 col-md-12" style="margin: 3px 0 10px 0;">
-                                        <div class="form-group" >
-                                        <label for="crop_name" style="font-weight: bold">Crop:</label>
-                                            <input type="text" name="crop_name" id="crop_name" x-ref="register_crop_name" class="form-control input-lg" placeholder="Add Crop Name">
-                                        </div>
-                                    </div>
-                                </div>
+                <div class="row-fluid span12" style="background-color: white; min-height: 400px; padding:10px;">
+                    <div class="column">
+                        <div class="col-xs-12 col-sm-6 col-md-12" style="margin: 3px 0 10px 0;">
+                            <div class="form-group" >
+                            <div style="display: flex; align-self: flex-end"><label class="control-label" style="font-weight: bold">Crop :</label></div>
+                            <!-- <label for="crop_name" style="font-weight: bold">Crop:</label> -->
+                                <input type="text" name="crop_name" id="crop_name" x-ref="register_crop_name" class="form-control input-lg" placeholder="Add Crop Name">
                             </div>
                         </div>
-                        <br>
                         <button type="button" class="btn btn-success" style="width: 50%" x-ref="submit_crop_button" x-on:click="submit_crop_form">Confirm</button>
                         <hr>
-                        <br>
                         <div class="table-responsive">
                             <table class="table table-hover table-sm" > 
                                 <thead>
@@ -69,7 +60,6 @@
                 </div>
             </div>
         </div>
-        <br>
         <div class="popup-child2">
             <a id="errorClose" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="confirm_reset">X</a>
         </div>

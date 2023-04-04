@@ -281,7 +281,7 @@
             }
             .popup-contentHomeContent{
                 height: auto;
-                width: 850px;
+                width: 700px;
                 background: white;
                 display: flex;
                 padding: 20px;
@@ -836,7 +836,7 @@
             position: absolute;
             text-align: left;
             left: 250px;
-            width: 250px;
+            width: 300px;
             top: 0;
             background: #2f323a;
             display: none;
@@ -851,7 +851,7 @@
             .navDash ul .dash_two ul{
             width: 180px;
             position: absolute;
-            left: 250px;
+            left: 300px;
             top: 0;
             }
             .navDash ul .dash_two:hover ul{

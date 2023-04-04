@@ -6,6 +6,7 @@
     <?php include('add_crop_modal.php'); ?>
     <?php include('add_service_modal.php'); ?>
     <?php include('activate_account_modal.php'); ?>
+    <?php include('customize_home_title_modal.php'); ?>
 
     <!-- <div> -->
         <div class="sidebar">
@@ -26,8 +27,8 @@
                         <li><a type="button" x-on:click="show_services_form = true" style="color: white"><i class="fas fa-plus-square"></i><span>Services</span></a>
                     </ul>
                 </li>
-                <li><a href="admin_dash_search_farmer.php"><i class="fas fa-search"></i><span>Search Farmer</span></a>
-                <li><a type="button" x-on:click="show_activate_account_form = true" style="color: white"><i class="fas fa-user-slash"></i><span>Activate Account</span></a>
+                <li><a type="button" x-on:click="show_activate_account_form = true" style="color: white"><i class="fas fa-search"></i><span>Search Farmer</span></a>
+                <li><a type="button" x-on:click="show_activate_account_form = true" style="color: white"><i class="fas fa-user-slash"></i><span>Farmers Account</span></a>
                 </ul>
                 </li>
             </ul>
@@ -38,8 +39,8 @@
                 <li class="dropdown">
                 <a href="#"><i class="fas fa-tools"></i><span>Home Features</span></a>
                     <ul>
-                        <li><a href="admin_dash_home_image.php"><i class="fas fa-wrench"></i><span>Customized Home Image</span></a></li>
-                        <li><a href="admin_dash_home_content.php"><i class="fas fa-wrench"></i><span>Customized Home Content</span></a></li>
+                        <li><a type="button" x-on:click="show_home_content_form = true" style="color: white"><i class="fas fa-wrench"></i><span>Edit Home Image Content</span></a>
+                        <li><a type="button" x-on:click="show_home_content_form = true" style="color: white"><i class="fas fa-wrench"></i><span>Edit Home Title Content</span></a>
                     </ul>
                 </li>
             </ul>
@@ -406,7 +407,7 @@
                                         </thead>
                                         <tbody>
                                             <template x-if="registry_records">
-                                                <template x-for="(row, index) in registry_records">
+                                                <template x-for="(row, index) in custom_pagination(registry_records)">
                                                     <tr>
                                                         <th scope="row"><span x-text="(index + 1)"></span></th>
                                                         <td><span x-text="get_farmer_first_name(row.user_id)"></span></td>
@@ -426,8 +427,8 @@
                                     </table>
                                     
                                     <div style="display: flex; flex-direction: row; justify-content: space-evenly">
-                                        <button class="btn btn-success">Back</button>
-                                        <button class="btn btn-success">Next</button>
+                                        <button class="btn btn-success" x-on:click="prevPage" :disabled="pageNumber==0" >Back</button>
+                                        <button class="btn btn-success" x-on:click="nextPage" :disabled="pageNumber >= pageCount() -1">Next</button>
                                     </div>
 
                                     <hr>
@@ -452,12 +453,14 @@
                 show_decline_request_form: false,
                 show_decline_account_regform: false,
                 show_approve_account_regform: false,
+                show_home_content_form: false,
                 admin_error_msg: '',
                 admin_success_msg: '',
                 
                 error_admin: false,
                 info_no: 1,
                 farmer_records: [],
+                farmer_records_backup: [],
                 registry_records: [],
                 registry_records_backup: [],
                 user_details: [],
@@ -633,7 +636,7 @@
                             // console.log(response.data);
                             this.$refs.submit_crop_button.disabled = false;
                             // console.log('Kini: ' + (response.data == true));
-                            if(response.data.status == false) {
+                            if(response.data.status == 'false') {
                                 this.error_admin = true;
                                 this.admin_error_msg = 'Crop is already registered!';
                                 setTimeout(() => {
@@ -682,10 +685,8 @@
 
                         await axios.post('../../controller/admin/register_service.php', data, options)
                         .then((response) => {
-                            // console.log(response.data);
                             this.$refs.submit_service_button.disabled = false;
-                            // console.log('Kini: ' + (response.data == true));
-                            if(response.data == false) {
+                            if(response.data.status == 'false') {
                                 this.error_admin = true;
                                 this.admin_error_msg = 'Service is already registered!';
                                 setTimeout(() => {
@@ -693,9 +694,9 @@
                                     this.admin_error_msg = '';
                                 }, 2000);
                             }
-                            else if(response.data == true){
+                            else if(response.data.status == 'true'){
                                 this.admin_success_msg = 'Service successfully registered!';
-                                this.services = (response.data.services);
+                                this.services = response.data.services;
                                 setTimeout(() => {
                                     this.error_admin = false;
                                     this.admin_success_msg = '';
@@ -721,7 +722,6 @@
                 async generate_secret_phrase(){
                     await axios.get('../../controller/admin/generate_secret_key.php')
                     .then((response) => {
-                        console.log(response.data);
                         this.$refs.secret_phrase.value = response.data;
                     });
                 },
@@ -982,29 +982,118 @@
                     };
                     let data = {
                         program_id: program_id,
-                        type: type,
+                        status: status,
+                        type: type.toLowerCase(),
                     };
 
-                    console.log(program_id, status, type);
+                    // console.log(program_id, status, type);
 
-                    // await axios.post('../../controller/admin/update_program_status.php', data, options)
-                    // .then((response) => {
-                    //     // console.log(response.data.requests);
-                    //     if(response.data.requests.length == 0){
-                    //         window.location = '<?php echo LOCATION; ?>modules/admin/admin_dash_body.php';
-                    //     }
-                    //     else{
-                    //         this.farmer_records = response.data.requests;
-                    //         this.admin_success_msg = 'Crop successfully registered!';
+                    await axios.post('../../controller/admin/update_program_status.php', data, options)
+                    .then((response) => {
+                        // console.log(response.data);
+                        if(response.data.status == 'true'){
+                            if(type == 'Crops'){
+                                this.crops = response.data.programs;
+                            }
+                            else {
+                                this.services = response.data.programs;
+                            }
+                            // Success Messages
+                        }
+                        else {
+                            // Error Messages
+                        }
+                    }); 
+                },
 
-                    //             setTimeout(() => {
-                    //                 this.error_admin = false;
-                    //                 this.admin_success_msg = '';
-                    //             }, 2000);
-                    //     }
-                        
-                    // }); 
-                }
+                async update_farmer_request_status(crop_id, service_id, type){
+                    const options = {
+                        xsrfHeaderName: 'X-XSRF-TOKEN',
+                        xsrfCookieName: 'XSRF-TOKEN',
+                    };
+                    let data = {
+                        crop_id: crop_id,
+                        service_id: service_id,
+                        type: type.toLowerCase(),
+                    };
+
+                    // console.log(program_id, status, type);
+
+                    await axios.post('../../controller/admin/update_farmer_request_status.php', data, options)
+                    .then((response) => {
+                        // console.log(response.data);
+                        if(response.data.status == 'true'){
+                            if(type == 'Crops'){
+                                this.crops = response.data.programs;
+                            }
+                            else {
+                                this.services = response.data.programs;
+                            }
+                            // Success Messages
+                        }
+                        else {
+                            // Error Messages
+                        }
+                    }); 
+                },
+
+                // Pagination Javascript
+                'search': "",
+                'pageNumber': 0,
+                'size': 5,
+                'total': "",
+
+                custom_pagination(paginate_records) {
+                    const start = this.pageNumber * this.size,
+                    end = start + this.size;
+
+                    // this.total = this.services.length;
+                    this.total = paginate_records.length;
+                    return this.registry_records.slice(start, end);
+                },
+
+                //Create array of all pages (for loop to display page numbers)
+                pages() {
+                    return Array.from({
+                        length: Math.ceil(this.total / this.size),
+                    });
+                },
+
+                //Next Page
+                nextPage() {
+                    this.pageNumber++;
+                },
+
+                //Previous Page
+                prevPage() {
+                    this.pageNumber--;
+                },
+
+                //Total number of pages
+                pageCount() {
+                    return Math.ceil(this.total / this.size);
+                },
+
+                //Return the start range of the paginated results
+                startResults() {
+                    return this.pageNumber * this.size + 1;
+                },
+
+                //Return the end range of the paginated results
+                endResults() {
+                    let resultsOnPage = (this.pageNumber + 1) * this.size;
+
+                    if (resultsOnPage <= this.total) {
+                        return resultsOnPage;
+                    }
+
+                    return this.total;
+                },
+
+                //Link to navigate to page
+                viewPage(index) {
+                    this.pageNumber = index;
+                },
             }));
         });
     </script>

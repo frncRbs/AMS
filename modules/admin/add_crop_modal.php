@@ -46,7 +46,7 @@
                                                 <td><span x-text="crop.is_available == 1 ? 'Available' : 'Not Available' "></span></td>
                                                 <td><span x-text="crop.date_created"></span></td>
                                                 <td>
-                                                    <select class="selectD" name="is_available" id="is_available" style="width: 100%; height: auto; margin-bottom: 0; padding: 5px; border-radius: 3px" x-on:change="update_program_status(crop.crop_id, document.getElementById('is_available').value, 'Crops')">
+                                                    <select class="selectD" name="is_available" :id="generate_id(index)" style="width: 100%; height: auto; margin-bottom: 0; padding: 5px; border-radius: 3px" x-on:change="update_program_status(crop.crop_id, document.getElementById(generate_id(index)).value, 'Crops')">
                                                         <option value="" disabled selected hidden> -- </option>
                                                         <option value="1" >Available</option>
                                                         <option value="0" >Not availabe</option>
@@ -136,6 +136,9 @@
             viewPage(index) {
                 this.pageNumber = index;
             },
+            generate_id(id){
+                return '_' + id;
+            }
         }));
     });
 </script>

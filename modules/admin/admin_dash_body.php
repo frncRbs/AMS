@@ -1,14 +1,16 @@
 <?php
     include_once('../../includes/header.php');
 ?>
-    <div x-data="admin_side" x-init="get_services_crops, initialize_registry(), initialize_user_details()">
-    <?php include('show_farmer_request_modal.php'); ?>
-    <?php include('add_crop_modal.php'); ?>
-    <?php include('add_service_modal.php'); ?>
-    <?php include('manage_farmer_modal.php'); ?>
-    <?php include('manage_personnel_modal.php'); ?>
-    <?php include('edit_home_title_modal.php'); ?>
-    <?php include('edit_home_image_modal.php'); ?>
+    <div x-data="admin_side" x-init="get_services_crops, initialize_registry(), initialize_farmer_details(), initialize_home_title_details(), initialize_personnel_details()">
+        <?php include('show_farmer_request_modal.php'); ?>
+        <?php include('add_crop_modal.php'); ?>
+        <?php include('add_service_modal.php'); ?>
+        <?php include('manage_farmer_modal.php'); ?>
+        <?php include('manage_personnel_modal.php'); ?>
+        <?php include('edit_home_title_modal.php'); ?>
+        <?php include('edit_home_image_modal.php'); ?>
+        <?php include('edit_personnel_details_modal.php'); ?>
+        <?php include('edit_farmer_details_modal.php'); ?>
 
     <!-- <div> -->
         <div class="sidebar">
@@ -331,7 +333,7 @@
                 <div class="row-fluid" style="background-color: white; min-height: 600px; padding:10px;">
                     <div class="span12">
                             <div class="printGrp" style="display: flex; flex-direction: row; gap: 20px; justify-content: flex-end; padding: 15px 0 15px 0; 
-                            margin-top: 10px; flex-wrap: wrap; background: #2f323a; position: relative; border-radius: 5px">
+                            margin-top: 10px; flex-wrap: wrap; background: #2f323a; position: relative ">
                                 <div style="left: 10px; position: absolute">
                                     <h3 style="font-weight: bolder; color: white">WELCOME <?php echo strtoupper($_SESSION["login_username"]); ?></h3>
                                 </div> 
@@ -449,6 +451,8 @@
         document.addEventListener('alpine:init', () => {
         Alpine.data('admin_side', () => ({
                 show_personnel_registration_form: false,
+                update_personnel_registration_form: false,
+                update_farmer_registration_form: false,
                 show_crops_form: false,
                 show_manage_farmer_form: false,
                 show_manage_personnel_form: false,
@@ -466,12 +470,15 @@
                 
                 error_admin: false,
                 info_no: 1,
+                home_title_records: [],
                 farmer_records: [],
                 farmer_records_backup: [],
                 registry_records: [],
                 registry_records_backup: [],
                 user_details: [],
                 user_details_backup: [],
+                personnel_details: [],
+                personnel_details_backup: [],
 
                 r_request_id: 0,
                 r_user_id: 0,
@@ -491,7 +498,7 @@
                         $database->close();
 
                         echo json_encode($results);
-                    ;?>';
+                    ?>';
                     this.registry_records = JSON.parse(this.registry_records);
                     this.registry_records_backup = this.registry_records;
                     // setTimeout(() => {
@@ -499,7 +506,7 @@
                     // }, 1500);
                 },
 
-                initialize_user_details(){
+                initialize_farmer_details(){
                     this.user_details  = '<?php  
                         $database = new Connection();
                         $db = $database->open();
@@ -509,12 +516,51 @@
                         $database->close();
 
                         echo json_encode($results);
-                    ;?>';
+                    ?>';
                     this.user_details = JSON.parse(this.user_details);
                     this.user_details_backup = this.user_details;
                     // setTimeout(() => {
                     //     console.log(JSON.parse(this.user_details));
                     // }, 1500);
+                },
+
+                initialize_personnel_details(){
+                    this.personnel_details  = '<?php  
+                        $database = new Connection();
+                        $db = $database->open();
+                        $sql = $db->prepare("SELECT * FROM user WHERE role = 'Personnel'");
+                        $sql->execute();
+                        $results = $sql->fetchAll();
+                        $database->close();
+
+                        echo json_encode($results);
+                    ?>';
+                    this.personnel_details = JSON.parse(this.personnel_details);
+                    this.personnel_details_backup = this.personnel_details;
+                    // setTimeout(() => {
+                    //     console.log(JSON.parse(this.user_details));
+                    // }, 1500);
+                },
+
+                initialize_home_title_details(){
+                    const rec = '<?php  
+                        $database = new Connection();
+                        $db = $database->open();
+                        $sql = $db->prepare("SELECT * FROM home_content");
+                        $sql->execute();
+                        $results = $sql->fetchAll();
+                        $database->close();
+
+                        echo json_encode($results);
+                    ;?>';
+                    this.home_title_records = JSON.parse(rec);
+                    this.$refs._id.value = this.home_title_records[0].id;
+                    this.$refs.title11.value = this.home_title_records[0].content11;
+                    this.$refs.title12.value = this.home_title_records[0].content12;
+                    this.$refs.title21.value = this.home_title_records[0].content21;
+                    this.$refs.title22.value = this.home_title_records[0].content22;
+                    this.$refs.title31.value = this.home_title_records[0].content31;
+                    this.$refs.title32.value = this.home_title_records[0].content32;
                 },
                 
                 next(){
@@ -532,6 +578,8 @@
                 exit_register(){
                     this.info_no = 1;
                     this.show_personnel_registration_form = false;
+                    this.update_personnel_registration_form = false;
+                    this.update_farmer_registration_form = false;
                 },
                 
                 exit_edit_home_features(){
@@ -1048,7 +1096,64 @@
                             // Error Messages
                         }
                     }); 
+                }, 
+
+                async update_home_title_form(){
+                    this.$refs.submit_home_title_button.disabled = false;
+                    if(this.$refs.title11.value && this.$refs.title12.value && this.$refs.title21.value && this.$refs.title22.value && this.$refs.title31.value && this.$refs.title31.value){
+                        const options = {
+                            xsrfHeaderName: 'X-XSRF-TOKEN',
+                            xsrfCookieName: 'XSRF-TOKEN',
+                        }
+                        let data = {
+                            content11: this.$refs.title11.value,
+                            content12: this.$refs.title12.value,
+                            content21: this.$refs.title21.value,
+                            content22: this.$refs.title22.value,
+                            content31: this.$refs.title31.value,
+                            content32: this.$refs.title32.value,
+                            id: this.$refs._id.value,
+                        };
+
+                        await axios.post('../../controller/admin/update_home_title.php', data, options)
+                        .then((response) => {
+                            // console.log(response.data);
+                            this.$refs.submit_home_title_button.disabled = true;
+
+                            if(response.data.status == 'false') {
+                                this.error_admin = true;
+                                this.admin_error_msg = 'Something went wrong cannot update title!';
+                                setTimeout(() => {
+                                    this.error_admin = false;
+                                    this.admin_error_msg = '';
+                                }, 2000);
+                            }
+                            else if(response.data.status == 'true'){
+                                this.admin_success_msg = 'Titles successfully updated!';
+                                this.home_title_records = response.data.title;
+                                setTimeout(() => {
+                                    this.$refs.submit_home_title_button.disabled = false;
+                                    this.error_admin = false;
+                                    this.admin_success_msg = '';
+                                }, 2000);
+                            }
+                        },
+                        (error) => {
+                            console.log(error);
+                        });
+                    }
+                    else{
+                        this.error_admin = true;
+                        this.$refs.submit_home_title_button.disabled = false;
+                        this.admin_error_msg = 'Please fill in all required fields!';
+
+                        setTimeout(() => {
+                            this.error_admin = false;
+                            this.admin_error_msg = '';
+                        }, 2000);
+                    }
                 },
+
 
                 // Pagination Javascript
                 'search': "",

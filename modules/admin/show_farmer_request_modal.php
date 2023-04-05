@@ -24,7 +24,7 @@
                                     <th style="min-width: 150px; text-align: center">Crops Kilo</th>
                                     <th style="min-width: 150px; text-align: center">Date Requested</th>
                                     <th style="min-width: 150px; text-align: center">Status</th>
-                                    <th style="min-width: 150px; text-align: center">Decline/Delete</th>
+                                    <th style="min-width: 150px; text-align: center">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -38,22 +38,25 @@
                                             <td style="min-width: 150px; text-align: center"><span x-text="row.service_remarks ? row.service_remarks : 'N/A'"></span></td>
                                             <td style="min-width: 150px; text-align: center"><span x-text="row.crops_kilo ? row.crops_kilo : 'N/A'"></span></td>
                                             <td style="min-width: 150px; text-align: center"><span x-text="row.date_requested"></span></td>
+                                            
                                             <td style="min-width: 150px; text-align: center">
-                                                <template x-if="row.request_status == 0">
-                                                    <button class="btn btn-success" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="">Approve</button>
-                                                </template>
                                                 <template x-if="row.request_status == 1">
                                                     <h4 style="color: green; font-weight: bold">Approved</h4>
                                                 </template>
-                                            </td>
-                                            <td style="min-width: 150px; text-align: center">
-                                                <template x-if="row.request_status == 1">
-                                                    <button class="btn btn-danger" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="delete_request(row.request_id, row.user_id, 'Crop')">Delete</button>
-                                                </template>
                                                 <template x-if="row.request_status == 0">
-                                                    <button class="btn btn-danger" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="show_decline_request_form = true, r_request_id = row.request_id, r_user_id = row.user_id">Decline</button>
+                                                    <h4 style="color: red; font-weight: bold">Pending</h4>
                                                 </template>
                                                 <!-- <button class="btn btn-danger" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="delete_request(row.request_id, row.user_id, 'Crop')">Delete</button> -->
+                                            </td>
+                                            <td style="min-width: 150px; text-align: center">
+                                                <div style="display: flex; flex-direction: flex-end; align-items: space-around">
+                                                    <template x-if="row.request_status == 0">
+                                                        <button class="btn btn-success" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="">Approve</button>
+                                                    </template>
+                                                    <template x-if="row.request_status == 0">
+                                                        <button class="btn btn-danger" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="show_decline_request_form = true, r_request_id = row.request_id, r_user_id = row.user_id">Decline</button>
+                                                    </template>
+                                                </div>
                                             </td>
                                         </tr>
                                     </template>

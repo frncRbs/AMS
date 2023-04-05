@@ -9,17 +9,17 @@
                 <div class="row-fluid" style="background-color: white; min-height: 400px; padding:10px;">
                 <hr>
                     <div style="position: relative; display: flex; justify-content: flex-end">
-                        <input type="text" placeholder="Enter details..." x-model="search_farmer" x-on:keyup="search_farmer_func()" x-on:keyup.backspace="search_farmer_func()" placeholder="Search Farmer">
+                        <input type="text" placeholder="Enter details..." x-model="search_personnel" x-on:keyup="search_personnel_func()" x-on:keyup.backspace="search_personnel_func()" placeholder="Search Personnel">
                     </div>
                     <div class="span12">
                         <div class="table-responsive" style="max-width: 950px; max-height: auto; overflow: auto;">
                             <table class="table table-hover table-sm" style="width: 100%;">
                                 <thead>
                                     <tr>
+                                        <th style="min-width: 150px; text-align: center">Commodity</th>
                                         <th style="min-width: 150px; text-align: center">First Name</th>
                                         <th style="min-width: 150px; text-align: center">Middle Name</th>
                                         <th style="min-width: 150px; text-align: center">Last Name</th>
-                                        <th style="min-width: 150px; text-align: center">Commodity</th>
                                         <th style="min-width: 150px; text-align: center">Birth Date</th>
                                         <th style="min-width: 150px; text-align: center">Civil Status</th>
                                         <th style="min-width: 150px; text-align: center">Sex</th>
@@ -29,27 +29,19 @@
                                         <th style="min-width: 150px; text-align: center">Address Street</th>
                                         <th style="min-width: 150px; text-align: center">Address Barangay</th>
                                         <th style="min-width: 150px; text-align: center">Address Municipality</th>
-                                        <th style="min-width: 150px; text-align: center">Address Zip Code</th>
-                                        <th style="min-width: 150px; text-align: center">Guardian Fullname</th>
-                                        <th style="min-width: 150px; text-align: center">Guardian No.</th>
-                                        <th style="min-width: 150px; text-align: center">Farm Type</th>
-                                        <th style="min-width: 150px; text-align: center">Farm Barangay</th>
-                                        <th style="min-width: 150px; text-align: center">Farm Municipality</th>
-                                        <th style="min-width: 150px; text-align: center">Farm Area</th>
                                         <th style="min-width: 150px; text-align: center">Username</th>
-                                        <th style="min-width: 150px; text-align: center">Verify</th>
-                                        <th style="min-width: 150px; text-align: center">Is active</th>
-                                        <th style="min-width: 150px; text-align: center">Delete</th>
+                                        <th style="min-width: 150px; text-align: center">Status</th>
+                                        <th style="min-width: 150px; text-align: center">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <template x-if="user_details">
-                                        <template x-for="(row, index) in custom_pagination(user_details)">
+                                    <template x-if="personnel_details">
+                                        <template x-for="(row, index) in custom_pagination(personnel_details)">
                                             <tr>
+                                                <td style="min-width: 150px; text-align: center"><span x-text="row.role_service == 1 ? 'High Value Crops' : (row.role_service == 2 ? 'Corn Value Crop' : 'Rice Crop');"></span></td>
                                                 <td style="min-width: 150px; text-align: center"><span x-text="row.first_name"></span></td>
                                                 <td style="min-width: 150px; text-align: center"><span x-text="row.middle_name"></span></td>
                                                 <td style="min-width: 150px; text-align: center"><span x-text="row.last_name"></span></td>
-                                                <td style="min-width: 150px; text-align: center"><span x-text="row.role_service == 1 ? 'High Value Crops' : (row.role_service == 2 ? 'Corn Value Crop' : 'Rice Crop');"></span></td>
                                                 <td style="min-width: 150px; text-align: center"><span x-text="row.birth_date"></span></td>
                                                 <td style="min-width: 150px; text-align: center"><span x-text="row.civil_status == 1 ? 'Married' : (row.civil_status == 2 ? 'Single' : 'Widowed');"></span></td>
                                                 <td style="min-width: 150px; text-align: center"><span x-text="row.sex == 1 ? 'Male' : 'Female';"></span></td>
@@ -59,39 +51,23 @@
                                                 <td style="min-width: 150px; text-align: center"><span x-text="row.address_street"></span></td>
                                                 <td style="min-width: 150px; text-align: center"><span x-text="row.address_barangay"></span></td>
                                                 <td style="min-width: 150px; text-align: center"><span x-text="row.address_municipality"></span></td>
-                                                <td style="min-width: 150px; text-align: center"><span x-text="row.address_zip"></span></td>
-                                                <td style="min-width: 150px; text-align: center"><span x-text="row.guardian_fname"></span></td>
-                                                <td style="min-width: 150px; text-align: center"><span x-text="row.guardian_contact"></span></td>
-                                                <td style="min-width: 150px; text-align: center"><span x-text="row.farm_type == 1 ? 'High Value Crops' : (row.role_service == 2 ? 'Corn Value Crop' : 'Rice Crop');"></span></td>
-                                                <td style="min-width: 150px; text-align: center"><span x-text="row.farm_barangay"></span></td>
-                                                <td style="min-width: 150px; text-align: center"><span x-text="row.farm_municipality"></span></td>
-                                                <td style="min-width: 150px; text-align: center"><span x-text="row.farm_area"></span></td>
                                                 <td style="min-width: 150px; text-align: center"><span x-text="row.username"></span></td>
                                                 <td style="min-width: 150px; text-align: center">
-                                                    
-                                                    <template x-if="row.status == 0">
-                                                        <button class="btn btn-success" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em">Approve</button>
-                                                    </template>
                                                     <template x-if="row.status == 1">
-                                                        <h4 style="color: green; font-weight: bold">Verified</h4>
+                                                        <h4 style="color: green; font-weight: bold">Approved</h4>
                                                     </template>
+                                                    <template x-if="row.status == 0">
+                                                        <h4 style="color: red; font-weight: bold">Pending</h4>
+                                                    </template>
+                                                <!-- <button class="btn btn-danger" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="delete_request(row.request_id, row.user_id, 'Crop')">Delete</button> -->
                                                 </td>
                                                 <td style="min-width: 150px; text-align: center">
-                                                    <!-- <button class="btn btn-success" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="delete_request(row.request_id, row.user_id, 'Crop')">View</button> -->
-                                                    <template x-if="row.is_active == 1 && row.status == 1">
-                                                        <button class="btn btn-danger" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="">Deactivate</button>
-                                                    </template>
-                                                    <template x-if="row.is_active == 0 && row.status == 0">
-                                                        <h4 style="color: red; font-weight: bold">Unverified</h4>
-                                                    </template>
-                                                    <template x-if="row.is_active == 0 && row.status == 1">
-                                                        <button class="btn btn-success" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="">Activate</button>
-                                                    </template>
-                                                </td>
-
-                                                <td style="min-width: 150px; text-align: center">
-                                                    <!-- <button class="btn btn-success" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="delete_request(row.request_id, row.user_id, 'Crop')">View</button> -->
-                                                    <button class="btn btn-danger" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="">Delete</button>
+                                                    <div style="display: flex; flex-direction: flex-end; align-items: space-around">
+                                                        <button class="btn btn-success" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="update_personnel_registration_form = true">Update</button>
+                                                        <template x-if="row.status == 0">
+                                                            <button class="btn btn-success" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="">Approve</button>
+                                                        </template>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         </template>
@@ -123,26 +99,26 @@
             'size': 5,
             'total': "",
 
-            search_farmer: '',
+            search_personnel: '',
 
-            async search_farmer_func(){
-                const preseve_rec = this.user_details;
-                this.user_details = [];
+            async search_personnel_func(){
+                const preseve_rec = this.personnel_details;
+                this.personnel_details = [];
 
-                if(this.search_farmer != ''){
+                if(this.search_personnel != ''){
                     for (const key in preseve_rec) {
                         if (Object.hasOwnProperty.call(preseve_rec, key)) {
                             const element = preseve_rec[key];
-                            let row_record = ((element.first_name) + ' ' + (element.middle_name) + ' ' + (element.last_name) + ' ' + (element.role_service == 1 ? 'High Value Crops' : (element.role_service == 2 ? 'Corn Value Crop' : 'Rice Crop')) + ' ' + (element.birth_date) + ' ' + (element.civil_status == 1 ? 'Married' : (element.civil_status == 2 ? 'Single' : 'Widowed')) + ' ' + (element.sex) + ' ' + (element.contact_no) + ' ' + (element.religion) + ' ' + (element.birth_place) + ' ' + (element.address_street) + ' ' + (element.address_barangay) + ' ' + (element.address_municipality) + ' ' + (element.address_zip) + ' ' + (element.guardian_fname) + ' ' + (element.guardian_contact) + ' ' + (element.farm_type) + ' ' + (element.farm_barangay) + ' ' + (element.farm_municipality) + ' ' + (element.farm_area) + ' ' + (element.username)).toLowerCase();
+                            let row_record = ((element.role_service == 1 ? 'High Value Crops' : (element.role_service == 2 ? 'Corn Value Crop' : 'Rice Crop')) + ' ' + (element.first_name) + ' ' + (element.middle_name) + ' ' + (element.last_name) + ' ' + (element.birth_date) + ' ' + (element.civil_status == 1 ? 'Married' : (element.civil_status == 2 ? 'Single' : 'Widowed')) + ' ' + (element.sex) + ' ' + (element.contact_no) + ' ' + (element.religion) + ' ' + (element.birth_place) + ' ' + (element.address_street) + ' ' + (element.address_barangay) + ' ' + (element.address_municipality) + ' ' + (element.username)).toLowerCase();
                             
-                            if(row_record.includes(this.search_farmer.toLowerCase())){
-                                this.user_details.push(element);
+                            if(row_record.includes(this.search_personnel.toLowerCase())){
+                                this.personnel_details.push(element);
                             };
                         }
                     }
                 }
                 else {
-                    this.user_details = this.user_details_backup;
+                    this.personnel_details = this.personnel_details_backup;
                 }
             },
 
@@ -152,7 +128,7 @@
 
                 // this.total = this.services.length;
                 this.total = paginate_records.length;
-                return this.user_details.slice(start, end);
+                return this.personnel_details.slice(start, end);
             },
 
             //Create array of all pages (for loop to display page numbers)

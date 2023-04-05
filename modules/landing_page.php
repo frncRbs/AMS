@@ -17,13 +17,15 @@
     $db = $database->open();
     $sql_query = 'SELECT * FROM home_imgs';
     $results = $db->query($sql_query);
+    foreach ($results as $key => $value) {
+        $image1=$value["image1"];
+        $image2=$value["image2"];
+        $image=$value["image3"];
+    }
 
     $sql_query2 = 'SELECT * FROM home_content';
     $results2 = $db->query($sql_query2);
     foreach ($results2 as $key => $value) {
-        $image1=$value["image1"];
-        $image2=$value["image2"];
-        $image3=$value["image3"];
         $content11=$value["content11"];
         $content12=$value["content12"];
         $content21=$value["content21"];
@@ -990,16 +992,16 @@
                     <div class="carousel-inner" role="listbox" id="home">
                         <div class="item active">
                         
-                            <div class="banner" style="background-image: url('<?php echo IMAGES.$image1;?>');"></div>
+                            <div class="banner" style="background-image: url('<?php echo UPLOADS.$image1;?>');"></div>
                             <div class="carousel-caption">
                                 <h2 class="animated slideInDown" style="animation-delay: 1s"><span><?php echo $content11?></span></h2>
                                 <h3 class="animated fadeInUp" style="animation-delay: 2s"><?php echo $content12?></h3>
                                 <p class="animated zoomIn" style="animation-delay: 3s"><a href="#contact">Contact us</a></p>
                             </div>
-                        </div>
+                            </div>
                         
                         <div class="item">
-                            <div class="banner" style="background-image: url('<?php echo IMAGES.$image2; ?>')"></div>
+                            <div class="banner" style="background-image: url('<?php echo UPLOADS.$image2; ?>')"></div>
                             <div class="carousel-caption">
                                 <h2 class="animated slideInDown" style="animation-delay: 1s"><span><?php echo $content21?></span></h2>
                                 <h3 class="animated fadeInUp" style="animation-delay: 2s"><?php echo $content22?></h3>
@@ -1007,7 +1009,7 @@
                         </div>
                         
                         <div class="item">
-                            <div class="banner" style="background-image: url('<?php echo IMAGES.$image3;?>');"></div>
+                            <div class="banner" style="background-image: url('<?php echo UPLOADS.$image3;?>');"></div>
                             <div class="carousel-caption">
                                 <h2 class="animated zoomIn" style="animation-delay: 1s"><span><?php echo $content31?></span></h2>
                                 <h3 class="animated fadeInLeft" style="animation-delay: 2s"><?php echo $content32?></h3>

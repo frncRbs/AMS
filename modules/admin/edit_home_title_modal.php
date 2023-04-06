@@ -7,7 +7,7 @@
                     <hr>
                         <h3 style="color: red" x-text="admin_error_msg"></h3>
                         <h3 style="color: green" x-text="admin_success_msg"></h3>
-                        <input type="text" hidden x-ref="_id">
+                        <input type="text" hidden x-ref="title_id">
                         <div class="row-fluid span12" style="overflow-y: scroll; max-height: 500px">
                             <div style="display: flex; align-self: flex-end"><label class="control-label" style="font-weight: bold">First Slide Upper Title Tag :</label></div>
                             <div class="control-group">

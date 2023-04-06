@@ -66,6 +66,22 @@
                 </div>
             </div>
         </div>
+
+        <!-- Success Update Prompt Personnel/Farmer -->
+        <div class="popupSuccess_register" x-show="show_success_update_form" style="display: none">
+            <div class="popup-contentSuccess_register">
+                <div class="popup-child1" style="margin-bottom: 5px">
+                    <div style="display: flex;  ">
+                        <h1 style="font-weight: bolder">Account Successfully Updated!</h1>
+                    </div>
+                </div>
+                <br>
+                <button type="button" class="btn btn-success" style="width: 50%" x-on:click="confirm_reset">Confirm</button>
+                <div class="popup-child2">
+                    <a id="errorClose" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="confirm_reset">X</a>
+                </div>
+            </div>
+        </div>
         
         <!-- Farmer Registration Form -->      
         <div class="popup3" x-show="show_personnel_registration_form" style="display: none;">
@@ -485,6 +501,7 @@
                 show_decline_account_regform: false,
                 show_approve_account_regform: false,
                 show_deactivate_request_form: false,
+                show_success_update_form: false,
                 show_home_content_form: false,
                 show_home_image_form: false,
                 admin_error_msg: '',
@@ -600,7 +617,7 @@
                         echo json_encode($results);
                     ;?>';
                     this.home_title_records = JSON.parse(rec);
-                    this.$refs._id.value = this.home_title_records[0].id;
+                    this.$refs.title_id.value = this.home_title_records[0].id;
                     this.$refs.title11.value = this.home_title_records[0].content11;
                     this.$refs.title12.value = this.home_title_records[0].content12;
                     this.$refs.title21.value = this.home_title_records[0].content21;
@@ -645,7 +662,7 @@
                     this.show_success_registration_form = false;
                     this.show_deactivate_request_form = false,
                     this.show_decline_request_form = false;
-
+                    this.show_success_update_form = false;
                 },
 
                 confirm_activate_account_exit(){
@@ -1174,7 +1191,7 @@
                             content22: this.$refs.title22.value,
                             content31: this.$refs.title31.value,
                             content32: this.$refs.title32.value,
-                            id: this.$refs._id.value,
+                            id: this.$refs.title_id.value,
                         };
 
                         await axios.post('../../controller/admin/update_home_title.php', data, options)
@@ -1250,7 +1267,7 @@
                                 this.info_no = 1;
                                 this.personnel_details = response.data.personnel_update;
                                 this.update_personnel_registration_form = false;
-                                this.show_success_registration_form = true;
+                                this.show_success_update_form = true;
                             }
                             else{
                                 //error msg

@@ -5,6 +5,7 @@
     $db = $database->open();
     $return_value = 'false';
     $is_duplicate = false;
+    $records = '';
     // $test = 'Working';
     // require_once('../../settings/custom_sql.php');
     

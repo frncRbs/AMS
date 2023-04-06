@@ -51,7 +51,7 @@
                                             <td style="min-width: 150px; text-align: center">
                                                 <div style="display: flex; flex-direction: flex-end; align-items: space-around">
                                                     <template x-if="row.request_status == 0">
-                                                        <button class="btn btn-success" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="">Approve</button>
+                                                        <button class="btn btn-success" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="approve_farmer_request(row)">Approve</button>
                                                     </template>
                                                     <template x-if="row.request_status == 0">
                                                         <button class="btn btn-danger" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="show_decline_request_form = true, r_request_id = row.request_id, r_user_id = row.user_id">Decline</button>
@@ -162,6 +162,29 @@
             viewPage(index) {
                 this.pageNumber = index;
             },
+
+            async approve_farmer_request(row){
+                // console.log(row.request_id);
+                const options = {
+                    xsrfHeaderName: 'X-XSRF-TOKEN',
+                    xsrfCookieName: 'XSRF-TOKEN',
+                };
+                let data = {
+                    request_id: row.request_id,
+                    request_status: true,
+                    user_id: row.user_id,
+                };
+                await axios.post('../../controller/admin/approve_farmer_request.php', data, options)
+                .then((response) => {
+                    if(response.data.status == 'true'){
+                        this.farmer_records = response.data.requests_registry;
+                    }
+                    else {
+                        // ERROR MESSAGE
+                    }
+                    // this.farmer_records = response.data;
+                });
+            }
         }));
     });
 </script>

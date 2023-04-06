@@ -20,7 +20,7 @@
     foreach ($results as $key => $value) {
         $image1=$value["image1"];
         $image2=$value["image2"];
-        $image=$value["image3"];
+        $image3=$value["image3"];
     }
 
     $sql_query2 = 'SELECT * FROM home_content';

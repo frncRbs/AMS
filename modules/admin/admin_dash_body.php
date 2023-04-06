@@ -270,10 +270,30 @@
                             <textarea class="form-control form-control-lg" placeholder="Enter reason here..."></textarea>
                         </div>
                         <br>
+                        <!-- <input type="text" x-model="r_request_id"> -->
                     </div>
                 </div>
                 <br>
                 <button type="button" class="btn btn-success" style="width: 50%" x-on:click="delete_request(r_request_id, r_user_id, 'Crop')">Confirm</button>
+                <div class="popup-child2">
+                    <a id="errorClose" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="confirm_reset">X</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Deactivate Personnel/Farmer Service Request Prompt -->
+        <div class="popupDecline_request" x-show="show_deactivate_request_form" style="display: none">
+            <div class="popup-contentDecline_request">
+                <div class="popup-child1" style="margin-bottom: 5px; display: flex; flex-direction: column">
+                    <div>
+                        <h2 style="font-weight: bolder">Are you sure you want to deactivate? <span x-text="p_fn"></span></h2>
+                    </div>
+                    <hr>
+                    <div style="display: flex; justify-content: space-around">
+                        <button type="button" class="btn btn-success" style="max-width: 100%" x-on:click="deactivate_personnel_account">Yes</button>
+                        <button type="button" class="btn btn-danger" style="max-width: 100%" x-on:click="confirm_reset">No</button>
+                    </div>
+                </div>
                 <div class="popup-child2">
                     <a id="errorClose" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="confirm_reset">X</a>
                 </div>
@@ -450,6 +470,7 @@
     <script>
         document.addEventListener('alpine:init', () => {
         Alpine.data('admin_side', () => ({
+                // MODAL-FORMS
                 show_personnel_registration_form: false,
                 update_personnel_registration_form: false,
                 update_farmer_registration_form: false,
@@ -463,11 +484,13 @@
                 show_decline_request_form: false,
                 show_decline_account_regform: false,
                 show_approve_account_regform: false,
+                show_deactivate_request_form: false,
                 show_home_content_form: false,
                 show_home_image_form: false,
                 admin_error_msg: '',
                 admin_success_msg: '',
                 
+                //ONE WAY DATA
                 error_admin: false,
                 info_no: 1,
                 home_title_records: [],
@@ -479,14 +502,37 @@
                 user_details_backup: [],
                 personnel_details: [],
                 personnel_details_backup: [],
+                crops: [],
+                services: [],
+                search_request: '',
 
+                // CURRENT USER DETAILS
                 r_request_id: 0,
                 r_user_id: 0,
 
-                crops: [],
-                services: [],
+                // CURRENT PERSONNEL DETAILS
+                p_id: 0,
+                p_fn: '',
+                p_mn: '',
+                p_ln: '',
+                p_role_s: '',
+                p_b_date: '',
+                p_c_status: '',
+                p_seggs: '',
+                p_c_no: '',
+                p_rel: '',
+                p_b_place: '',
+                p_a_street: '',
+                p_a_barangay: '',
+                p_a_street: '',
+                p_a_municipality: '',
+                p_user_n: '',
+                p_secret_p: '',
+                p_role: '',
+                p_is_active: '',
 
-                search_request: '',
+                
+                // CURRENT FARMER DETAILS
 
                 initialize_registry(){
                     this.registry_records  = '<?php  
@@ -528,7 +574,7 @@
                     this.personnel_details  = '<?php  
                         $database = new Connection();
                         $db = $database->open();
-                        $sql = $db->prepare("SELECT * FROM user WHERE role = 'Personnel'");
+                        $sql = $db->prepare("SELECT * FROM user WHERE role IN ('Personnel', 'Admin');");
                         $sql->execute();
                         $results = $sql->fetchAll();
                         $database->close();
@@ -542,7 +588,7 @@
                     // }, 1500);
                 },
 
-                initialize_home_title_details(){
+                initialize_home_title_details(){ 
                     const rec = '<?php  
                         $database = new Connection();
                         $db = $database->open();
@@ -597,6 +643,7 @@
                     this.show_services_form = false;
                     this.show_services_form = false;
                     this.show_success_registration_form = false;
+                    this.show_deactivate_request_form = false,
                     this.show_decline_request_form = false;
 
                 },
@@ -927,6 +974,21 @@
                     // return response.data;
                 },
 
+                async get_personnel_records(user_id){
+                    const options = {
+                        xsrfHeaderName: 'X-XSRF-TOKEN',
+                        xsrfCookieName: 'XSRF-TOKEN',
+                    };
+                    let data = {
+                        user_id: user_id
+                    };
+                    await axios.post('../../controller/admin/get_farmer_details.php', data, options)
+                    .then((response) => {
+                        // console.log(response.data);
+                        this.farmer_records = response.data;
+                    }); 
+                },
+
                 async delete_request(request_id, user_id, request_type){
                     console.log(request_id);
                     const options = {
@@ -1154,6 +1216,101 @@
                     }
                 },
 
+                async update_personnel_details(){
+
+                    if(this.p_role_s && this.p_fn && this.p_mn && this.p_ln && this.p_c_no && this.p_b_date && this.p_b_place && this.p_seggs && this.p_rel && this.p_a_street && this.p_a_barangay && this.p_a_municipality && this.p_user_n && this.p_role){
+                        const options = {
+                        xsrfHeaderName: 'X-XSRF-TOKEN',
+                        xsrfCookieName: 'XSRF-TOKEN',
+                        };
+                        let data = {
+                            first_name: this.p_fn,
+                            middle_name: this.p_mn,
+                            last_name: this.p_ln,
+                            role_service: this.p_role_s,
+                            birth_date: this.p_b_date,
+                            civil_status: this.p_c_status,
+                            sex: this.p_seggs,
+                            contact_no: this.p_c_no,
+                            religion: this.p_rel,
+                            birth_place: this.p_b_place,
+                            address_street: this.p_a_street,
+                            address_barangay: this.p_a_barangay,
+                            address_municipality: this.p_a_municipality,
+                            username: this.p_user_n,
+                            role: this.p_role,
+                            id: this.p_id,
+                            // p_secret_phrase: true,
+                        };
+                        // this.admin_error_msg = 'Pasok sa database!';
+                        await axios.post('../../controller/admin/update_personnel_details.php', data, options)
+                        .then((response) => {
+                            console.log(response.data);
+                            if(response.data.status == 'true') {
+                                this.info_no = 1;
+                                this.personnel_details = response.data.personnel_update;
+                                this.update_personnel_registration_form = false;
+                                this.show_success_registration_form = true;
+                            }
+                            else{
+                                //error msg
+                                this.$refs.update_personnel_button.disabled = false;
+                                this.admin_error_msg = 'Server error cannot update user!';
+
+                                setTimeout(() => {
+                                    this.error_admin = false;
+                                    this.admin_error_msg = '';
+                                }, 2000);
+                            }
+                        });
+                    }
+                    else{
+                        this.error_admin = true;
+                        this.$refs.submit_home_title_button.disabled = false;
+                        this.admin_error_msg = 'Please fill in all required fields!';
+
+                        setTimeout(() => {
+                            this.error_admin = false;
+                            this.admin_error_msg = '';
+                        }, 2000);
+                    }
+                },
+
+                async deactivate_personnel_account(){
+                    const options = {
+                        xsrfHeaderName: 'X-XSRF-TOKEN',
+                        xsrfCookieName: 'XSRF-TOKEN',
+                    };
+                    let data = {
+                        id: this.p_id,
+                        is_active: this.p_is_active,
+                    };
+                    await axios.post('../../controller/admin/deactivate_personnel_account.php', data, options)
+                    .then((response) => {
+                        // console.log(response.data);
+                        this.info_no = 1;
+                        this.personnel_details = response.data.personnel_update;
+                        this.show_deactivate_request_form = false;
+                    }); 
+                },
+
+                async activate_personnel_account(){
+                    const options = {
+                        xsrfHeaderName: 'X-XSRF-TOKEN',
+                        xsrfCookieName: 'XSRF-TOKEN',
+                    };
+                    let data = {
+                        id: this.p_id,
+                        is_active: this.p_is_active,
+                    };
+                    await axios.post('../../controller/admin/activate_personnel_account.php', data, options)
+                    .then((response) => {
+                        // console.log(response.data);
+                        this.info_no = 1;
+                        this.personnel_details = response.data.personnel_update;
+                        this.show_deactivate_request_form = false;
+                    }); 
+                },
 
                 // Pagination Javascript
                 'search': "",

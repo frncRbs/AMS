@@ -31,21 +31,6 @@
 
         $return_value = ($sql_u->execute()) ? 'true' : 'false';
 
-        // INSERT RECORD
-        // $sql = $db->prepare("INSERT INTO home_content (content11, content12, content21, content22, content31, content32) VALUES (:content11, :content12, :content21, :content22, :content31, :content32)");
-        //bind
-        // $sql->bindParam(':content11', $content11);
-        // $sql->bindParam(':content12', $content12);
-        // $sql->bindParam(':content21', $content21);
-        // $sql->bindParam(':content22', $content22);
-        // $sql->bindParam(':content31', $content31);
-        // $sql->bindParam(':content32', $content32);
-
-        // $return_value = ($sql->execute(array(':id'=> $id,':content11' => $content11, ':content12' => $content12, ':content21' => $content21, ':content22' => $content22, ':content31' => $content31, ':content32' => $content32))) ? $return_value = 'true' : $return_value = 'Something went wrong. Cannot saved record.';
-        // ($sql->execute()) ? $return_value = 'true' : $return_value = 'Something went wrong. Cannot saved record.';
-
-        // echo $return_value = $test;
-
         // Retrieve updated record
         $sql = $db->prepare("SELECT * FROM home_content");
         $sql->execute();

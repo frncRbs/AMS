@@ -5,6 +5,8 @@
     $db = $database->open();
     $return_value = '';
     $is_duplicate = false;
+    $records = '';
+    $pattern = "/^09\d{9}$/";
     // $test = 'Working';
     // require_once('../../settings/custom_sql.php');
     
@@ -34,32 +36,42 @@
         $sql->execute(array(':username' => $username));
         $users = $sql->fetchAll();
         
+        
         if($users){
-            $return_value = 'false';
+            $return_value = 2;
         }
         else {
-            // INSERT RECORD
-            $sql = $db->prepare("INSERT INTO user (first_name, middle_name, last_name, role_service, birth_date, sex, contact_no, religion, birth_place, address_street, address_barangay, address_municipality, username, password, secret_phrase, role, status) VALUES (:first_name, :middle_name, :last_name, :role_service, :birth_date, :sex, :contact_no, :religion, :birth_place, :address_street, :address_barangay, :address_municipality, :username, :password, :secret_phrase, :role, :status)");
-            //bind
-            $sql->bindParam(':first_name', $first_name);
-            $sql->bindParam(':middle_name', $middle_name);
-            $sql->bindParam(':last_name', $last_name);
-            $sql->bindParam(':role_service', $role_service);
-            $sql->bindParam(':birth_date', $birth_date);
-            $sql->bindParam(':sex', $sex);
-            $sql->bindParam(':contact_no', $contact_no);
-            $sql->bindParam(':religion', $religion);
-            $sql->bindParam(':birth_place', $birth_place);
-            $sql->bindParam(':address_street', $address_street);
-            $sql->bindParam(':address_barangay', $address_barangay);
-            $sql->bindParam(':address_municipality', $address_municipality);
-            $sql->bindParam(':username', $username);
-            $sql->bindParam(':password', $password);
-            $sql->bindParam(':secret_phrase', $secret_phrase);
-            $sql->bindParam(':role', $role);
-            $sql->bindParam(':status', $status);
+            if(preg_match($pattern, $contact_no)){
+                // INSERT RECORD
+                $sql = $db->prepare("INSERT INTO user (first_name, middle_name, last_name, role_service, birth_date, sex, contact_no, religion, birth_place, address_street, address_barangay, address_municipality, username, password, secret_phrase, role, status) VALUES (:first_name, :middle_name, :last_name, :role_service, :birth_date, :sex, :contact_no, :religion, :birth_place, :address_street, :address_barangay, :address_municipality, :username, :password, :secret_phrase, :role, :status)");
+                //bind
+                $sql->bindParam(':first_name', $first_name);
+                $sql->bindParam(':middle_name', $middle_name);
+                $sql->bindParam(':last_name', $last_name);
+                $sql->bindParam(':role_service', $role_service);
+                $sql->bindParam(':birth_date', $birth_date);
+                $sql->bindParam(':sex', $sex);
+                $sql->bindParam(':contact_no', $contact_no);
+                $sql->bindParam(':religion', $religion);
+                $sql->bindParam(':birth_place', $birth_place);
+                $sql->bindParam(':address_street', $address_street);
+                $sql->bindParam(':address_barangay', $address_barangay);
+                $sql->bindParam(':address_municipality', $address_municipality);
+                $sql->bindParam(':username', $username);
+                $sql->bindParam(':password', $password);
+                $sql->bindParam(':secret_phrase', $secret_phrase);
+                $sql->bindParam(':role', $role);
+                $sql->bindParam(':status', $status);
 
-            ($sql->execute()) ? $return_value = 'true' : $return_value = 'Something went wrong. Cannot saved record.';
+                ($sql->execute()) ? $return_value = 'true' : $return_value = 'Something went wrong. Cannot saved record.';
+
+                // Retrieve updated record
+                $sql_all = $db->prepare("SELECT * FROM user WHERE role IN ('Personnel', 'Admin') ORDER BY date_registered DESC");
+                $sql_all->execute();
+                $records = $sql_all->fetchAll();
+            }else{
+                $return_value = 3;
+            }
         }
         // echo $return_value = $test;
         
@@ -67,6 +79,11 @@
         $return_value = $e->getMessage();
         echo $return_value;
     }
-    $database->close();
-    echo $return_value;
+
+    $return_dict = [
+        'status' => $return_value,
+        'personnel_update' => $records,
+    ];
+
+    echo json_encode($return_dict);
 ?>

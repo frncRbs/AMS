@@ -34,7 +34,7 @@
             ($sql->execute()) ? $return_value = 'true' : $return_value = 'Something went wrong. Cannot saved record.';
 
             // Retrieve updated record
-            $sql = $db->prepare("SELECT * FROM crops");
+            $sql = $db->prepare("SELECT * FROM crops ORDER BY date_created DESC");
             $sql->execute();
             $records = $sql->fetchAll();
         }

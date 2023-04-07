@@ -17,7 +17,7 @@
         $return_value = ($sql_d->execute(array(':service_id' => $service_id))) ? $return_value = 'true' : $return_value = 'Something went wrong. Cannot saved record.';
 
         // Retrieve updated record
-        $sql = $db->prepare("SELECT * FROM services");
+        $sql = $db->prepare("SELECT * FROM services ORDER BY date_created DESC");
         $sql->execute();
         $records = $sql->fetchAll();
 

@@ -23,7 +23,7 @@
         $return_value = ($sql_u->execute()) ? 'true' : 'false';
 
         // Retrieve updated record
-        $sql_all = $db->prepare("SELECT * FROM user WHERE role IN ('Personnel', 'Admin');");
+        $sql_all = $db->prepare("SELECT * FROM user WHERE role IN ('Personnel', 'Admin') ORDER BY date_registered DESC");
         $sql_all->execute();
         $records = $sql_all->fetchAll();
         // echo $return_value = $test;

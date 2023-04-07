@@ -1221,97 +1221,85 @@
                             </div>
                         </div>
                         <!-- PAGE 3 -->
-                        <div class="formG" style="display: none; flex-direction: row; gap: 40px; justify-content: center" x-show="info_no == 3" style="display: none;">
-                            <div style="width: 100%">
-                            <h3 style="font-weight: bold">Farm Land Description</h3>
-                            <hr>
-                            <div class="row" style="text-align: left">
-                                <div class="column">
-                                <div class="col-xs-12 col-sm-6 col-md-12">
-                                    <label for="farm_type">Farm Type: </label>
-                                    <select class="selectD" name="farm_type" id="farm_type" x-ref="farm_type" style="width: 100%; height: auto; margin-bottom: 10px; padding: 5px; border-radius: 3px">
-                                        <option value="" disabled selected hidden>Choose Services</option>
-                                        <option value="1">High Value Crops</option>
-                                        <option value="2">Corn Value Crop</option>
-                                        <option value="3">Rice Crop</option>
-                                    </select>
-                                </div>
-                                </div>
-                                <div class="col-xs-12 col-sm-6 col-md-6">
-                                    <div class="form-group" >
-                                    <label for="farm_barangay">Barangay:</label>
-                                        <input type="text" name="farm_barangay" id="farm_barangay" x-ref="farm_barangay" class="form-control input-lg" placeholder="Barangay">
-                                    </div>
-                                </div>
-                                <div class="col-xs-12 col-sm-6 col-md-6">
-                                    <div class="form-group" >
-                                    <label for="farm_municipality">Municipality:</label>
-                                        <input type="text" name="farm_municipality" id="farm_municipality" x-ref="farm_municipality" class="form-control input-lg" placeholder="Municipality">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row" style="text-align: left">
-                                <div class="col-xs-12 col-sm-6 col-md-12">
-                                    <div class="form-group">
-                                        <label for="farm_area">Total farm area:</label>
-                                        <input type="number" name="farm_area" id="farm_area" x-ref="farm_area" class="form-control input-lg" placeholder="Total farm area">
-                                    </div>
-                                </div>
-                            </div>
-                            <h3 style="font-weight: bold">Farmers Account</h3>
-                            <hr>
-                            <div class="row" style="text-align: left">
-                                <!-- <div class="column">
+                        <div class="formG" style="display: none; flex-direction: row; gap: 40px; justify-content: center; width: 570px" x-show="info_no == 3" style="display: none;">
+                            <div style="width: 100%" >
+                                <h3 style="font-weight: bold">Farm Land Description</h3>
+                                <hr>
+                                <div class="row" style="text-align: left">
+                                    <div class="column">
                                     <div class="col-xs-12 col-sm-6 col-md-12">
-                                            <div class="form-group" >
-                                            <label for="username">Username:</label>
-                                                <input type="text" name="username" id="username" x-ref="username" class="form-control input-lg" placeholder="Username">
-                                            </div>
+                                        <label for="farm_type">Farm Type: </label>
+                                        <select class="selectD" name="farm_type" id="farm_type" x-ref="farm_type" style="width: 100%; height: auto; margin-bottom: 10px; padding: 5px; border-radius: 3px">
+                                            <option value="" disabled selected hidden>Choose Services</option>
+                                            <option value="1">High Value Crops</option>
+                                            <option value="2">Corn Value Crop</option>
+                                            <option value="3">Rice Crop</option>
+                                        </select>
                                     </div>
-                                </div> -->
-                                <div class="col-xs-12 col-sm-6 col-md-6">
-                                    <div class="form-group">
-                                        <label for="username">Username:</label>
-                                        <input type="username" name="username" id="username" x-ref="username" class="form-control input-lg" placeholder="Username">
                                     </div>
-                                </div>
-                                <div class="col-xs-12 col-sm-6 col-md-6">
-                                    <div class="form-group">
-                                        <label for="secret_phrase">Secret Phrase: (Use to change Password)</label>
-                                        <!-- <div style="display: inline">
-                                            <input type="secret_phrase" name="secret_phrase" id="secret_phrase" x-ref="secret_phrase" style="display: inline" class="form-control input-lg" placeholder="Secret Phrase">
-                                            <button type="button" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em; display: inline">Generate</button>
-                                        </div> -->
-                                        <div class="buttonIn">
-                                            <input type="text" id="enter" name="secret_phrase" x-ref="secret_phrase" class="form-control input-lg" placeholder="Secret Phrase" autocomplete=off>
-                                            <button type="button" id="clear" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em; display: inline; margin-top: 6px" x-on:click="generate_secret_phrase" >Generate</button>
+                                    <div class="col-xs-12 col-sm-6 col-md-6">
+                                        <div class="form-group" >
+                                        <label for="farm_barangay">Barangay:</label>
+                                            <input type="text" name="farm_barangay" id="farm_barangay" x-ref="farm_barangay" class="form-control input-lg" placeholder="Barangay">
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6 col-md-6">
+                                        <div class="form-group" >
+                                        <label for="farm_municipality">Municipality:</label>
+                                            <input type="text" name="farm_municipality" id="farm_municipality" x-ref="farm_municipality" class="form-control input-lg" placeholder="Municipality">
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-xs-12 col-sm-6 col-md-6">
-                                    <div class="form-group">
-                                        <label for="password">Password:</label>
-                                        <input type="password" name="password" id="password" x-ref="password" class="form-control input-lg" placeholder="Password">
+                                <div class="row" style="text-align: left">
+                                    <div class="col-xs-12 col-sm-6 col-md-12">
+                                        <div class="form-group">
+                                            <label for="farm_area">Total farm area:</label>
+                                            <input type="number" name="farm_area" id="farm_area" x-ref="farm_area" class="form-control input-lg" placeholder="Total farm area">
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-xs-12 col-sm-6 col-md-6">
-                                    <div class="form-group">
-                                        <label for="confirmPassword">Confirm Password:</label>
-                                        <input type="password" name="confirmPassword" id="confirmPassword" x-ref="confirmPassword" class="form-control input-lg" placeholder="Confirm Password">
+                                <h3 style="font-weight: bold; margin-top: 0">Farmers Account</h3>
+                                <hr>
+                                <div class="row" style="text-align: left">
+                                    <div class="col-xs-12 col-sm-6 col-md-6">
+                                        <div class="form-group">
+                                            <label for="username">Username:</label>
+                                            <input type="username" name="username" id="username" x-ref="username" class="form-control input-lg" placeholder="Username">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-xs-12 col-sm-6 col-md-6" style="display: none">
-                                    <div class="form-group">
-                                            <label for="role">Role:</label>
-                                            <input type="password" name="role" id="role" x-ref="role" class="form-control input-lg" placeholder="Confirm Password">
+                                    <div class="col-xs-12 col-sm-6 col-md-6">
+                                        <div class="form-group">
+                                            <label for="secret_phrase">Secret Phrase: (Use to change Password)</label>
+                                            <div class="buttonIn">
+                                                <input type="text" id="enter" name="secret_phrase" x-ref="secret_phrase" class="form-control input-lg" placeholder="Secret Phrase" autocomplete=off>
+                                                <button type="button" id="clear" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em; display: inline; margin-top: 6px" x-on:click="generate_secret_phrase" >Generate</button>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-xs-12 col-sm-6 col-md-6" style="display: none">
-                                    <div class="form-group">
-                                            <label for="status">Status:</label>
-                                            <input type="password" name="status" id="status" x-ref="status" class="form-control input-lg" placeholder="Confirm Password">
+                                    <div class="col-xs-12 col-sm-6 col-md-6">
+                                        <div class="form-group">
+                                            <label for="password">Password:</label>
+                                            <input type="password" name="password" id="password" x-ref="password" class="form-control input-lg" placeholder="Password">
+                                        </div>
                                     </div>
-                                </div>
+                                    <div class="col-xs-12 col-sm-6 col-md-6">
+                                        <div class="form-group">
+                                            <label for="confirmPassword">Confirm Password:</label>
+                                            <input type="password" name="confirmPassword" id="confirmPassword" x-ref="confirmPassword" class="form-control input-lg" placeholder="Confirm Password">
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6 col-md-6" style="display: none">
+                                        <div class="form-group">
+                                                <label for="role">Role:</label>
+                                                <input type="password" name="role" id="role" x-ref="role" class="form-control input-lg" placeholder="Confirm Password">
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6 col-md-6" style="display: none">
+                                        <div class="form-group">
+                                                <label for="status">Status:</label>
+                                                <input type="password" name="status" id="status" x-ref="status" class="form-control input-lg" placeholder="Confirm Password">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1984,9 +1972,17 @@
                             .then((response) => {
                                 this.$refs.submit_farmer_button.disabled = false;
                                 // console.log((response.data == false));
-                                if(response.data == false) {
+                                if(response.data == 2) {
                                     this.error_landing = true;
                                     this.landing_page_msg = 'Username already taken!';
+                                    setTimeout(() => {
+                                        this.error_landing = false;
+                                        this.landing_page_msg = '';
+                                    }, 2000);
+                                }
+                                else if(response.data == 3){
+                                    this.error_landing = true;
+                                    this.landing_page_msg = 'Contact No. should start from 09 and eleven digit maxed!';
                                     setTimeout(() => {
                                         this.error_landing = false;
                                         this.landing_page_msg = '';

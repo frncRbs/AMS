@@ -19,7 +19,7 @@
         $return_value = ($sql_u->execute( array(':request_status' => $request_status, ':request_id' => $request_id) )) ? $return_value = 'true' : $return_value = 'Something went wrong. Cannot saved record.';
 
         // Retrieve updated record
-        $sql = $db->prepare("SELECT * FROM requests_registry WHERE user_id = :user_id");
+        $sql = $db->prepare("SELECT * FROM requests_registry WHERE user_id = :user_id ORDER BY date_requested DESC");
         $sql->execute(array(':user_id' => $user_id));
         $records = $sql->fetchAll();
 

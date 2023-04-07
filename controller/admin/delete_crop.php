@@ -17,7 +17,7 @@
         $return_value = ($sql_d->execute(array(':crop_id' => $crop_id))) ? $return_value = 'true' : $return_value = 'Something went wrong. Cannot saved record.';
 
         // Retrieve updated record
-        $sql = $db->prepare("SELECT * FROM crops");
+        $sql = $db->prepare("SELECT * FROM crops ORDER BY date_created DESC");
         $sql->execute();
         $records = $sql->fetchAll();
 

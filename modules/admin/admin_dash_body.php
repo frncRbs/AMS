@@ -137,7 +137,8 @@
                                     <div class="col-xs-12 col-sm-6 col-md-6">
                                         <div class="form-group">
                                             <label for="contact_no">Contact Number:</label>
-                                            <input type="number" name="contact_no" id="contact_no" x-ref="contact_no" class="form-control input-lg" tabindex="6" placeholder="Contact Number" required>
+                                            
+                                            <input type="number" name="contact_no" id="contact_no" x-ref="contact_no" class="form-control input-lg" tabindex="6" placeholder="Contact Number" required="" autocomplete="off" pattern="\d{11}">
                                         </div>
                                     </div>
                                 </div>
@@ -159,7 +160,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 
                                 <div class="row" style="text-align: left">
                                     <div class="col-xs-12 col-sm-6 col-md-6">
@@ -555,7 +555,7 @@
                     this.registry_records  = '<?php  
                         $database = new Connection();
                         $db = $database->open();
-                        $sql = $db->prepare("SELECT * FROM requests_registry GROUP BY user_id");
+                        $sql = $db->prepare("SELECT * FROM requests_registry GROUP BY user_id ORDER BY date_requested DESC");
                         $sql->execute();
                         $results = $sql->fetchAll();
                         $database->close();
@@ -573,7 +573,7 @@
                     this.user_details  = '<?php  
                         $database = new Connection();
                         $db = $database->open();
-                        $sql = $db->prepare("SELECT * FROM user WHERE role = 'Farmer'");
+                        $sql = $db->prepare("SELECT * FROM user WHERE role = 'Farmer' ORDER BY date_registered DESC");
                         $sql->execute();
                         $results = $sql->fetchAll();
                         $database->close();
@@ -591,7 +591,7 @@
                     this.personnel_details  = '<?php  
                         $database = new Connection();
                         $db = $database->open();
-                        $sql = $db->prepare("SELECT * FROM user WHERE role IN ('Personnel', 'Admin');");
+                        $sql = $db->prepare("SELECT * FROM user WHERE role IN ('Personnel', 'Admin') ORDER BY date_registered DESC");
                         $sql->execute();
                         $results = $sql->fetchAll();
                         $database->close();
@@ -700,10 +700,10 @@
 
                             await axios.post('../../controller/admin/register_personnel.php', data, options)
                             .then((response) => {
-                                // console.log(response.data);
+                                console.log(response.data);
                                 this.$refs.submit_personnel_button.disabled = false;
                                 // console.log('Kini: ' + (response.data == true));
-                                if(response.data == false) {
+                                if(response.data.status == 2) {
                                     this.error_admin = true;
                                     this.admin_error_msg = 'Username already taken!';
                                     setTimeout(() => {
@@ -711,11 +711,19 @@
                                         this.admin_error_msg = '';
                                     }, 2000);
                                 }
-                                else if(response.data == true){
-                                    this.$refs.submit_personnel_button.disabled = true;
+                                else if(response.data.status == 3){
+                                    this.error_admin = true;
+                                    this.admin_error_msg = 'Contact No. should start from 09 and eleven digit maxed!';
+                                    setTimeout(() => {
+                                        this.error_admin = false;
+                                        this.admin_error_msg = '';
+                                    }, 2000);
+                                }
+                                else if(response.data.status == 'true'){
                                     this.info_no = 1;
                                     this.show_personnel_registration_form = false;
                                     this.show_success_registration_form = true;
+                                    this.personnel_details = response.data.personnel_update;
                                 }
                             },
                             (error) => {
@@ -1269,10 +1277,10 @@
                                 this.update_personnel_registration_form = false;
                                 this.show_success_update_form = true;
                             }
-                            else{
+                            else if(response.data.status == 'false'){
                                 //error msg
                                 this.$refs.update_personnel_button.disabled = false;
-                                this.admin_error_msg = 'Server error cannot update user!';
+                                this.admin_error_msg = 'Contact No. should start from 09 and eleven digit maxed!';
 
                                 setTimeout(() => {
                                     this.error_admin = false;

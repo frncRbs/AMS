@@ -1,7 +1,7 @@
 <?php
     include_once('../../includes/header.php');
 ?>
-    <div x-data="admin_side" x-init="get_services_crops, initialize_registry(), initialize_farmer_details(), initialize_home_title_details(), initialize_personnel_details()">
+    
         <?php include('show_farmer_request_modal.php'); ?>
         <?php include('add_crop_modal.php'); ?>
         <?php include('add_service_modal.php'); ?>
@@ -11,6 +11,7 @@
         <?php include('edit_home_image_modal.php'); ?>
         <?php include('edit_personnel_details_modal.php'); ?>
         <?php include('edit_farmer_details_modal.php'); ?>
+        <?php include('show_user_profile_modal.php'); ?>
 
     <!-- <div> -->
         <div class="sidebar">
@@ -504,6 +505,7 @@
                 show_success_update_form: false,
                 show_home_content_form: false,
                 show_home_image_form: false,
+                show_user_profile_form: false,
                 admin_error_msg: '',
                 admin_success_msg: '',
                 
@@ -668,6 +670,10 @@
                 confirm_activate_account_exit(){
                     this.show_manage_farmer_form = false;
                     this.show_manage_personnel_form = false;
+                },
+
+                profile_account_exit(){
+                    this.show_user_profile_form = false;
                 },
 
                 async submit_personnel_form(){

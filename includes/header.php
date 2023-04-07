@@ -931,25 +931,26 @@
     <body>
         <input type="checkbox" id="check">
         <!--header area start-->
-        <header style="background: #2f323a;">
-            <label for="check">
-                <i class="fas fa-bars" id="sidebar_btn"></i>
-            </label>
-            <div class="left_area">
-                <h3>Admin<span> Dashboard</span></h3>
-                <!-- FOR CURRENT LOGGED USER -->
-                <!-- <h3><?php echo $_SESSION["login_username"]; ?></h3> --> 
-            </div>
+        <div x-data="admin_side" x-init="get_services_crops, initialize_registry(), initialize_farmer_details(), initialize_home_title_details(), initialize_personnel_details()">
+            <header style="background: #2f323a;">
+                <label for="check">
+                    <i class="fas fa-bars" id="sidebar_btn"></i>
+                </label>
+                <div class="left_area">
+                    <h3>Admin<span> Dashboard</span></h3>
+                    <!-- FOR CURRENT LOGGED USER -->
+                    <!-- <h3><?php echo $_SESSION["login_username"]; ?></h3> --> 
+                </div>
 
-            <div class="right_area">
-                <a href="admin_dash_profile.php" class="user_btn"><i class="fas fa-user"></i></a>
-            </div>
-            <div class="right_area">
-                <a href="#" class="notif_btn"><i class="fas fa-bell" ></i></a>
-            </div>
-            <div class="right_area">
-                <a href="<?php echo LOCATION;?>settings/logout.php"  class="logout_btn">Logout</a>
-            </div>
-        </header>
+                <div class="right_area">
+                    <a type="button" class="user_btn" x-on:click="show_user_profile_form = true"><i class="fas fa-user"></i></a>
+                </div>
+                <div class="right_area">
+                    <a type="button" class="notif_btn" x-on:click="show_user_profile_form = true"><i class="fas fa-bell" ></i></a>
+                </div>
+                <div class="right_area">
+                    <a href="<?php echo LOCATION;?>settings/logout.php"  class="logout_btn">Logout</a>
+                </div>
+            </header>
 
         <!--header area end-->

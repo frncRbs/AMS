@@ -12,6 +12,7 @@
         <?php include('edit_personnel_details_modal.php'); ?>
         <?php include('edit_farmer_details_modal.php'); ?>
         <?php include('show_user_profile_modal.php'); ?>
+        <?php include('loading_modal.php'); ?>
 
     <!-- <div> -->
         <div class="sidebar">
@@ -213,8 +214,8 @@
                                 <div class="row" style="text-align: left">
                                     <div class="col-xs-12 col-sm-6 col-md-6">
                                     <div class="form-group">
-                                        <label for="username">Username:</label>
-                                        <input type="username" name="username" id="username" x-ref="username" class="form-control input-lg" placeholder="Username">
+                                        <label for="username">Email:</label>
+                                        <input type="username" name="username" id="username" x-ref="username" class="form-control input-lg" placeholder="Email">
                                     </div>
                                     </div>
                                     <div class="col-xs-12 col-sm-6 col-md-6">
@@ -506,6 +507,7 @@
                 show_home_content_form: false,
                 show_home_image_form: false,
                 show_user_profile_form: false,
+                show_loading_form: false,
                 admin_error_msg: '',
                 admin_success_msg: '',
                 
@@ -550,6 +552,35 @@
                 p_role: '',
                 p_is_active: '',
 
+                cu_full_name: '',
+                cu_firstname: '',
+                cu_middlename: '',
+                cu_lastname: '',
+                cu_role_s: '',
+                cu_birth_d: '',
+                cu_civil_s: '',
+                cu_sex: '',
+                cu_contact: '',
+                cu_religion: '',
+                cu_birth_p: '',
+                cu_address_s: '',
+                cu_address_b: '',
+                cu_address_m: '',
+                cu_address_z: '',
+                cu_guardian_fn: '',
+                cu_guardian_c: '',
+                cu_farm_t: '',
+                cu_farm_b: '',
+                cu_farm_m: '',
+                cu_farm_a: '',
+                cu_user_n: '',
+                cu_secret_p: '',
+                cu_id: '',
+
+                cu_address_m_text: '',
+                cu_address_b_text: '',
+                cu_user_n_text: '',
+                cu_contact_text: '',
                 
                 // CURRENT FARMER DETAILS
 
@@ -642,6 +673,7 @@
 
                 exit_register(){
                     this.info_no = 1;
+                    this.info_no_farmer = 1;
                     this.show_personnel_registration_form = false;
                     this.update_personnel_registration_form = false;
                     this.update_farmer_registration_form = false;
@@ -711,7 +743,7 @@
                                 // console.log('Kini: ' + (response.data == true));
                                 if(response.data.status == 2) {
                                     this.error_admin = true;
-                                    this.admin_error_msg = 'Username already taken!';
+                                    this.admin_error_msg = 'Email already taken!';
                                     setTimeout(() => {
                                         this.error_admin = false;
                                         this.admin_error_msg = '';
@@ -719,7 +751,15 @@
                                 }
                                 else if(response.data.status == 3){
                                     this.error_admin = true;
-                                    this.admin_error_msg = 'Contact No. should start from 09 and eleven digit maxed!';
+                                    this.admin_error_msg = 'Contact No. should start from 09 and eleven digit max!';
+                                    setTimeout(() => {
+                                        this.error_admin = false;
+                                        this.admin_error_msg = '';
+                                    }, 2000);
+                                }
+                                else if(response.data.status == 4){
+                                    this.error_admin = true;
+                                    this.admin_error_msg = 'Invalid email, please pick another!';
                                     setTimeout(() => {
                                         this.error_admin = false;
                                         this.admin_error_msg = '';
@@ -1248,7 +1288,6 @@
                 },
 
                 async update_personnel_details(){
-
                     if(this.p_role_s && this.p_fn && this.p_mn && this.p_ln && this.p_c_no && this.p_b_date && this.p_b_place && this.p_seggs && this.p_rel && this.p_a_street && this.p_a_barangay && this.p_a_municipality && this.p_user_n && this.p_role){
                         const options = {
                         xsrfHeaderName: 'X-XSRF-TOKEN',
@@ -1283,11 +1322,19 @@
                                 this.update_personnel_registration_form = false;
                                 this.show_success_update_form = true;
                             }
-                            else if(response.data.status == 'false'){
+                            else if(response.data.status == 2){
                                 //error msg
                                 this.$refs.update_personnel_button.disabled = false;
-                                this.admin_error_msg = 'Contact No. should start from 09 and eleven digit maxed!';
-
+                                this.admin_error_msg = 'Contact No. should start from 09 and eleven digit max!';
+                                setTimeout(() => {
+                                    this.error_admin = false;
+                                    this.admin_error_msg = '';
+                                }, 2000);
+                            }
+                            else if(response.data.status == 3){
+                                //error msg
+                                this.error_admin = true;
+                                this.admin_error_msg = 'Invalid email, please pick another!';
                                 setTimeout(() => {
                                     this.error_admin = false;
                                     this.admin_error_msg = '';
@@ -1341,6 +1388,130 @@
                         this.personnel_details = response.data.personnel_update;
                         this.show_deactivate_request_form = false;
                     }); 
+                },
+
+                async get_current_user_details(){
+                    this.show_user_profile_form = true;
+                    const options = {
+                        xsrfHeaderName: 'X-XSRF-TOKEN',
+                        xsrfCookieName: 'XSRF-TOKEN',
+                    };
+                    let data = {
+                        user_id: "<?php echo $_SESSION["login_user_id"]; ?>",
+                    };
+                    await axios.post('../../controller/admin/get_current_user_details.php', data, options)
+                    .then((response) => {
+                        
+                        // Assign response to refs
+                        setTimeout(() => {
+                            this.cu_id = response.data[0].id;
+                            this.cu_firstname = response.data[0].first_name;
+                            this.cu_middlename = response.data[0].middle_name;
+                            this.cu_lastname = response.data[0].last_name;
+                            this.cu_contact = response.data[0].contact_no;
+                            this.cu_full_name = response.data[0].first_name +' '+ response.data[0].middle_name +' '+response.data[0].last_name;
+                            this.cu_birth_d = response.data[0].birth_date;
+                            this.cu_birth_p = response.data[0].birth_place;
+                            this.cu_sex = response.data[0].sex;
+                            this.cu_religion = response.data[0].religion;
+                            this.cu_address_s = response.data[0].address_street;
+                            this.cu_address_b = response.data[0].address_barangay;
+                            this.cu_address_m = response.data[0].address_municipality;
+                            this.cu_address_z = response.data[0].address_zip;
+                            this.cu_guardian_fn = response.data[0].guardian_fname;
+                            this.cu_guardian_c = response.data[0].guardian_contact;
+                            this.cu_farm_t = response.data[0].farm_type;
+                            this.cu_farm_b = response.data[0].farm_barangay;
+                            this.cu_farm_m = response.data[0].farm_municipality;
+                            this.cu_farm_a = response.data[0].farm_area;
+                            this.cu_role_s = response.data[0].role_service; //Kini
+                            this.cu_civil_s = response.data[0].civil_status;
+                            this.cu_user_n = response.data[0].username;
+                            this.cu_secret_p = response.data[0].secret_phrase;
+                            
+                            this.cu_address_m_text = response.data[0].address_municipality;
+                            this.cu_address_b_text = response.data[0].address_barangay;
+                            this.cu_user_n_text = response.data[0].username;
+                            this.cu_contact_text = response.data[0].contact_no;
+                        }, 100);
+                                         
+                    }); 
+                },
+
+                async update_current_user_details(){
+                    console.log();
+                    if(this.cu_firstname && this.cu_middlename && this.cu_lastname && this.cu_contact && this.cu_birth_d && this.cu_birth_p && this.cu_sex && this.cu_religion && this.cu_address_s && this.cu_address_b && this.cu_address_m && this.cu_address_z && this.cu_guardian_fn && this.cu_guardian_c && this.cu_farm_t && this.cu_farm_b && this.cu_farm_m && this.cu_farm_a && this.cu_user_n && this.cu_civil_s){
+                        const options = {
+                        xsrfHeaderName: 'X-XSRF-TOKEN',
+                        xsrfCookieName: 'XSRF-TOKEN',
+                        };
+                        let data = {
+                            first_name: this.cu_firstname,
+                            middle_name: this.cu_middlename,
+                            last_name: this.cu_lastname,
+                            role_service: this.cu_role_s,
+                            birth_date: this.cu_birth_d,
+                            civil_status: this.cu_civil_s,
+                            sex: this.cu_sex,
+                            contact_no: this.cu_contact,
+                            religion: this.cu_religion,
+                            birth_place: this.cu_birth_p,
+                            address_street: this.cu_address_s,
+                            address_barangay: this.cu_address_b,
+                            address_municipality: this.cu_address_m,
+                            address_zip: this.cu_address_z,
+                            guardian_fname: this.cu_guardian_fn,
+                            guardian_contact: this.cu_guardian_c,
+                            farm_type: this.cu_farm_t,
+                            farm_barangay: this.cu_farm_b,
+                            farm_municipality: this.cu_farm_m, 
+                            farm_area: this.cu_farm_a, 
+                            username: this.cu_user_n,
+                            // secret_phrase: this.cu_secret_p,
+                            id: this.cu_id,
+                        };
+                        
+                        await axios.post('../../controller/admin/update_current_user_details.php', data, options)
+                        .then((response) => {
+                            console.log(response.data);
+                            if(response.data.status == 'true') {
+                                this.info_no = 1;
+                                this.personnel_details = response.data.personnel_update;
+                                this.update_personnel_registration_form = false;
+                                this.show_success_update_form = true;
+                            }
+                            else if(response.data.status == 2){
+                                //error msg
+                                this.$refs.update_personnel_button.disabled = false;
+                                this.admin_error_msg = 'Contact No. should start from 09 and eleven digit max!';
+
+                                setTimeout(() => {
+                                    this.error_admin = false;
+                                    this.admin_error_msg = '';
+                                }, 2000);
+                            }
+                            else if(response.data.status == 3){
+                                //error msg
+                                this.error_admin = true;
+                                this.admin_error_msg = 'Invalid email, please pick another!';
+                                setTimeout(() => {
+                                    this.error_admin = false;
+                                    this.admin_error_msg = '';
+                                }, 2000);
+                            }
+                        });
+                    }
+                    else{
+                        // console.log(response.data);
+                        this.error_admin = true;
+                        this.$refs.submit_home_title_button.disabled = false;
+                        this.admin_error_msg = 'Please fill in all required fields!';
+
+                        setTimeout(() => {
+                            this.error_admin = false;
+                            this.admin_error_msg = '';
+                        }, 2000);
+                    }
                 },
 
                 // Pagination Javascript

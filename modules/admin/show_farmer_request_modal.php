@@ -1,7 +1,7 @@
 <!-- Farmer Request Prompt -->
 <div class="popupSuccess" x-show="show_farmer_request_form" style="display: none">
     <div class="popup-contentSuccess" x-data="show_farmer_request_modal" style="width: 900px;">
-        <div class="popup-child1" style="margin-bottom: 5px">
+        <div class="popup-child1">
             <div style="display: flex; flex-direction: column;">
                 <h1 style="font-weight: bolder">Farmer Requests</h1>
                     <hr>
@@ -72,7 +72,7 @@
                 <br>
             </div>
         </div>
-        <button type="button" class="btn btn-success" style="width: 50%; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="confirm_farmer_request_exit">Confirm</button>
+        <!-- <button type="button" class="btn btn-success" style="width: 50%; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="confirm_farmer_request_exit">Confirm</button> -->
         <div class="popup-child2">
             <a id="errorClose" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="confirm_farmer_request_exit">X</a>
         </div>

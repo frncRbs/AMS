@@ -164,7 +164,7 @@ button.createbtn {
 
 button.chatbtn:hover,
 button.createbtn:hover {
-  background: rgba(288, 0, 70, 0.9);
+  background: rgb(0, 128, 0, 0.7);
 }
 
 button.chatbtn i,
@@ -221,7 +221,7 @@ button.createbtn i {
 
 .nav_profile ul li:hover,
 .nav_profile ul li.active {
-  box-shadow: 0px -3px 0px rgba(288, 0, 70, 0.9) inset;
+  box-shadow: 0px -3px 0px rgb(0, 128, 0)  inset;
 }
 
 .profile-body {
@@ -366,26 +366,29 @@ button.createbtn i {
                     <img src="./bg.jpg" width="200" alt="Profile Image">
                     </div>
                     <div class="profile-nav_profile-info">
-                    <h3 class="user-name">Bright Code</h3>
+                    <div style="display: inline">
+                        <h5 style="color: red" x-text="admin_error_msg"></h5>
+                        <h5 style="color: green" x-text="admin_success_msg"></h5>
+                      <h3 class="user-name" x-html="cu_full_name"></h3>
+                    </div>
                     <div class="address">
-                        <p id="state" class="state">New York,</p>
-                        <span id="country" class="country">USA.</span>
+                        <p id="state" class="state" x-html="cu_address_m_text">,</p>
+                        <span id="country" class="country" x-html="cu_address_b_text">.</span>
                     </div>
-
                     </div>
-                    <div class="profile-option">
+                    <!-- <div class="profile-option">
                     <div class="notification">
                         <i class="fa fa-bell"></i>
                         <span class="alert-message">3</span>
                     </div>
-                    </div>
+                    </div> -->
                 </div>
 
                 <div class="main-bd">
                     <div class="left-side">
                     <div class="profile-side">
-                        <p class="mobile-no"><i class="fa fa-phone"></i> +23470xxxxx700</p>
-                        <p class="user-mail"><i class="fa fa-envelope"></i> Brightisaac80@gmail.com</p>
+                        <p class="mobile-no"><i class="fa fa-phone"></i><span x-html="cu_contact_text"></span></p>
+                        <p class="user-mail"><i class="fa fa-envelope"></i><span x-html="cu_user_n_text"></span></p>
                         <div class="user-bio">
                         <h3>Bio</h3>
                         <p class="bio">
@@ -393,74 +396,79 @@ button.createbtn i {
                         </p>
                         </div>
                         <div class="profile-btn">
-                        <button class="chatbtn" id="chatBtn"><i class="fas fa-plus-square"></i>Update</button>
+                        <button type="button" class="chatbtn" id="chatBtn" x-on:click="update_current_user_details"><i class="fas fa-plus-square" ></i>Update</button>
                         </div>
+                        <!-- START TEST -->
+                        <div>
+                          <button type="button" x-on:click="send_mail()">Send Mail</button>
+                        </div>
+                        <!-- END TEST -->
                     </div>
                 </div>
                     <div class="right-side">
 
                     <div class="nav_profile">
                         <ul>
-                        <li x-on:click="show_profile_posts" class="user-post active" style="font-size: 15px">Personal Details</li>
-                        <li x-on:click="show_profile_reviews" class="user-review" style="font-size: 15px">Farm Details</li>
-                        <li x-on:click="show_profile_settings" class="user-setting" style="font-size: 15px">Account Details</li>
+                        <li x-on:click="change_tab(1)" class="user-post" :class="[tab_index == 1 ? 'active' : '']" style="font-size: 15px">User Details</li>
+                        <li x-on:click="change_tab(2)" class="user-review" :class="[tab_index == 2 ? 'active' : '']" style="font-size: 15px">Address & Guardian Details</li>
+                        <li x-on:click="change_tab(3)" class="user-setting" :class="[tab_index == 3 ? 'active' : '']" style="font-size: 15px">Farm & Account Details</li>
                         </ul>
                     </div>
                     <div class="profile-body">
-                        <div x-show="profile_posts" style="display: none">
+                        <div x-show="tab_index == 1" style="display: none">
                             <div class="profile-posts tab" style="display: flex; flex-direction: column">
                             <h3 style="font-weight: bold">User Details</h3>
                             <div class="row" style="text-align: left">
                                 <div class="column">
-                                <div class="col-xs-12 col-sm-6 col-md-12" style="margin-bottom: 10px;">
-                                    <label for="role_service">Register for: </label>
-                                    <select class="selectD" name="role_service" id="role_service" x-ref="role_service" style="width: 100%; height: auto; margin-bottom: 0; padding: 5px; border-radius: 3px">
-                                        <option value="" disabled selected hidden>Choose Services</option>
-                                        <option value="1">High Value Crops</option>
-                                        <option value="2">Corn Value Crop</option>
-                                        <option value="3">Rice Crop</option>
-                                    </select>
-                                </div>
+                                  <div class="col-xs-12 col-sm-6 col-md-12" style="margin-bottom: 10px;">
+                                      <label for="cu_role_service">Register for: </label>
+                                      <select class="selectD" name="cu_role_service" id="cu_role_service" x-model="cu_role_s" style="width: 100%; height: auto; margin-bottom: 0; padding: 5px; border-radius: 3px">
+                                          <option value="" disabled selected hidden>Choose service</option>
+                                          <option value="1">High Value Crops</option>
+                                          <option value="2">Corn Value Crop</option>
+                                          <option value="3">Rice Crop</option>
+                                      </select>
+                                  </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-6 col-md-6">
                                         <div class="form-group">
-                                            <label for="last_name">Last Name:</label>
-                                            <input type="text" name="last_name" id="last_name" x-ref="last_name" class="form-control input-lg" tabindex="1" placeholder="Last Name" required>
+                                            <label for="cu_last_name">Last Name:</label>
+                                            <input type="text" name="cu_last_name" id="cu_last_name" x-model="cu_lastname" class="form-control input-lg" tabindex="1" placeholder="Last Name" required>
                                         </div>
                                     </div>
                                     <div class="col-xs-12 col-sm-6 col-md-6">
                                         <div class="form-group" >
-                                        <label for="first_name">First Name:</label>
-                                            <input type="text" name="first_name" id="first_name" x-ref="first_name" class="form-control input-lg" tabindex="2" placeholder="First Name" required>
+                                        <label for="cu_first_name">First Name:</label>
+                                            <input type="text" name="cu_first_name" id="cu_first_name" x-model="cu_firstname" class="form-control input-lg" tabindex="2" placeholder="First Name" required>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row" style="text-align: left">
                                     <div class="col-xs-12 col-sm-6 col-md-6">
                                         <div class="form-group">
-                                            <label for="middle_name">Middle Name:</label>
-                                            <input type="text" name="middle_name" id="middle_name" x-ref="middle_name" class="form-control input-lg" tabindex="5" placeholder="Middle Name" required>
+                                            <label for="cu_middle_name">Middle Name:</label>
+                                            <input type="text" name="cu_middle_name" id="cu_middle_name" x-model="cu_middlename" class="form-control input-lg" tabindex="5" placeholder="Middle Name" required>
                                         </div>
                                     </div>
                                     <div class="col-xs-12 col-sm-6 col-md-6">
                                         <div class="form-group">
-                                            <label for="contact_no">Contact Number:</label>
-                                            <input type="number" name="contact_no" id="contact_no" x-ref="contact_no" class="form-control input-lg" tabindex="6" placeholder="Contact Number" required>
+                                            <label for="cu_contact_no">Contact Number:</label>
+                                            <input type="number" name="cu_contact_no" id="cu_contact_no" x-model="cu_contact" class="form-control input-lg" tabindex="6" placeholder="Contact Number" required>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row" style="text-align: left">
                                     <div class="col-xs-12 col-sm-6 col-md-6">
                                         <div class="inputC">
-                                            <label for="birth_date">Birth Date:</label>
-                                            <input type="date" name="birth_date" id="birth_date" name="trip-start"
-                                                value="2000-01-01" x-ref="birth_date"
+                                            <label for="cu_birth_date">Birth Date:</label>
+                                            <input type="date" name="cu_contact_no" id="cu_contact_no" name="trip-start"
+                                                value="2000-01-01" x-model="cu_birth_d"
                                                 min="1900-01-01" max="2050-12-31" style="width: 100%; padding: 3px;">
                                         </div>
                                     </div>
                                     <div class="col-xs-12 col-sm-6 col-md-6">
-                                    <label for="civil_status">Civil Status: </label>
-                                    <select class="selectD" name="civil_status" id="civil_status" x-ref="civil_status" style="width: 100%; height: auto; margin-bottom: 0; padding: 5px; border-radius: 3px">
+                                    <label for="cu_civil_status">Civil Status: </label>
+                                    <select class="selectD" name="cu_civil_status" id="cu_civil_status" x-model="cu_civil_s" style="width: 100%; height: auto; margin-bottom: 0; padding: 5px; border-radius: 3px">
                                         <option value="" disabled selected hidden>Choose Status</option>
                                         <option value="1">Married</option>
                                         <option value="2">Single</option>
@@ -470,8 +478,8 @@ button.createbtn i {
                                 </div>
                                 <div class="row" style="text-align: left">
                                     <div class="col-xs-12 col-sm-6 col-md-6">
-                                    <label for="sex">Sex: </label>
-                                    <select class="selectD" name="sex" id="sex" x-ref="sex" style="width: 100%; height: auto; margin-bottom: 0; padding: 5px; border-radius: 3px">
+                                    <label for="cu_sex">Sex: </label>
+                                    <select class="selectD" name="cu_sex" id="cu_sex" x-model="cu_sex" style="width: 100%; height: auto; margin-bottom: 0; padding: 5px; border-radius: 3px">
                                         <option value="" disabled selected hidden>Choose Sex</option>
                                         <option value="1">Male</option>
                                         <option value="2">Female</option>
@@ -479,52 +487,52 @@ button.createbtn i {
                                     </div>
                                     <div class="col-xs-12 col-sm-6 col-md-6">
                                         <div class="form-group">
-                                            <label for="religion">Religion:</label>
-                                            <input type="text" name="religion" id="religion" x-ref="religion" class="form-control input-lg" value="Religion">
+                                            <label for="cu_religion">Religion:</label>
+                                            <input type="text" name="cu_religion" id="cu_religion" x-model="cu_religion" class="form-control input-lg" value="Religion">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="column" style="text-align: left">
                                     <div class="col-xs-12 col-sm-6 col-md-12">
                                         <div class="form-group">
-                                            <label for="birth_place">Place of Birth:</label>
-                                            <input type="text" name="birth_place" id="birth_place" x-ref="birth_place" class="form-control input-lg" placeholder="Place of Birth">
+                                            <label for="cu_birth_place">Place of Birth:</label>
+                                            <input type="text" name="cu_birth_place" id="cu_birth_place" x-model="cu_birth_p" class="form-control input-lg" placeholder="Place of Birth">
                                         </div>
                                     </div>
                                 </div>
                                 <br>
                             </div>
                         </div>
-                        <div x-show="profile_reviews" style="display: none">
+                        <div x-show="tab_index == 2" style="display: none">
                             <div class="profile-reviews tab" style="display: flex; flex-direction: column">
                                 <h3 style="font-weight: bold">Address and Guardian Details</h3>
                                 <div class="row" style="text-align: left">
                                 <div class="column">
                                     <div class="col-xs-12 col-sm-6 col-md-12">
                                             <div class="form-group" >
-                                            <label for="address_street">Street/Subdiv/Sitio:</label>
-                                                <input type="text" name="address_street" id="address_street"  x-ref="address_street" class="form-control input-lg" placeholder="Street/Subdiv/Sitio">
+                                            <label for="cu_address_street">Street/Subdiv/Sitio:</label>
+                                                <input type="text" name="cu_address_street" id="cu_address_street" x-model="cu_address_s" class="form-control input-lg" placeholder="Street/Subdiv/Sitio">
                                             </div>
                                     </div>
                                 </div>
                                     <div class="col-xs-12 col-sm-6 col-md-6">
                                         <div class="form-group" >
-                                        <label for="address_barangay">Barangay:</label>
-                                            <input type="text" name="address_barangay" id="address_barangay" x-ref="address_barangay" class="form-control input-lg" placeholder="Barangay">
+                                        <label for="cu_address_barangay">Barangay:</label>
+                                            <input type="text" name="cu_address_barangay" id="cu_address_barangay" x-model="cu_address_b" class="form-control input-lg" placeholder="Barangay">
                                         </div>
                                     </div>
                                     <div class="col-xs-12 col-sm-6 col-md-6">
                                         <div class="form-group" >
-                                        <label for="address_municipality">Municipality:</label>
-                                            <input type="text" name="address_municipality" id="address_municipality" x-ref="address_municipality" class="form-control input-lg" placeholder="Municipality">
+                                        <label for="cu_address_municipality">Municipality:</label>
+                                            <input type="text" name="cu_address_municipality" id="cu_address_municipality" x-model="cu_address_m" class="form-control input-lg" placeholder="Municipality">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row" style="text-align: left">
                                     <div class="col-xs-12 col-sm-6 col-md-12">
                                         <div class="form-group">
-                                            <label for="address_zip">Zipcode:</label>
-                                            <input type="number" name="address_zip" id="address_zip" x-ref="address_zip" class="form-control input-lg" placeholder="Zipcode">
+                                            <label for="cu_address_zip">Zipcode:</label>
+                                            <input type="number" name="cu_address_zip" id="cu_address_zip" x-model="cu_address_z" class="form-control input-lg" placeholder="Zipcode">
                                         </div>
                                     </div>
                                 </div>
@@ -533,29 +541,29 @@ button.createbtn i {
                                 <div class="row" style="text-align: left">
                                     <div class="col-xs-12 col-sm-6 col-md-6">
                                         <div class="form-group" >
-                                        <label for="guardian_fname">Full Name:</label>
-                                            <input type="text" name="guardian_fname" id="guardian_fname" x-ref="guardian_fname" class="form-control input-lg" placeholder="Full Name">
+                                        <label for="cu_guardian_fname">Full Name:</label>
+                                            <input type="text" name="cu_guardian_fname" id="cu_guardian_fname" x-model="cu_guardian_fn" class="form-control input-lg" placeholder="Full Name">
                                         </div>
                                     </div>
                                     <div class="col-xs-12 col-sm-6 col-md-6">
                                         <div class="form-group">
-                                            <label for="guardian_contact">Contact Number:</label>
-                                            <input type="number" name="guardian_contact" id="guardian_contact" x-ref="guardian_contact" class="form-control input-lg" placeholder="Contact Number">
+                                            <label for="cu_guardian_contact">Contact Number:</label>
+                                            <input type="number" name="cu_guardian_contact" id="cu_guardian_contact" x-model="cu_guardian_c" class="form-control input-lg" placeholder="Contact Number">
                                         </div>
                                     </div>
                                 </div>
                                 <br>
                             </div>
                         </div>
-                        <div x-show="profile_settings" style="display: none">
+                        <div x-show="tab_index == 3" style="display: none">
                             <div class="profile-settings tab" style="display: flex; flex-direction: column">
                             <h3 style="font-weight: bold">Farm and Account Details</h3>
                                 <div class="account-setting">
                                     <div class="row" style="text-align: left">
                                         <div class="column">
                                         <div class="col-xs-12 col-sm-6 col-md-12">
-                                            <label for="farm_type">Farm Type: </label>
-                                            <select class="selectD" name="farm_type" id="farm_type" x-ref="farm_type" style="width: 100%; height: auto; margin-bottom: 10px; padding: 5px; border-radius: 3px">
+                                            <label for="cu_farm_type">Farm Type: </label>
+                                            <select class="selectD" name="cu_farm_type" id="cu_farm_type" x-model="cu_farm_t" style="width: 100%; height: auto; margin-bottom: 10px; padding: 5px; border-radius: 3px">
                                                 <option value="" disabled selected hidden>Choose Services</option>
                                                 <option value="1">High Value Crops</option>
                                                 <option value="2">Corn Value Crop</option>
@@ -565,22 +573,22 @@ button.createbtn i {
                                         </div>
                                         <div class="col-xs-12 col-sm-6 col-md-6">
                                             <div class="form-group" >
-                                            <label for="farm_barangay">Barangay:</label>
-                                                <input type="text" name="farm_barangay" id="farm_barangay" x-ref="farm_barangay" class="form-control input-lg" placeholder="Barangay">
+                                            <label for="cu_farm_barangay">Barangay:</label>
+                                                <input type="text" name="cu_farm_barangay" id="cu_farm_barangay" x-model="cu_farm_b" class="form-control input-lg" placeholder="Barangay">
                                             </div>
                                         </div>
                                         <div class="col-xs-12 col-sm-6 col-md-6">
                                             <div class="form-group" >
-                                            <label for="farm_municipality">Municipality:</label>
-                                                <input type="text" name="farm_municipality" id="farm_municipality" x-ref="farm_municipality" class="form-control input-lg" placeholder="Municipality">
+                                            <label for="cu_farm_municipality">Municipality:</label>
+                                                <input type="text" name="cu_farm_municipality" id="cu_farm_municipality" x-model="cu_farm_m" class="form-control input-lg" placeholder="Municipality">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row" style="text-align: left">
                                         <div class="col-xs-12 col-sm-6 col-md-12">
                                             <div class="form-group">
-                                                <label for="farm_area">Total farm area:</label>
-                                                <input type="number" name="farm_area" id="farm_area" x-ref="farm_area" class="form-control input-lg" placeholder="Total farm area">
+                                                <label for="cu_farm_area">Total farm area:</label>
+                                                <input type="number" name="cu_farm_area" id="cu_farm_area" x-model="cu_farm_a" class="form-control input-lg" placeholder="Total farm area">
                                             </div>
                                         </div>
                                     </div>
@@ -589,16 +597,16 @@ button.createbtn i {
                                     <div class="row" style="text-align: left">
                                         <div class="col-xs-12 col-sm-6 col-md-6">
                                             <div class="form-group">
-                                                <label for="username">Username:</label>
-                                                <input type="username" name="username" id="username" x-ref="username" class="form-control input-lg" placeholder="Username">
+                                                <label for="cu_username">Email:</label>
+                                                <input type="text" name="cu_username" id="cu_username" x-model="cu_user_n" class="form-control input-lg" placeholder="Email" >
                                             </div>
                                         </div>
                                         <div class="col-xs-12 col-sm-6 col-md-6">
                                             <div class="form-group">
-                                                <label for="secret_phrase" style="font-size: 14px">Secret Phrase: (Use to change Password)</label>
+                                                <label for="cu_secret_phrase" style="font-size: 14px">Secret Phrase: (Use to change Password)</label>
                                                 <div class="buttonIn">
-                                                    <input type="text" id="enter" name="secret_phrase" x-ref="secret_phrase" class="form-control input-lg" placeholder="Secret Phrase" autocomplete=off>
-                                                    <button type="button" id="clear" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em; display: inline" x-on:click="generate_secret_phrase" >Generate</button>
+                                                    <input type="text" id="enter" name="cu_secret_phrase" x-model="cu_secret_p" class="form-control input-lg" placeholder="Secret Phrase" autocomplete=off>
+                                                    <button type="button" id="clear" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em; display: inline" x-on:click="generate_secret_phrase">Generate</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -624,6 +632,11 @@ document.addEventListener('alpine:init', () => {
         profile_reviews: false,
         profile_settings: false,
 
+        tab_index: 1,
+        change_tab(tab_number){
+          this.tab_index = tab_number;
+        },
+
         show_profile_posts(){
             this.profile_posts = true;
             this.profile_settings = false;
@@ -640,6 +653,24 @@ document.addEventListener('alpine:init', () => {
             this.profile_posts = false;
             this.profile_settings = true;
             this.profile_reviews = false;
+        },
+        
+        async send_mail(){
+          const options = {
+              xsrfHeaderName: 'X-XSRF-TOKEN',
+              xsrfCookieName: 'XSRF-TOKEN',
+          }
+          let data = {
+            email: 'frncrebollos@gmail.com',
+            subject: 'CROP REQUEST',
+            message: '<b>Hello Farmer,</b><br/><br/> This is to notify you that your request is now approved.',
+          }
+          
+          await axios.post('../../controller/sendmail/sendmail.php', data, options)
+          .then((response) => {
+            console.log(response.data);
+          });
+          // console.log(this.$refs.m_email_address.value, this.$refs.m_subject.value, this.$refs.m_message.value);
         }
     }));
 });

@@ -15,6 +15,7 @@
     define("UPLOADS",   ASSETS."uploads/");
     define("LANDING_PAGE",   "modules/landing_page.php");
     define("CIPHER",   "aes-128-gcm");
+    define("PHP_MAILER",   LOCATION."plugins/PHPMailer/src/");
 
     define('INCLUDES', LOCATION."includes/");
 

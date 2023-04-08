@@ -6,8 +6,7 @@
     $return_value = '';
     $is_duplicate = false;
     $pattern = "/^09\d{9}$/";
-    // require_once('../../settings/custom_sql.php');
-    
+    $email_pattern = "/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/";
     
     try {
         // Receive data from axios post
@@ -47,36 +46,40 @@
         }
         else {
             if(preg_match($pattern, $contact_no) && preg_match($pattern, $guardian_contact)){
-                // INSERT RECORD
-                $sql = $db->prepare("INSERT INTO user (first_name, middle_name, last_name, role_service, birth_date, civil_status, sex, contact_no, religion, birth_place, address_street, address_barangay, address_municipality, username, password, address_zip, guardian_fname, guardian_contact, farm_type, farm_barangay, farm_municipality, farm_area, secret_phrase, role, status) VALUES (:first_name, :middle_name, :last_name, :role_service, :birth_date, :civil_status, :sex, :contact_no, :religion, :birth_place, :address_street, :address_barangay, :address_municipality, :username, :password, :address_zip, :guardian_fname, :guardian_contact, :farm_type, :farm_barangay, :farm_municipality, :farm_area, :secret_phrase, :role, :status)");
-                //bind
-                $sql->bindParam(':first_name', $first_name);
-                $sql->bindParam(':middle_name', $middle_name);
-                $sql->bindParam(':last_name', $last_name);
-                $sql->bindParam(':role_service', $role_service);
-                $sql->bindParam(':birth_date', $birth_date);
-                $sql->bindParam(':civil_status', $civil_status);
-                $sql->bindParam(':sex', $sex);
-                $sql->bindParam(':contact_no', $contact_no);
-                $sql->bindParam(':religion', $religion);
-                $sql->bindParam(':birth_place', $birth_place);
-                $sql->bindParam(':address_street', $address_street);
-                $sql->bindParam(':address_barangay', $address_barangay);
-                $sql->bindParam(':address_municipality', $address_municipality);
-                $sql->bindParam(':username', $username);
-                $sql->bindParam(':password', $password);
-                $sql->bindParam(':address_zip', $address_zip);
-                $sql->bindParam(':guardian_fname', $guardian_fname);
-                $sql->bindParam(':guardian_contact', $guardian_contact);
-                $sql->bindParam(':farm_type', $farm_type);
-                $sql->bindParam(':farm_barangay', $farm_barangay);
-                $sql->bindParam(':farm_municipality', $farm_municipality);
-                $sql->bindParam(':farm_area', $farm_area);
-                $sql->bindParam(':secret_phrase', $secret_phrase);
-                $sql->bindParam(':role', $role);
-                $sql->bindParam(':status', $status);
+                if(preg_match($email_pattern, $username)){
+                    // INSERT RECORD
+                    $sql = $db->prepare("INSERT INTO user (first_name, middle_name, last_name, role_service, birth_date, civil_status, sex, contact_no, religion, birth_place, address_street, address_barangay, address_municipality, username, password, address_zip, guardian_fname, guardian_contact, farm_type, farm_barangay, farm_municipality, farm_area, secret_phrase, role, status) VALUES (:first_name, :middle_name, :last_name, :role_service, :birth_date, :civil_status, :sex, :contact_no, :religion, :birth_place, :address_street, :address_barangay, :address_municipality, :username, :password, :address_zip, :guardian_fname, :guardian_contact, :farm_type, :farm_barangay, :farm_municipality, :farm_area, :secret_phrase, :role, :status)");
+                    //bind
+                    $sql->bindParam(':first_name', $first_name);
+                    $sql->bindParam(':middle_name', $middle_name);
+                    $sql->bindParam(':last_name', $last_name);
+                    $sql->bindParam(':role_service', $role_service);
+                    $sql->bindParam(':birth_date', $birth_date);
+                    $sql->bindParam(':civil_status', $civil_status);
+                    $sql->bindParam(':sex', $sex);
+                    $sql->bindParam(':contact_no', $contact_no);
+                    $sql->bindParam(':religion', $religion);
+                    $sql->bindParam(':birth_place', $birth_place);
+                    $sql->bindParam(':address_street', $address_street);
+                    $sql->bindParam(':address_barangay', $address_barangay);
+                    $sql->bindParam(':address_municipality', $address_municipality);
+                    $sql->bindParam(':username', $username);
+                    $sql->bindParam(':password', $password);
+                    $sql->bindParam(':address_zip', $address_zip);
+                    $sql->bindParam(':guardian_fname', $guardian_fname);
+                    $sql->bindParam(':guardian_contact', $guardian_contact);
+                    $sql->bindParam(':farm_type', $farm_type);
+                    $sql->bindParam(':farm_barangay', $farm_barangay);
+                    $sql->bindParam(':farm_municipality', $farm_municipality);
+                    $sql->bindParam(':farm_area', $farm_area);
+                    $sql->bindParam(':secret_phrase', $secret_phrase);
+                    $sql->bindParam(':role', $role);
+                    $sql->bindParam(':status', $status);
 
-                ($sql->execute()) ? $return_value = true : $return_value = 'Something went wrong. Cannot saved record.';
+                    ($sql->execute()) ? $return_value = 'true' : $return_value = 'Something went wrong. Cannot saved record.';
+                }else{
+                    $return_value = 4;
+                }
             }
             else{
                 $return_value = 3;

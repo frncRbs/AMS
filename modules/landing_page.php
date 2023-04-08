@@ -1971,7 +1971,7 @@
                             await axios.post('controller/farmer/register_farmer.php', data, options)
                             .then((response) => {
                                 this.$refs.submit_farmer_button.disabled = false;
-                                // console.log((response.data == false));
+                                console.log(response.data);
                                 if(response.data == 2) {
                                     this.error_landing = true;
                                     this.landing_page_msg = 'Username already taken!';
@@ -1982,7 +1982,15 @@
                                 }
                                 else if(response.data == 3){
                                     this.error_landing = true;
-                                    this.landing_page_msg = 'Contact No. should start from 09 and eleven digit maxed!';
+                                    this.landing_page_msg = 'Contact No. should start from 09 and eleven digit max!';
+                                    setTimeout(() => {
+                                        this.error_landing = false;
+                                        this.landing_page_msg = '';
+                                    }, 2000);
+                                }
+                                else if(response.data == 4){
+                                    this.error_landing = true;
+                                    this.landing_page_msg = 'Invalid email, please pick another!';
                                     setTimeout(() => {
                                         this.error_landing = false;
                                         this.landing_page_msg = '';
@@ -2047,6 +2055,7 @@
                             }
                             else if(response.data == 2){
                                 // window.location = '';
+                                window.location = 'modules/personnel/personnel_dash_body.php';
                             }
                             else if(response.data == 3){
                                 window.location = 'modules/personnel/personnel_dash_body.php';

@@ -1,6 +1,6 @@
 <!-- Farmer Registration Form -->      
 <div class="popup3" x-show="update_farmer_registration_form" style="display: none;">
-    <div class="popup-content3" >
+    <div class="popup-content3" x-data="edit_farmer_details_modal">
         <div class="popup-child1">
             <form>
             <span>
@@ -8,10 +8,9 @@
             </span>
             <h1 style="font-weight: bolder">Update Farmer Account</h1>
                 <br>
-                <div class="formG" style="display: flex; flex-direction: row; gap: 40px; justify-content: center" x-show="info_no == 1" style="display: none;">
+                <div class="formG" style="display: flex; flex-direction: row; gap: 40px; justify-content: center" x-show="info_no_farmer == 1" style="display: none;">
                     <div style="width: 100%; padding: 0 20px 0 20px">
                     <h3 style="font-weight: bold">Farmer Information</h3>
-                    
                     <div class="row" style="text-align: left">
                         <div class="column">
                         <hr>
@@ -26,7 +25,6 @@
                             </div>
                         <hr>
                         </div>
-                        
                         <div class="col-xs-12 col-sm-6 col-md-6">
                             <div class="form-group">
                                 <label for="first_name">First Name:</label>
@@ -40,7 +38,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="row" style="text-align: left">
                             <div class="col-xs-12 col-sm-6 col-md-6">
                                 <div class="form-group">
@@ -56,7 +53,15 @@
                             </div>
                         </div>
                         <hr>
-                        
+                        <div class="col-xs-12 col-sm-6 col-md-12" style="margin-bottom: 5px">
+                            <label for="cu_civil_status" style="float: left">Civil Status: </label>
+                            <select class="selectD" name="cu_civil_status" id="cu_civil_status" x-model="cu_civil_s" style="width: 100%; height: auto; margin-bottom: 0; padding: 5px; border-radius: 3px">
+                                <option value="" disabled selected hidden>Choose Status</option>
+                                <option value="1">Married</option>
+                                <option value="2">Single</option>
+                                <option value="3">Widowed</option>
+                            </select>
+                        </div>
                         <div class="row" style="text-align: left">
                             <div class="col-xs-12 col-sm-6 col-md-6">
                                 <div class="inputC">
@@ -73,8 +78,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        
                         <div class="row" style="text-align: left">
                             <div class="col-xs-12 col-sm-6 col-md-6">
                             <label for="sex">Sex: </label>
@@ -94,7 +97,63 @@
                     </div>
                 </div>
                 <!-- PAGE 2 -->
-                <div class="formG" style="display: none; flex-direction: row; gap: 40px; justify-content: center" x-show="info_no == 2" style="display: none;">
+                
+                <div class="formG" style="display: flex; flex-direction: row; gap: 40px; justify-content: center" x-show="info_no_farmer == 2" style="display: none;">
+                    <div style="width: 100%; padding: 0 20px 0 20px">
+                    <h3 style="font-weight: bold">Farmer Information</h3>
+                    <div class="row" style="text-align: left">
+                        <div class="column">
+                            <div class="col-xs-12 col-sm-6 col-md-12">
+                                    <div class="form-group" >
+                                    <label for="address_street">Street/Subdiv/Sitio:</label>
+                                        <input type="text" name="address_street" id="address_street"  x-ref="address_street" class="form-control input-lg" placeholder="Street/Subdiv/Sitio">
+                                    </div>
+                            </div>
+                        </div>
+                            <div class="col-xs-12 col-sm-6 col-md-6">
+                                <div class="form-group" >
+                                <label for="address_barangay">Barangay:</label>
+                                    <input type="text" name="address_barangay" id="address_barangay" x-ref="address_barangay" class="form-control input-lg" placeholder="Barangay">
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-md-6">
+                                <div class="form-group" >
+                                <label for="address_municipality">Municipality:</label>
+                                    <input type="text" name="address_municipality" id="address_municipality" x-ref="address_municipality" class="form-control input-lg" placeholder="Municipality">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="text-align: left">
+                            <div class="col-xs-12 col-sm-6 col-md-12">
+                                <div class="form-group">
+                                    <label for="address_zip">Zipcode:</label>
+                                    <input type="number" name="address_zip" id="address_zip" x-ref="address_zip" class="form-control input-lg" placeholder="Zipcode">
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <h3 style="font-weight: bold">Person to contact in case of emergency</h3>
+                        <hr>
+                        <div class="row" style="text-align: left">
+                            <div class="col-xs-12 col-sm-6 col-md-6">
+                                <div class="form-group" >
+                                <label for="guardian_fname">Full Name:</label>
+                                    <input type="text" name="guardian_fname" id="guardian_fname" x-ref="guardian_fname" class="form-control input-lg" placeholder="Full Name">
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-md-6">
+                                <div class="form-group">
+                                    <label for="guardian_contact">Contact Number:</label>
+                                    <input type="number" name="guardian_contact" id="guardian_contact" x-ref="guardian_contact" class="form-control input-lg" placeholder="Contact Number">
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                    </div>
+                </div>
+
+                <!-- PAGE 3 -->
+                <div class="formG" style="display: none; flex-direction: row; gap: 40px; justify-content: center" x-show="info_no_farmer == 3" style="display: none;">
                     <div style="width: 100%; padding: 0 20px 0 20px">
                         <h3 style="font-weight: bold">Coordinators Address</h3>
                         <hr>
@@ -126,8 +185,8 @@
                         <div class="row" style="text-align: left">
                             <div class="col-xs-12 col-sm-6 col-md-6">
                             <div class="form-group">
-                                <label for="username">Username:</label>
-                                <input type="username" name="username" id="username" x-ref="username" class="form-control input-lg" placeholder="Username">
+                                <label for="username">Email:</label>
+                                <input type="username" name="username" id="username" x-ref="username" class="form-control input-lg" placeholder="Email">
                             </div>
                             </div>
                             <div class="col-xs-12 col-sm-6 col-md-6">
@@ -171,12 +230,12 @@
                 </div>
                 <hr>
                 <div class="column" style="text-align: center">
-                    <template x-if="info_no != 1">
-                        <button type="button" class="btn btn-success" style="width: 25%; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="back">Back</button>
+                    <template x-if="info_no_farmer != 1">
+                        <button type="button" class="btn btn-success" style="width: 25%; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="back_farmer">Back</button>
                     </template>
                     
-                    <template x-if="info_no != 2">
-                        <button type="button" class="btn btn-success" style="width: 25%; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em " x-on:click="next">Next</button>
+                    <template x-if="info_no_farmer != 3">
+                        <button type="button" class="btn btn-success" style="width: 25%; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em " x-on:click="next_farmer">Next</button>
                     </template>
                 </div>
             </form>
@@ -187,27 +246,22 @@
     </div>
 </div>
 
-<!-- <script>
+<script>
     document.addEventListener('alpine:init', () => {
-        Alpine.data('edit_personnel_details_modal', () => ({
-            info_no: 1,
+        Alpine.data('edit_farmer_details_modal', () => ({
+            info_no_farmer: 1,
 
-            next(){
-                if(this.info_no < 2){
-                    this.info_no = (this.info_no + 1);
+            next_farmer(){
+                if(this.info_no_farmer < 3){
+                    this.info_no_farmer = (this.info_no_farmer + 1);
                 }
             },
 
-            back(){
-                if(this.info_no > 1){
-                    this.info_no = (this.info_no - 1);
+            back_farmer(){
+                if(this.info_no_farmer > 1){
+                    this.info_no_farmer = (this.info_no_farmer - 1);
                 }
-            },
-
-            exit_register(){
-                this.info_no = 1;
-                this.show_personnel_registration_form = false;
             },
         }));
     });
-</script> -->
+</script>

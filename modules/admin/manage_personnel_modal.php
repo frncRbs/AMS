@@ -28,7 +28,7 @@
                                         <th style="min-width: 150px; text-align: center">Address Street</th>
                                         <th style="min-width: 150px; text-align: center">Address Barangay</th>
                                         <th style="min-width: 150px; text-align: center">Address Municipality</th>
-                                        <th style="min-width: 150px; text-align: center">Username</th>
+                                        <th style="min-width: 150px; text-align: center">Email</th>
                                         <th style="min-width: 150px; text-align: center">Role</th>
                                         <th style="min-width: 150px; text-align: center">Status</th>
                                         <th style="min-width: 150px; text-align: center">Actions</th>

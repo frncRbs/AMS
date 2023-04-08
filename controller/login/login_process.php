@@ -30,6 +30,8 @@
                 $_SESSION["login_user_id"] = $users['id'];
                 $_SESSION["login_username"] = $users['username'];
                 $_SESSION["user_role"] = $users['role'];
+                // $_SESSION["user_firstname"] = $users['first_name'];
+
             }
         }
         else {
@@ -41,10 +43,10 @@
                 if($user_role == 'Admin'){
                     $return_value = 1; //Admin
                 }
-                else if($user_role == 'User'){
+                else if($user_role == 'Personnel'){
                     $return_value = 2; // User/Personnel
                 }
-                else {
+                else if($user_role == 'Farmer'){
                     $return_value = 3; // Farmer
                 }
             }

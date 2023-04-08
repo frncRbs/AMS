@@ -22,7 +22,7 @@
         $return_value = ($sql_u->execute(array(':is_available' => $status, $bind_field_name => $program_id))) ? $return_value = 'true' : $return_value = 'Something went wrong. Cannot saved record.';
 
         // Retrieve updated record
-        $sql = $db->prepare("SELECT * FROM ".$type." ORDER BY date_created DESC");
+        $sql = $db->prepare("SELECT * FROM ".$type."");
         $sql->execute();
         $records = $sql->fetchAll();
 

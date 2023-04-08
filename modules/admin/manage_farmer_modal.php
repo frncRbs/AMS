@@ -36,7 +36,7 @@
                                         <th style="min-width: 150px; text-align: center;">Farm Barangay</th>
                                         <th style="min-width: 150px; text-align: center;">Farm Municipality</th>
                                         <th style="min-width: 150px; text-align: center;">Farm Area</th>
-                                        <th style="min-width: 150px; text-align: center;">Username</th>
+                                        <th style="min-width: 150px; text-align: center;">Email</th>
                                         <th style="min-width: 150px; text-align: center;">Status</th>
                                         <th style="min-width: 150px; text-align: center;">Actions</th>
                                     </tr>

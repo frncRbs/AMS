@@ -943,7 +943,7 @@
                 </div>
 
                 <div class="right_area">
-                    <a type="button" class="user_btn" x-on:click="show_user_profile_form = true"><i class="fas fa-user"></i></a>
+                    <a type="button" class="user_btn" x-on:click="get_current_user_details()"><i class="fas fa-user"></i></a>
                 </div>
                 <div class="right_area">
                     <a type="button" class="notif_btn" x-on:click="show_user_profile_form = true"><i class="fas fa-bell" ></i></a>

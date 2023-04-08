@@ -126,8 +126,8 @@
                         <div class="row" style="text-align: left">
                             <div class="col-xs-12 col-sm-6 col-md-6">
                             <div class="form-group">
-                                <label for="p_username">Username:</label>
-                                <input type="text" name="p_username" id="p_username" x-ref="p_username" x-model="p_user_n" class="form-control input-lg" placeholder="Username">
+                                <label for="p_username">Email:</label>
+                                <input type="text" name="p_username" id="p_username" x-ref="p_username" x-model="p_user_n" class="form-control input-lg" placeholder="Email" disable>
                             </div>
                             </div>
                             <div class="col-xs-12 col-sm-6 col-md-6">
@@ -160,12 +160,6 @@
                                     <input type="password" name="p_confirmPassword" id="p_confirmPassword" x-ref="p_confirmPassword" class="form-control input-lg" placeholder="Confirm Password">
                                 </div>
                             </div>
-                            <!-- <div class="col-xs-12 col-sm-6 col-md-6" style="display: none">
-                                <div class="form-group">
-                                    <label for="role">Role:</label>
-                                    <input type="text" name="role" id="role" x-ref="role" class="form-control input-lg" placeholder="Confirm Password">
-                                </div>
-                            </div> -->
                             <div class="col-xs-12 col-sm-6 col-md-6" style="display: none">
                                 <div class="form-group">
                                     <label for="p_status">Status:</label>

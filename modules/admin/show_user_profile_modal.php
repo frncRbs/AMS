@@ -363,7 +363,7 @@ button.createbtn i {
             <div class="container">
                 <div class="profile-header">
                     <div class="profile-img">
-                    <img src="./bg.jpg" width="200" alt="Profile Image">
+                    <img :src="cu_image" width="200" alt="Profile Image">
                     </div>
                     <div class="profile-nav_profile-info">
                     <div style="display: inline">

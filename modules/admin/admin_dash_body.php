@@ -536,6 +536,7 @@
                 cu_address_b_text: '',
                 cu_user_n_text: '',
                 cu_contact_text: '',
+                cu_image: '',
                 
                 // CURRENT FARMER DETAILS
                 f_full_name: '',
@@ -1627,6 +1628,7 @@
                             this.cu_address_b_text = response.data[0].address_barangay;
                             this.cu_user_n_text = response.data[0].username;
                             this.cu_contact_text = response.data[0].contact_no;
+                            this.cu_image = '../../assets/images/'+response.data[0].image;
                         }, 100);
                                          
                     }); 

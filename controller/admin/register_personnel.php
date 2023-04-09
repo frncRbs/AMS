@@ -29,6 +29,7 @@
         $secret_phrase = encrypt_ams($obj['secret_phrase']);
         $role = 'Personnel';
         $status = true;
+        $image = 'personnel.jpg';
 
         $sql = $db->prepare("SELECT * FROM user WHERE username = :username");
         $sql->execute(array(':username' => $username));
@@ -42,7 +43,7 @@
             if(preg_match($pattern, $contact_no)){
                 if(preg_match($email_pattern, $username)){
                     // INSERT RECORD
-                    $sql = $db->prepare("INSERT INTO user (first_name, middle_name, last_name, role_service, birth_date, sex, contact_no, religion, birth_place, address_street, address_barangay, address_municipality, username, password, secret_phrase, role, status) VALUES (:first_name, :middle_name, :last_name, :role_service, :birth_date, :sex, :contact_no, :religion, :birth_place, :address_street, :address_barangay, :address_municipality, :username, :password, :secret_phrase, :role, :status)");
+                    $sql = $db->prepare("INSERT INTO user (first_name, middle_name, last_name, role_service, birth_date, sex, contact_no, religion, birth_place, address_street, address_barangay, address_municipality, username, password, secret_phrase, role, status) VALUES (:first_name, :middle_name, :last_name, :role_service, :birth_date, :sex, :contact_no, :religion, :birth_place, :address_street, :address_barangay, :address_municipality, :username, :password, :secret_phrase, :role, :status, image = :image)");
                     //bind
                     $sql->bindParam(':first_name', $first_name);
                     $sql->bindParam(':middle_name', $middle_name);
@@ -61,6 +62,7 @@
                     $sql->bindParam(':secret_phrase', $secret_phrase);
                     $sql->bindParam(':role', $role);
                     $sql->bindParam(':status', $status);
+                    $sql->bindParam(':image', $image);
 
                     ($sql->execute()) ? $return_value = 'true' : $return_value = 'Something went wrong. Cannot saved record.';
 

@@ -7,12 +7,12 @@
     $return_value_services = [];
 
     try{
-        $sql = $db->prepare("SELECT * FROM crops");
+        $sql = $db->prepare("SELECT * FROM crops ORDER BY date_created DESC");
         $sql->execute();
         $crops = $sql->fetchAll();
         $return_value_crops = $crops;
 
-        $sql_services = $db->prepare("SELECT * FROM services");
+        $sql_services = $db->prepare("SELECT * FROM services ORDER BY date_created DESC");
         $sql_services->execute();
         $services = $sql_services->fetchAll();
         $return_value_services = $services;

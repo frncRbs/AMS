@@ -30,7 +30,7 @@
                 $_SESSION["login_user_id"] = $users['id'];
                 $_SESSION["login_username"] = $users['username'];
                 $_SESSION["user_role"] = $users['role'];
-                // $_SESSION["user_firstname"] = $users['first_name'];
+                $_SESSION["user_firstname"] = $users['first_name'];
 
             }
         }

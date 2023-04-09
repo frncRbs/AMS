@@ -4,8 +4,8 @@
         <div class="popup-child1" style="margin-bottom: 5px">
             <div style="display: flex; flex-direction: column;">
                 <h1 style="font-weight: bolder">Manage Personnels Account</h1>
-                <!-- <h3 style="color: red" x-text="admin_error_msg"></h3>
-                <h3 style="color: green" x-text="admin_success_msg"></h3> -->
+                <h3 style="color: red; font-weight: bold" x-text="admin_error_msg"></h3>
+                <h3 style="color: green; font-weight: bold" x-text="admin_success_msg"></h3>
                 <div class="row-fluid" style="background-color: white; min-height: 400px; padding:10px;">
                 <hr>
                     <div style="position: relative; display: flex; justify-content: flex-end">
@@ -65,7 +65,7 @@
                                                     <div style="display: flex; flex-direction: flex-end">
                                                         <button class="btn btn-success" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="update_personnel_registration_form = true, p_id = row.id, p_fn = row.first_name, p_mn = row.middle_name, p_ln = row.last_name, p_role_s = row.role_service, p_b_date = row.birth_date, p_c_status = row.civil_status, p_seggs = row.sex, p_c_no = row.contact_no, p_rel = row.religion, p_b_place = row.birth_place, p_a_street = row.address_street, p_a_barangay = row.address_barangay, p_a_municipality = row.address_municipality, p_user_n = row.username, p_secret_p = row.secret_phrase, p_role = row.role">Update</button>
                                                         <template x-if="row.is_active == 1">
-                                                            <button class="btn btn-danger" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="show_deactivate_request_form = true, p_id = row.id, p_fn = row.first_name, p_is_active = row.is_active">Deactivate</button>
+                                                            <button class="btn btn-danger" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="show_deactivate_personnel_account_form = true, p_id = row.id, p_fn = row.first_name, p_is_active = row.is_active">Deactivate</button>
                                                         </template>
                                                         <template x-if="row.is_active == 0">
                                                             <button class="btn btn-success" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="activate_personnel_account, p_id = row.id, p_is_active = row.is_active">Activate</button>

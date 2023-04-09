@@ -939,7 +939,7 @@
                 <div class="left_area">
                     <h3>Admin<span> Dashboard</span></h3>
                     <!-- FOR CURRENT LOGGED USER -->
-                    <!-- <h3><?php echo $_SESSION["login_username"]; ?></h3> --> 
+                    <!-- <h3><?php echo $_SESSION["login_username"]; ?></h3> -->
                 </div>
 
                 <div class="right_area">

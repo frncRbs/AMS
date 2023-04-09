@@ -399,7 +399,7 @@ button.createbtn i {
                         <button type="button" class="chatbtn" id="chatBtn" x-on:click="update_current_user_details"><i class="fas fa-plus-square" ></i>Update</button>
                         </div>
                         <!-- START TEST -->
-                        <div>
+                        <div style="display: none">
                           <button type="button" x-on:click="send_mail()">Send Mail</button>
                         </div>
                         <!-- END TEST -->

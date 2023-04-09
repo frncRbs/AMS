@@ -4,8 +4,8 @@
         <div class="popup-child1" style="margin-bottom: 5px">
             <div style="display: flex; flex-direction: column;">
                 <h1 style="font-weight: bolder">Manage Farmers Account</h1>
-                <!-- <h3 style="color: red" x-text="admin_error_msg"></h3>
-                <h3 style="color: green" x-text="admin_success_msg"></h3> -->
+                <h3 style="color: red; font-weight: bold" x-text="admin_error_msg"></h3>
+                <h3 style="color: green; font-weight: bold" x-text="admin_success_msg"></h3>
                 <div class="row-fluid" style="background-color: white; min-height: 400px; padding:10px;">
                 <hr>
                     <div style="position: relative; display: flex; justify-content: flex-end">
@@ -67,19 +67,28 @@
                                                 <td style="min-width: 150px; text-align: center;"><span x-text="row.farm_area"></span></td>
                                                 <td style="min-width: 150px; text-align: center;"><span x-text="row.username"></span></td>
                                                 <td style="min-width: 150px; text-align: center">
-                                                    <template x-if="row.status == 1">
+                                                    <template x-if="row.status == 1 && row.is_active == 1">
                                                         <h4 style="color: green; font-weight: bold">Approved</h4>
                                                     </template>
                                                     <template x-if="row.status == 0">
                                                         <h4 style="color: red; font-weight: bold">Pending</h4>
                                                     </template>
+                                                    <template x-if="row.is_active == 0">
+                                                        <h4 style="color: red; font-weight: bold">Deactivated</h4>
+                                                    </template>
                                                 <!-- <button class="btn btn-danger" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="delete_request(row.request_id, row.user_id, 'Crop')">Delete</button> -->
                                                 </td>
                                                 <td style="min-width: 150px; text-align: center">
                                                     <div style="display: flex; flex-direction: flex-end; align-items: space-around">
-                                                        <button class="btn btn-success" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="update_farmer_registration_form = true">Update</button>
+                                                        <button class="btn btn-success" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="update_farmer_registration_form = true, f_firstname = row.first_name, f_middlename = row.middle_name, f_lastname = row.last_name, f_role_s = row.role_service, f_birth_d = row.birth_date, f_civil_s = row.civil_status, f_sex = row.sex, f_contact = row.contact_no, f_religion = row.religion, f_birth_p = row.birth_place, f_address_s = row.address_street, f_address_b = row.address_barangay, f_address_m = row.address_municipality, f_address_z = row.address_zip, f_guardian_fn = row.guardian_fname, f_guardian_c = row.guardian_contact, f_farm_t = row.farm_type, f_farm_b = row.farm_barangay, f_farm_m = row.farm_municipality, f_farm_a = row.farm_area, f_user_n = row.username, f_secret_p = row.secret_phrase, f_id = row.id">Update</button>
                                                         <template x-if="row.status == 0">
-                                                            <button class="btn btn-success" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="">Approve</button>
+                                                            <button class="btn btn-success" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="approve_farmer_account, f_id = row.id, f_status = row.status">Approve</button>
+                                                        </template>
+                                                        <template x-if="row.is_active == 1 && row.status == 1">
+                                                            <button class="btn btn-danger" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="show_deactivate_farmer_account_form = true, f_id = row.id, f_firstname = row.first_name, f_is_active = row.is_active">Deactivate</button>
+                                                        </template>
+                                                        <template x-if="row.is_active == 0">
+                                                            <button class="btn btn-success" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="activate_farmer_account, f_id = row.id, f_is_active = row.is_active">Activate</button>
                                                         </template>
                                                     </div>
                                                 </td>

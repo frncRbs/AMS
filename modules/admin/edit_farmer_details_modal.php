@@ -15,8 +15,8 @@
                         <div class="column">
                         <hr>
                             <div class="col-xs-12 col-sm-6 col-md-12" style="margin-bottom: 10px;">
-                                <label for="role_service">Register for: </label>
-                                <select class="selectD" name="role_service" id="role_service" x-ref="role_service" style="width: 100%; height: auto; margin-bottom: 0; padding: 5px; border-radius: 3px">
+                                <label for="f_role_service">Register for: </label>
+                                <select class="selectD" name="f_role_service" id="f_role_service" x-model="f_role_s" style="width: 100%; height: auto; margin-bottom: 0; padding: 5px; border-radius: 3px">
                                     <option value="" disabled selected hidden>Choose Services</option>
                                     <option value="1">High Value Crops</option>
                                     <option value="2">Corn Value Crop</option>
@@ -27,35 +27,35 @@
                         </div>
                         <div class="col-xs-12 col-sm-6 col-md-6">
                             <div class="form-group">
-                                <label for="first_name">First Name:</label>
-                                    <input type="text" name="first_name" id="first_name" x-ref="first_name" class="form-control input-lg" tabindex="2" placeholder="First Name" required>
+                                <label for="f_first_name">First Name:</label>
+                                    <input type="text" name="f_first_name" id="f_first_name" x-model="f_firstname" class="form-control input-lg" tabindex="2" placeholder="First Name" required>
                                 </div>
                             </div>
                         <div class="col-xs-12 col-sm-6 col-md-6">
                             <div class="form-group" >
-                                <label for="last_name">Last Name:</label>
-                                    <input type="text" name="last_name" id="last_name" x-ref="last_name" class="form-control input-lg" tabindex="1" placeholder="Last Name" required>
+                                <label for="f_last_name">Last Name:</label>
+                                    <input type="text" name="f_last_name" id="f_last_name" x-model="f_lastname" class="form-control input-lg" tabindex="1" placeholder="Last Name" required>
                                 </div>
                             </div>
                         </div>
                         <div class="row" style="text-align: left">
                             <div class="col-xs-12 col-sm-6 col-md-6">
                                 <div class="form-group">
-                                    <label for="middle_name">Middle Name:</label>
-                                    <input type="text" name="middle_name" id="middle_name" x-ref="middle_name" class="form-control input-lg" tabindex="5" placeholder="Middle Name" required>
+                                    <label for="f_middle_name">Middle Name:</label>
+                                    <input type="text" name="f_middle_name" id="f_middle_name" x-model="f_middlename" class="form-control input-lg" tabindex="5" placeholder="Middle Name" required>
                                 </div>
                             </div>
                             <div class="col-xs-12 col-sm-6 col-md-6">
                                 <div class="form-group">
-                                    <label for="contact_no">Contact Number:</label>
-                                    <input type="number" name="contact_no" id="contact_no" x-ref="contact_no" class="form-control input-lg" tabindex="6" placeholder="Contact Number" required>
+                                    <label for="f_contact_no">Contact Number:</label>
+                                    <input type="number" name="f_contact_no" id="f_contact_no" x-model="f_contact" class="form-control input-lg" tabindex="6" placeholder="Contact Number" required>
                                 </div>
                             </div>
                         </div>
                         <hr>
                         <div class="col-xs-12 col-sm-6 col-md-12" style="margin-bottom: 5px">
-                            <label for="cu_civil_status" style="float: left">Civil Status: </label>
-                            <select class="selectD" name="cu_civil_status" id="cu_civil_status" x-model="cu_civil_s" style="width: 100%; height: auto; margin-bottom: 0; padding: 5px; border-radius: 3px">
+                            <label for="f_civil_status" style="float: left">Civil Status: </label>
+                            <select class="selectD" name="f_civil_status" id="f_civil_status" x-model="f_civil_s" style="width: 100%; height: auto; margin-bottom: 0; padding: 5px; border-radius: 3px">
                                 <option value="" disabled selected hidden>Choose Status</option>
                                 <option value="1">Married</option>
                                 <option value="2">Single</option>
@@ -65,23 +65,23 @@
                         <div class="row" style="text-align: left">
                             <div class="col-xs-12 col-sm-6 col-md-6">
                                 <div class="inputC">
-                                    <label for="birth_date">Birth Date:</label>
-                                    <input type="date" name="birth_date" id="birth_date" name="trip-start"
-                                        value="2000-01-01" x-ref="birth_date"
+                                    <label for="f_birth_date">Birth Date:</label>
+                                    <input type="date" name="f_birth_date" id="f_birth_date" name="trip-start"
+                                        value="2000-01-01" x-model="f_birth_d"
                                         min="1900-01-01" max="2050-12-31" style="width: 100%; padding: 3px;">
                                 </div>
                             </div>
                             <div class="col-xs-12 col-sm-6 col-md-6">
                                 <div class="form-group">
-                                    <label for="birth_place">Place of Birth:</label>
-                                    <input type="text" name="birth_place" id="birth_place" x-ref="birth_place" class="form-control input-lg" placeholder="Place of Birth">
+                                    <label for="f_birth_place">Place of Birth:</label>
+                                    <input type="text" name="f_birth_place" id="f_birth_place" x-model="f_birth_p" class="form-control input-lg" placeholder="Place of Birth">
                                 </div>
                             </div>
                         </div>
                         <div class="row" style="text-align: left">
                             <div class="col-xs-12 col-sm-6 col-md-6">
-                            <label for="sex">Sex: </label>
-                            <select class="selectD" name="sex" id="sex" x-ref="sex" style="width: 100%; height: auto; margin-bottom: 0; padding: 5px; border-radius: 3px">
+                            <label for="f_sex">Sex: </label>
+                            <select class="selectD" name="f_sex" id="f_sex" x-model="f_sex" style="width: 100%; height: auto; margin-bottom: 0; padding: 5px; border-radius: 3px">
                                 <option value="" disabled selected hidden>Choose Sex</option>
                                 <option value="1">Male</option>
                                 <option value="2">Female</option>
@@ -89,8 +89,8 @@
                             </div>
                             <div class="col-xs-12 col-sm-6 col-md-6">
                                 <div class="form-group">
-                                    <label for="religion">Religion:</label>
-                                    <input type="text" name="religion" id="religion" x-ref="religion" class="form-control input-lg" value="Religion">
+                                    <label for="f_religion">Religion:</label>
+                                    <input type="text" name="f_religion" id="f_religion" x-model="f_religion" class="form-control input-lg" value="Religion">
                                 </div>
                             </div>
                         </div>
@@ -104,30 +104,41 @@
                     <div class="row" style="text-align: left">
                         <div class="column">
                             <div class="col-xs-12 col-sm-6 col-md-12">
-                                    <div class="form-group" >
-                                    <label for="address_street">Street/Subdiv/Sitio:</label>
-                                        <input type="text" name="address_street" id="address_street"  x-ref="address_street" class="form-control input-lg" placeholder="Street/Subdiv/Sitio">
-                                    </div>
+                                <label for="f_farm_type">Farm Type: </label>
+                                <select class="selectD" name="f_farm_type" id="f_farm_type" x-model="f_farm_t" style="width: 100%; height: auto; margin-bottom: 10px; padding: 5px; border-radius: 3px">
+                                    <option value="" disabled selected hidden>Choose Services</option>
+                                    <option value="1">High Value Crops</option>
+                                    <option value="2">Corn Value Crop</option>
+                                    <option value="3">Rice Crop</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div class="col-xs-12 col-sm-6 col-md-12">
+                                <div class="form-group" >
+                                <label for="f_address_street">Street/Subdiv/Sitio:</label>
+                                    <input type="text" name="f_address_street" id="f_address_street"  x-model="f_address_s" class="form-control input-lg" placeholder="Street/Subdiv/Sitio">
+                                </div>
                             </div>
                         </div>
                             <div class="col-xs-12 col-sm-6 col-md-6">
                                 <div class="form-group" >
-                                <label for="address_barangay">Barangay:</label>
-                                    <input type="text" name="address_barangay" id="address_barangay" x-ref="address_barangay" class="form-control input-lg" placeholder="Barangay">
+                                <label for="f_address_barangay">Barangay:</label>
+                                    <input type="text" name="f_address_barangay" id="f_address_barangay" x-model="f_address_b" class="form-control input-lg" placeholder="Barangay">
                                 </div>
                             </div>
                             <div class="col-xs-12 col-sm-6 col-md-6">
                                 <div class="form-group" >
-                                <label for="address_municipality">Municipality:</label>
-                                    <input type="text" name="address_municipality" id="address_municipality" x-ref="address_municipality" class="form-control input-lg" placeholder="Municipality">
+                                <label for="f_address_municipality">Municipality:</label>
+                                    <input type="text" name="f_address_municipality" id="f_address_municipality" x-model="f_address_m" class="form-control input-lg" placeholder="Municipality">
                                 </div>
                             </div>
                         </div>
                         <div class="row" style="text-align: left">
                             <div class="col-xs-12 col-sm-6 col-md-12">
                                 <div class="form-group">
-                                    <label for="address_zip">Zipcode:</label>
-                                    <input type="number" name="address_zip" id="address_zip" x-ref="address_zip" class="form-control input-lg" placeholder="Zipcode">
+                                    <label for="f_address_zip">Zipcode:</label>
+                                    <input type="number" name="f_address_zip" id="f_address_zip" x-model="f_address_z" class="form-control input-lg" placeholder="Zipcode">
                                 </div>
                             </div>
                         </div>
@@ -137,14 +148,14 @@
                         <div class="row" style="text-align: left">
                             <div class="col-xs-12 col-sm-6 col-md-6">
                                 <div class="form-group" >
-                                <label for="guardian_fname">Full Name:</label>
-                                    <input type="text" name="guardian_fname" id="guardian_fname" x-ref="guardian_fname" class="form-control input-lg" placeholder="Full Name">
+                                <label for="f_guardian_fname">Full Name:</label>
+                                    <input type="text" name="f_guardian_fname" id="f_guardian_fname" x-model="f_guardian_fn" class="form-control input-lg" placeholder="Full Name">
                                 </div>
                             </div>
                             <div class="col-xs-12 col-sm-6 col-md-6">
                                 <div class="form-group">
-                                    <label for="guardian_contact">Contact Number:</label>
-                                    <input type="number" name="guardian_contact" id="guardian_contact" x-ref="guardian_contact" class="form-control input-lg" placeholder="Contact Number">
+                                    <label for="f_guardian_contact">Contact Number:</label>
+                                    <input type="number" name="f_guardian_contact" id="f_guardian_contact" x-model="f_guardian_c" class="form-control input-lg" placeholder="Contact Number">
                                 </div>
                             </div>
                         </div>
@@ -155,77 +166,85 @@
                 <!-- PAGE 3 -->
                 <div class="formG" style="display: none; flex-direction: row; gap: 40px; justify-content: center" x-show="info_no_farmer == 3" style="display: none;">
                     <div style="width: 100%; padding: 0 20px 0 20px">
-                        <h3 style="font-weight: bold">Coordinators Address</h3>
+                        <h3 style="font-weight: bold">Farmers Address</h3>
                         <hr>
                         <div class="row" style="text-align: left">
                         <div class="column">
                             <div class="col-xs-12 col-sm-6 col-md-12">
                                     <div class="form-group" >
-                                    <label for="address_street">Provincial Address:</label>
-                                        <input type="text" name="address_street" id="address_street"  x-ref="address_street" class="form-control input-lg" placeholder="Street/Subdiv/Sitio">
+                                    <label for="f_address_street">Provincial Address:</label>
+                                        <input type="text" name="f_address_street" id="f_address_street"  x-model="f_address_s" class="form-control input-lg" placeholder="Street/Subdiv/Sitio">
                                     </div>
                             </div>
                         </div>
                             <div class="col-xs-12 col-sm-6 col-md-6">
                                 <div class="form-group" >
-                                <label for="address_barangay">Barangay:</label>
-                                    <input type="text" name="address_barangay" id="address_barangay" x-ref="address_barangay" class="form-control input-lg" placeholder="Barangay">
+                                <label for="f_address_barangay">Barangay:</label>
+                                    <input type="text" name="f_address_barangay" id="f_address_barangay" x-model="f_address_b" class="form-control input-lg" placeholder="Barangay">
                                 </div>
                             </div>
                             <div class="col-xs-12 col-sm-6 col-md-6">
                                 <div class="form-group" >
-                                <label for="address_municipality">Municipality:</label>
-                                    <input type="text" name="address_municipality" id="address_municipality" x-ref="address_municipality" class="form-control input-lg" placeholder="Municipality">
+                                <label for="f_address_municipality">Municipality:</label>
+                                    <input type="text" name="f_address_municipality" id="f_address_municipality" x-model="f_address_m" class="form-control input-lg" placeholder="Municipality">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="text-align: left">
+                            <div class="col-xs-12 col-sm-6 col-md-12">
+                                <div class="form-group">
+                                    <label for="f_farm_area">Total farm area:</label>
+                                    <input type="number" name="f_farm_area" id="f_farm_area" x-model="f_farm_a" class="form-control input-lg" placeholder="Total farm area">
                                 </div>
                             </div>
                         </div>
                         <br>
-                        <h3 style="font-weight: bold">Coordinators Login Information</h3>
+                        <h3 style="font-weight: bold">Farmers Login Information</h3>
                         <hr>
                         <div class="row" style="text-align: left">
                             <div class="col-xs-12 col-sm-6 col-md-6">
                             <div class="form-group">
-                                <label for="username">Email:</label>
-                                <input type="username" name="username" id="username" x-ref="username" class="form-control input-lg" placeholder="Email">
+                                <label for="f_username">Email:</label>
+                                <input type="text" name="f_username" id="f_username" x-model="f_user_n" class="form-control input-lg" placeholder="Email">
                             </div>
                             </div>
                             <div class="col-xs-12 col-sm-6 col-md-6">
                                 <div class="form-group">
-                                    <label for="secret_phrase">Secret Phrase:</label>
+                                    <label for="f_secret_phrase">Secret Phrase:</label>
                                     <div class="buttonIn">
-                                        <input type="text" id="enter" name="secret_phrase" x-ref="secret_phrase" class="form-control input-lg" placeholder="Secret Phrase" autocomplete=off>
+                                        <input type="text" id="f_secret_phrase" name="f_secret_phrase" x-model="f_secret_p" class="form-control input-lg" placeholder="Secret Phrase" autocomplete=off>
                                         <button type="button" id="clear" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em; display: inline" x-on:click="generate_secret_phrase">Generate</button>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xs-12 col-sm-6 col-md-6">
+                            <div class="col-xs-12 col-sm-6 col-md-6" style="display: none">
                                 <div class="form-group">
                                     <label for="password">Password:</label>
-                                    <input type="password" name="password" id="password" x-ref="password" class="form-control input-lg" placeholder="Password">
+                                    <input type="password" name="password" id="password" x-model="password" class="form-control input-lg" placeholder="Password">
                                 </div>
                             </div>
-                            <div class="col-xs-12 col-sm-6 col-md-6">
+                            <div class="col-xs-12 col-sm-6 col-md-6" style="display: none">
                                 <div class="form-group">
                                     <label for="confirmPassword">Confirm Password:</label>
-                                    <input type="password" name="confirmPassword" id="confirmPassword" x-ref="confirmPassword" class="form-control input-lg" placeholder="Confirm Password">
+                                    <input type="password" name="confirmPassword" id="confirmPassword" x-model="confirmPassword" class="form-control input-lg" placeholder="Confirm Password">
                                 </div>
                             </div>
                             <div class="col-xs-12 col-sm-6 col-md-6" style="display: none">
                                 <div class="form-group">
                                     <label for="role">Role:</label>
-                                    <input type="password" name="role" id="role" x-ref="role" class="form-control input-lg" placeholder="Confirm Password">
+                                    <input type="password" name="role" id="role" x-model="role" class="form-control input-lg" placeholder="Confirm Password">
                                 </div>
                             </div>
                             <div class="col-xs-12 col-sm-6 col-md-6" style="display: none">
                                 <div class="form-group">
                                     <label for="status">Status:</label>
-                                    <input type="password" name="status" id="status" x-ref="status" class="form-control input-lg" placeholder="Confirm Password">
+                                    <input type="password" name="status" id="status" x-model="status" class="form-control input-lg" placeholder="Confirm Password">
                                 </div>
                             </div>
                         </div>
                     <br>
                     </div>
-                    <button type="button" class="btn btn-success" style="width: 50%" x-ref="submit_personnel_button" x-on:click="submit_personnel_form">Update</button>
+                    <button type="button" class="btn btn-success" style="width: 50%" x-ref="submit_farmer_button" x-on:click="update_farmer_details">Update</button>
                     <br>
                 </div>
                 <hr>

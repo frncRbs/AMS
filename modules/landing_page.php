@@ -1990,7 +1990,7 @@
                                 }
                                 else if(response.data == 4){
                                     this.error_landing = true;
-                                    this.landing_page_msg = 'Invalid email, please pick another!';
+                                    this.landing_page_msg = 'Invalid email format!';
                                     setTimeout(() => {
                                         this.error_landing = false;
                                         this.landing_page_msg = '';

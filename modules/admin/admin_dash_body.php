@@ -1,5 +1,6 @@
 <?php
     include_once('../../includes/header.php');
+    // session_start();
 ?>
     
         <?php include('show_farmer_request_modal.php'); ?>
@@ -285,7 +286,7 @@
                     <hr>
                     <div class="col-lg-12 col-md-12 col-sm-12 right">
                         <div class="form-group">
-                            <textarea class="form-control form-control-lg" placeholder="Enter reason here..."></textarea>
+                            <textarea class="form-control form-control-lg" x-ref="decline_message" placeholder="Enter reason here..."></textarea>
                         </div>
                         <br>
                         <!-- <input type="text" x-model="r_request_id"> -->
@@ -300,7 +301,7 @@
         </div>
 
         <!-- Deactivate Personnel/Farmer Service Request Prompt -->
-        <div class="popupDecline_request" x-show="show_deactivate_request_form" style="display: none">
+        <div class="popupDecline_request" x-show="show_deactivate_personnel_account_form" style="display: none">
             <div class="popup-contentDecline_request">
                 <div class="popup-child1" style="margin-bottom: 5px; display: flex; flex-direction: column">
                     <div>
@@ -309,6 +310,25 @@
                     <hr>
                     <div style="display: flex; justify-content: space-around">
                         <button type="button" class="btn btn-success" style="max-width: 100%" x-on:click="deactivate_personnel_account">Yes</button>
+                        <button type="button" class="btn btn-danger" style="max-width: 100%" x-on:click="confirm_reset">No</button>
+                    </div>
+                </div>
+                <div class="popup-child2">
+                    <a id="errorClose" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="confirm_reset">X</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Deactivate Personnel/Farmer Service Request Prompt -->
+        <div class="popupDecline_request" x-show="show_deactivate_farmer_account_form" style="display: none">
+            <div class="popup-contentDecline_request">
+                <div class="popup-child1" style="margin-bottom: 5px; display: flex; flex-direction: column">
+                    <div>
+                        <h2 style="font-weight: bolder">Are you sure you want to deactivate? <span x-text="f_firstname"></span></h2>
+                    </div>
+                    <hr>
+                    <div style="display: flex; justify-content: space-around">
+                        <button type="button" class="btn btn-success" style="max-width: 100%" x-on:click="deactivate_farmer_account">Yes</button>
                         <button type="button" class="btn btn-danger" style="max-width: 100%" x-on:click="confirm_reset">No</button>
                     </div>
                 </div>
@@ -373,7 +393,7 @@
                             <div class="printGrp" style="display: flex; flex-direction: row; gap: 20px; justify-content: flex-end; padding: 15px 0 15px 0; 
                             margin-top: 10px; flex-wrap: wrap; background: #2f323a; position: relative ">
                                 <div style="left: 10px; position: absolute">
-                                    <h3 style="font-weight: bolder; color: white">WELCOME <?php echo strtoupper($_SESSION["login_username"]); ?></h3>
+                                    <h3 style="font-weight: bolder; color: white">WELCOME <?php echo strtoupper($_SESSION["user_firstname"]); ?></h3>
                                 </div> 
                                 <div style="margin: 0 10px 0 0;">
                                     <button class="btn btn-success">Generate Report</button>
@@ -502,7 +522,8 @@
                 show_decline_request_form: false,
                 show_decline_account_regform: false,
                 show_approve_account_regform: false,
-                show_deactivate_request_form: false,
+                show_deactivate_personnel_account_form: false,
+                show_deactivate_farmer_account_form: false,
                 show_success_update_form: false,
                 show_home_content_form: false,
                 show_home_image_form: false,
@@ -552,6 +573,7 @@
                 p_role: '',
                 p_is_active: '',
 
+                // CURRENT USER DETAILS
                 cu_full_name: '',
                 cu_firstname: '',
                 cu_middlename: '',
@@ -583,6 +605,33 @@
                 cu_contact_text: '',
                 
                 // CURRENT FARMER DETAILS
+                f_full_name: '',
+                f_firstname: '',
+                f_middlename: '',
+                f_lastname: '',
+                f_role_s: '',
+                f_birth_d: '',
+                f_civil_s: '',
+                f_sex: '',
+                f_contact: '',
+                f_religion: '',
+                f_birth_p: '',
+                f_address_s: '',
+                f_address_b: '',
+                f_address_m: '',
+                f_address_z: '',
+                f_guardian_fn: '',
+                f_guardian_c: '',
+                f_farm_t: '',
+                f_farm_b: '',
+                f_farm_m: '',
+                f_farm_a: '',
+                f_user_n: '',
+                f_secret_p: '',
+                f_status: '',
+                f_is_active: '',
+                f_id: '',
+
 
                 initialize_registry(){
                     this.registry_records  = '<?php  
@@ -694,7 +743,8 @@
                     this.show_services_form = false;
                     this.show_services_form = false;
                     this.show_success_registration_form = false;
-                    this.show_deactivate_request_form = false,
+                    this.show_deactivate_personnel_account_form = false,
+                    this.show_deactivate_farmer_account_form = false,
                     this.show_decline_request_form = false;
                     this.show_success_update_form = false;
                 },
@@ -759,7 +809,7 @@
                                 }
                                 else if(response.data.status == 4){
                                     this.error_admin = true;
-                                    this.admin_error_msg = 'Invalid email, please pick another!';
+                                    this.admin_error_msg = 'Invalid email format!';
                                     setTimeout(() => {
                                         this.error_admin = false;
                                         this.admin_error_msg = '';
@@ -1002,7 +1052,7 @@
                 },
 
                 async get_services_crops(){
-                    await axios.get("../../controller/farmer/get_crops_services.php")
+                    await axios.get("../../controller/admin/get_crops_services.php")
                     .then((response)=>{
                         this.crops = (response.data.crops);
                         this.services = (response.data.services);
@@ -1070,11 +1120,14 @@
                         request_id: request_id,
                         user_id: user_id,
                         request_type: request_type,
+
                     };
+
                     await axios.post('../../controller/admin/delete_farmer_request.php', data, options)
                     .then((response) => {
                         // console.log(response.data.requests);
                         if(response.data.requests.length == 0){
+
                             window.location = '<?php echo LOCATION; ?>modules/admin/admin_dash_body.php';
                         }
                         else{
@@ -1324,7 +1377,6 @@
                             }
                             else if(response.data.status == 2){
                                 //error msg
-                                this.$refs.update_personnel_button.disabled = false;
                                 this.admin_error_msg = 'Contact No. should start from 09 and eleven digit max!';
                                 setTimeout(() => {
                                     this.error_admin = false;
@@ -1334,7 +1386,7 @@
                             else if(response.data.status == 3){
                                 //error msg
                                 this.error_admin = true;
-                                this.admin_error_msg = 'Invalid email, please pick another!';
+                                this.admin_error_msg = 'Invalid email format!';
                                 setTimeout(() => {
                                     this.error_admin = false;
                                     this.admin_error_msg = '';
@@ -1366,9 +1418,55 @@
                     await axios.post('../../controller/admin/deactivate_personnel_account.php', data, options)
                     .then((response) => {
                         // console.log(response.data);
-                        this.info_no = 1;
-                        this.personnel_details = response.data.personnel_update;
-                        this.show_deactivate_request_form = false;
+                        if(response.data.status = 'true'){
+                            this.info_no = 1;
+                            this.personnel_details = response.data.personnel_update;
+                            this.show_deactivate_personnel_account_form = false;
+
+                            this.admin_success_msg = 'Personnel account successfully deactivated!';
+                            setTimeout(() => {
+                                this.error_admin = false;
+                                this.admin_success_msg = '';
+                            }, 2000);
+                        }else{
+                            this.admin_error_msg = 'Cannot deactivate the account!';
+                            setTimeout(() => {
+                                this.error_admin = false;
+                                this.admin_error_msg = '';
+                            }, 2000);
+                        }
+                    });
+                },
+
+                async deactivate_farmer_account(){
+                    const options = {
+                        xsrfHeaderName: 'X-XSRF-TOKEN',
+                        xsrfCookieName: 'XSRF-TOKEN',
+                    };
+                    let data = {
+                        id: this.f_id,
+                        is_active: this.f_is_active,
+                    };
+                    await axios.post('../../controller/admin/deactivate_farmer_account.php', data, options)
+                    .then((response) => {
+                        // console.log(response.data);
+                        if(response.data.status = 'true'){
+                            this.info_no = 1;
+                            this.user_details = response.data.farmer_update;
+                            this.show_deactivate_farmer_account_form = false;
+
+                            this.admin_success_msg = 'Farmer registration successfully declined!';
+                            setTimeout(() => {
+                                this.error_admin = false;
+                                this.admin_success_msg = '';
+                            }, 2000);
+                        }else{
+                            this.admin_error_msg = 'Cannot decline the account!';
+                            setTimeout(() => {
+                                this.error_admin = false;
+                                this.admin_error_msg = '';
+                            }, 2000);
+                        }
                     }); 
                 },
 
@@ -1384,9 +1482,52 @@
                     await axios.post('../../controller/admin/activate_personnel_account.php', data, options)
                     .then((response) => {
                         // console.log(response.data);
-                        this.info_no = 1;
-                        this.personnel_details = response.data.personnel_update;
-                        this.show_deactivate_request_form = false;
+                        if(response.data.status = 'true'){
+                            this.info_no = 1;
+                            this.personnel_details = response.data.personnel_update;
+
+                            this.admin_success_msg = 'Account successfully activated!';
+                            setTimeout(() => {
+                                this.error_admin = false;
+                                this.admin_success_msg = '';
+                            }, 2000);
+                        }else{
+                            this.admin_error_msg = 'Cannot activate the account!';
+                            setTimeout(() => {
+                                this.error_admin = false;
+                                this.admin_error_msg = '';
+                            }, 2000);
+                        }
+                    }); 
+                },
+
+                async activate_farmer_account(){
+                    const options = {
+                        xsrfHeaderName: 'X-XSRF-TOKEN',
+                        xsrfCookieName: 'XSRF-TOKEN',
+                    };
+                    let data = {
+                        id: this.f_id,
+                        is_active: this.f_is_active,
+                    };
+                    await axios.post('../../controller/admin/activate_farmer_account.php', data, options)
+                    .then((response) => {
+                        // console.log(response.data);
+                        if(response.data.status = 'true'){
+                            this.info_no = 1;
+                            this.user_details = response.data.farmer_update;
+                            this.admin_success_msg = 'Account successfully activated!';
+                            setTimeout(() => {
+                                this.error_admin = false;
+                                this.admin_success_msg = '';
+                            }, 2000);
+                        }else{
+                            this.admin_error_msg = 'Cannot activate the account!';
+                            setTimeout(() => {
+                                this.error_admin = false;
+                                this.admin_error_msg = '';
+                            }, 2000);
+                        }
                     }); 
                 },
 
@@ -1439,8 +1580,7 @@
                 },
 
                 async update_current_user_details(){
-                    console.log();
-                    if(this.cu_firstname && this.cu_middlename && this.cu_lastname && this.cu_contact && this.cu_birth_d && this.cu_birth_p && this.cu_sex && this.cu_religion && this.cu_address_s && this.cu_address_b && this.cu_address_m && this.cu_address_z && this.cu_guardian_fn && this.cu_guardian_c && this.cu_farm_t && this.cu_farm_b && this.cu_farm_m && this.cu_farm_a && this.cu_user_n && this.cu_civil_s){
+                    if(this.cu_firstname && this.cu_middlename && this.cu_lastname && this.cu_contact && this.cu_birth_d && this.cu_role_s && this.cu_birth_p && this.cu_sex && this.cu_religion && this.cu_address_s && this.cu_address_b && this.cu_address_m && this.cu_address_z && this.cu_guardian_fn && this.cu_guardian_c && this.cu_farm_t && this.cu_farm_b && this.cu_farm_m && this.cu_farm_a && this.cu_user_n && this.cu_civil_s){
                         const options = {
                         xsrfHeaderName: 'X-XSRF-TOKEN',
                         xsrfCookieName: 'XSRF-TOKEN',
@@ -1482,9 +1622,7 @@
                             }
                             else if(response.data.status == 2){
                                 //error msg
-                                this.$refs.update_personnel_button.disabled = false;
                                 this.admin_error_msg = 'Contact No. should start from 09 and eleven digit max!';
-
                                 setTimeout(() => {
                                     this.error_admin = false;
                                     this.admin_error_msg = '';
@@ -1493,7 +1631,7 @@
                             else if(response.data.status == 3){
                                 //error msg
                                 this.error_admin = true;
-                                this.admin_error_msg = 'Invalid email, please pick another!';
+                                this.admin_error_msg = 'Invalid email format!';
                                 setTimeout(() => {
                                     this.error_admin = false;
                                     this.admin_error_msg = '';
@@ -1512,6 +1650,112 @@
                             this.admin_error_msg = '';
                         }, 2000);
                     }
+                },
+
+                async update_farmer_details(){
+                    
+                    if(this.f_firstname && this.f_middlename && this.f_lastname && this.f_contact && this.f_role_s && this.f_birth_d && this.f_birth_p && this.f_sex && this.f_religion && this.f_address_s && this.f_address_b && this.f_address_m && this.f_address_z && this.f_guardian_fn && this.f_guardian_c && this.f_farm_t && this.f_farm_b && this.f_farm_m && this.f_farm_a && this.f_user_n && this.f_civil_s){
+                        const options = {
+                        xsrfHeaderName: 'X-XSRF-TOKEN',
+                        xsrfCookieName: 'XSRF-TOKEN',
+                        };
+                        let data = {
+                            first_name: this.f_firstname,
+                            middle_name: this.f_middlename,
+                            last_name: this.f_lastname,
+                            role_service: this.f_role_s,
+                            birth_date: this.f_birth_d,
+                            civil_status: this.f_civil_s,
+                            sex: this.f_sex,
+                            contact_no: this.f_contact,
+                            religion: this.f_religion,
+                            birth_place: this.f_birth_p,
+                            address_street: this.f_address_s,
+                            address_barangay: this.f_address_b,
+                            address_municipality: this.f_address_m,
+                            address_zip: this.f_address_z,
+                            guardian_fname: this.f_guardian_fn,
+                            guardian_contact: this.f_guardian_c,
+                            farm_type: this.f_farm_t,
+                            farm_barangay: this.f_farm_b,
+                            farm_municipality: this.f_farm_m, 
+                            farm_area: this.f_farm_a, 
+                            username: this.f_user_n,
+                            // secret_phrase: this.f_secret_p,
+                            id: this.f_id,
+                        };
+                        
+                        await axios.post('../../controller/admin/update_farmer_details.php', data, options)
+                        .then((response) => {
+                            console.log(response.data);
+                            if(response.data.status == 'true') {
+                                this.info_no = 1;
+                                this.user_details = response.data.farmer_update;
+                                this.update_farmer_registration_form = false;
+                                this.show_success_update_form = true;
+                            }
+                            else if(response.data.status == 2){
+                                //error msg
+                                this.admin_error_msg = 'Contact No. should start from 09 and eleven digit max!';
+
+                                setTimeout(() => {
+                                    this.error_admin = false;
+                                    this.admin_error_msg = '';
+                                }, 2000);
+                            }
+                            else if(response.data.status == 3){
+                                //error msg
+                                this.error_admin = true;
+                                this.admin_error_msg = 'Invalid email format!';
+                                setTimeout(() => {
+                                    this.error_admin = false;
+                                    this.admin_error_msg = '';
+                                }, 2000);
+                            }
+                        });
+                    }
+                    else{
+                        // console.log(response.data);
+                        this.error_admin = true;
+                        this.admin_error_msg = 'Please fill in all required fields!';
+
+                        setTimeout(() => {
+                            this.error_admin = false;
+                            this.admin_error_msg = '';
+                        }, 2000);
+                    }
+                },
+
+                async approve_farmer_account(){
+                    const options = {
+                        xsrfHeaderName: 'X-XSRF-TOKEN',
+                        xsrfCookieName: 'XSRF-TOKEN',
+                    };
+                    let data = {
+                        id: this.f_id,
+                        status: this.f_status,
+                    };
+                    await axios.post('../../controller/admin/approve_farmer_registration.php', data, options)
+                    .then((response) => {
+                        // console.log(response.data);
+                        if(response.data.status = 'true'){
+                            this.info_no = 1;
+                            this.user_details = response.data.farmer_update;
+                            this.admin_success_msg = 'Farmer registration approved!';
+
+                            setTimeout(() => {
+                                this.error_admin = false;
+                                this.admin_success_msg = '';
+                            }, 2000);
+                        }else{
+                            this.admin_error_msg = 'Cannot approve this account!';
+                            
+                            setTimeout(() => {
+                                this.error_admin = false;
+                                this.admin_error_msg = '';
+                            }, 2000);
+                        }
+                    }); 
                 },
 
                 // Pagination Javascript

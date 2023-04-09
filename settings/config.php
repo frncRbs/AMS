@@ -1,6 +1,7 @@
 <?php
     session_start();
     require ('custom.php');
+    
 
     define("HOST",              "localhost");
     define("LOCATION",          "http://".HOST."/AMS/");

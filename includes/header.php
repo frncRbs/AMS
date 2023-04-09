@@ -941,12 +941,11 @@
                     <!-- FOR CURRENT LOGGED USER -->
                     <!-- <h3><?php echo $_SESSION["login_username"]; ?></h3> -->
                 </div>
-
                 <div class="right_area">
                     <a type="button" class="user_btn" x-on:click="get_current_user_details()"><i class="fas fa-user"></i></a>
                 </div>
                 <div class="right_area">
-                    <a type="button" class="notif_btn" x-on:click="show_user_profile_form = true"><i class="fas fa-bell" ></i></a>
+                    <a type="button" class="notif_btn"><i class="fas fa-bell" ></i></a>
                 </div>
                 <div class="right_area">
                     <a href="<?php echo LOCATION;?>settings/logout.php"  class="logout_btn">Logout</a>

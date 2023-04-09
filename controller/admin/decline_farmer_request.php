@@ -13,11 +13,13 @@
         $request_id = $obj['request_id'];
         $user_id = $obj['user_id'];
         $request_type = $obj['request_type'];
+        $decline_message = $obj['decline_message'];
+        $request_status = 2;
 
 
         // Delete record
-        $sql_d = $db->prepare("DELETE FROM requests_registry WHERE request_id = :request_id");
-        $return_value = ($sql_d->execute(array(':request_id' => $request_id))) ? $return_value = 'true' : $return_value = 'Something went wrong. Cannot saved record.';
+        $sql_d = $db->prepare("UPDATE requests_registry SET request_status = :request_status, declination_message = :declination_message WHERE request_id = :request_id");
+        $return_value = ($sql_d->execute(array(':request_status' => $request_status, ':declination_message' => $decline_message,':request_id' => $request_id))) ? $return_value = 'true' : $return_value = 'Something went wrong. Cannot saved record.';
 
         // Retrieve updated record
         $sql = $db->prepare("SELECT * FROM requests_registry WHERE user_id = :user_id ORDER BY date_requested DESC");

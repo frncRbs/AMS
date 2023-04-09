@@ -605,7 +605,7 @@ button.createbtn i {
                                             <div class="form-group">
                                                 <label for="cu_secret_phrase" style="font-size: 14px">Secret Phrase: (Use to change Password)</label>
                                                 <div class="buttonIn">
-                                                    <input type="text" id="enter" name="cu_secret_phrase" x-model="cu_secret_p" class="form-control input-lg" placeholder="Secret Phrase" autocomplete=off>
+                                                    <input type="text" id="enter" name="cu_secret_phrase" x-ref="secret_phrase"  x-model="cu_secret_p" class="form-control input-lg" placeholder="Secret Phrase" autocomplete=off>
                                                     <button type="button" id="clear" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em; display: inline" x-on:click="generate_secret_phrase">Generate</button>
                                                 </div>
                                             </div>

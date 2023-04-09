@@ -15,6 +15,7 @@
         $user_exists = false;
         $user_role = '';
         $is_verified = '';
+        $is_active = '';
 
         $sql = $db->prepare("SELECT * FROM user WHERE username = :username");
         $sql->execute(array(':username' => $username));
@@ -24,6 +25,7 @@
             if(strtolower($password) == decrypt_ams($users['password'])){
                 $user_exists = true;
                 $is_verified = $users['status'];
+                $is_active = $users['is_active'];
                 $user_role = $users['role'];
 
                 // Set session variable for logged user
@@ -40,14 +42,18 @@
 
         if($user_exists){
             if($is_verified){
-                if($user_role == 'Admin'){
-                    $return_value = 1; //Admin
-                }
-                else if($user_role == 'Personnel'){
-                    $return_value = 2; // User/Personnel
-                }
-                else if($user_role == 'Farmer'){
-                    $return_value = 3; // Farmer
+                if($is_active){
+                    if($user_role == 'Admin'){
+                        $return_value = 1; //Admin
+                    }
+                    else if($user_role == 'Personnel'){
+                        $return_value = 2; // User/Personnel
+                    }
+                    else if($user_role == 'Farmer'){
+                        $return_value = 3; // Farmer
+                    }
+                }else{
+                    $return_value = 5; // Deactivated
                 }
             }
             else {

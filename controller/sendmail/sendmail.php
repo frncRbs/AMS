@@ -6,8 +6,8 @@
     use PHPMailer\PHPMailer\SMTP;
     use PHPMailer\PHPMailer\Exception;
 
-    // $database = new Connection();
-    // $db = $database->open();
+    $database = new Connection();
+    $db = $database->open();
 
     require ('../../plugins/PHPMailer/src/Exception.php');
     require ('../../plugins/PHPMailer/src/PHPMailer.php');
@@ -15,9 +15,15 @@
 
     // Receive data from axios post
     $obj = json_decode(file_get_contents('php://input'), TRUE);
-    $request_email = $obj['email'];
+
+    // Retrieve email from database using user id
+    $sql = $db->prepare("SELECT first_name, username FROM user WHERE id = :id");
+    $sql->execute(array(':id' => $obj['user_id']));
+    $farmer = $sql->fetch();
+
+    $request_email = $farmer['username'];
     $mail_subject= $obj['subject'];
-    $mail_message = $obj['message'];
+    $mail_message = '<b> Hello '.$farmer['first_name'].',</b> <br/><br/>'.$obj['message'].'<br/><br/> Regards, <br/> <b>Ayala District Agriculture Office</b>' ;
 
     $mail = new PHPMailer(true);
 
@@ -35,8 +41,13 @@
     $mail->isHTML(true);
 
     $mail->Subject = $mail_subject;
-    $mail->Body = $mail_message;
-    $mail->send();
-
-    echo true;
+    $mail->AddEmbeddedImage('../../assets/images/LOGO.png', 'ADAO_image',);
+    $mail->Body = '<img src="cid:ADAO_image">'.$mail_message;
+    
+    if($mail->send()){
+        echo 'true';
+    }
+    else{
+        echo 'false';
+    };
 ?>

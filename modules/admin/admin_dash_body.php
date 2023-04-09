@@ -14,6 +14,8 @@
         <?php include('edit_farmer_details_modal.php'); ?>
         <?php include('show_user_profile_modal.php'); ?>
         <?php include('loading_modal.php'); ?>
+        <?php include('decline_request_modal.php'); ?>
+        <?php include('register_farmer_modal.php'); ?>
 
     <!-- <div> -->
         <div class="sidebar">
@@ -27,6 +29,7 @@
                 <li class="dash" style="z-index: 10;">
                     <a href="#"><i class="fas fa-cogs"></i><span>Features</span></a>
                     <ul>
+                        <li><a type="button" x-on:click="show_farmer_registration_form = true"  style="color: white"><i class="fas fa-user-plus"></i><span>Register Farmer</span></a></li>
                         <li><a type="button" x-on:click="show_personnel_registration_form = true"  style="color: white"><i class="fas fa-user-plus"></i><span>Register Coordinator</span></a></li>
                         <li class="dash_two split"><a href="#"><i class="fas fa-plus-square"></i><span>Set Program</span></a>
                     <ul>
@@ -43,8 +46,9 @@
             </nav>
         <nav class="nav2">
             <ul>
+                <li><a type="button" style="color: white" x-on:click="get_current_user_details()"><i class="fas fa-user-circle"></i><span>Profile</span></a></li>
                 <li class="dropdown">
-                <a href="#"><i class="fas fa-tools"></i><span>Home Features</span></a>
+                <a type="button" style="color: white"><i class="fas fa-tools"></i><span>Home Features</span></a>
                     <ul>
                         <li><a type="button" x-on:click="show_home_image_form = true" style="color: white"><i class="fas fa-wrench"></i><span style="font-size: 14px">Manage Home Image Carousell</span></a></li>
                         <li><a type="button" x-on:click="show_home_content_form = true" style="color: white"><i class="fas fa-wrench"></i><span style="font-size: 14px">Manage Home Title Content</span></a></li>
@@ -276,30 +280,6 @@
             </div>
         </div>
 
-        <!-- Decline Farmer Service Request Prompt -->
-        <div class="popupDecline_request" x-show="show_decline_request_form" style="display: none">
-            <div class="popup-contentDecline_request">
-                <div class="popup-child1" style="margin-bottom: 5px; display: flex; flex-direction: column">
-                    <div>
-                        <h1 style="font-weight: bolder">Reason of Declination!</h1>
-                    </div>
-                    <hr>
-                    <div class="col-lg-12 col-md-12 col-sm-12 right">
-                        <div class="form-group">
-                            <textarea class="form-control form-control-lg" x-ref="decline_message" placeholder="Enter reason here..."></textarea>
-                        </div>
-                        <br>
-                        <!-- <input type="text" x-model="r_request_id"> -->
-                    </div>
-                </div>
-                <br>
-                <button type="button" class="btn btn-success" style="width: 50%" x-on:click="delete_request(r_request_id, r_user_id, 'Crop')">Confirm</button>
-                <div class="popup-child2">
-                    <a id="errorClose" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="confirm_reset">X</a>
-                </div>
-            </div>
-        </div>
-
         <!-- Deactivate Personnel/Farmer Service Request Prompt -->
         <div class="popupDecline_request" x-show="show_deactivate_personnel_account_form" style="display: none">
             <div class="popup-contentDecline_request">
@@ -338,54 +318,6 @@
             </div>
         </div>
 
-        <!-- Decline Farmer Acccount Registration Prompt -->
-        <div class="popupDecline_Account_Reg" x-show="show_decline_account_regform" style="display: none">
-            <div class="popup-contentDecline_Account_Reg">
-                <div class="popup-child1" style="margin-bottom: 5px; display: flex; flex-direction: column">
-                    <div>
-                        <h1 style="font-weight: bolder">Reason of Declination!</h1>
-                    </div>
-                    <hr>
-                    <div class="col-lg-12 col-md-12 col-sm-12 right">
-                        <div class="form-group">
-                            <textarea class="form-control form-control-lg" placeholder="Enter reason here...">
-                        </textarea>
-                    </div>
-                    <br>
-                </div>
-                </div>
-                <br>
-                <button type="button" class="btn btn-success" style="width: 50%" x-on:click="">Confirm</button>
-                <div class="popup-child2">
-                    <a id="errorClose" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="confirm_reset">X</a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Approve Farmer Acccount Registration  Prompt -->
-        <div class="popupApprove_Account_Reg" x-show="show_approve_account_regform" style="display: none">
-            <div class="popup-contentApprove_Account_Reg">
-                <div class="popup-child1" style="margin-bottom: 5px; display: flex; flex-direction: column">
-                    <div>
-                        <h1 style="font-weight: bolder">Reason of Declination!</h1>
-                    </div>
-                    <hr>
-                    <div class="col-lg-12 col-md-12 col-sm-12 right">
-                        <div class="form-group">
-                            <textarea class="form-control form-control-lg" placeholder="Enter reason here...">
-                        </textarea>
-                    </div>
-                    <br>
-                </div>
-                </div>
-                <br>
-                <button type="button" class="btn btn-success" style="width: 50%" x-on:click="">Confirm</button>
-                <div class="popup-child2">
-                    <a id="errorClose" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="confirm_reset">X</a>
-                </div>
-            </div>
-        </div>
-
         <div class="content">
             <div class="container-fluid">
                 <div class="row-fluid" style="background-color: white; min-height: 600px; padding:10px;">
@@ -405,7 +337,7 @@
                                             <div class="card-box bg-blue">
                                                 <div class="inner">
                                                     <h3> 13436 </h3>
-                                                    <p> Total Number of Farmers </p>
+                                                    <p> Total Number of Registered Farmers</p>
                                                 </div>
                                                 <div class="icon">
                                                     <i class="fa fa-users" aria-hidden="true"></i>
@@ -417,7 +349,7 @@
                                             <div class="card-box bg-green">
                                                 <div class="inner">
                                                     <h3> 185358 </h3>
-                                                    <p> Total Number of Approved Request </p>
+                                                    <p> Total Number for registered Rice Crops</p>
                                                 </div>
                                                 <div class="icon">
                                                     <i class="fa fa-thumbs-up" aria-hidden="true"></i>
@@ -429,7 +361,7 @@
                                             <div class="card-box bg-orange">
                                                 <div class="inner">
                                                     <h3> 5464 </h3>
-                                                    <p> Total Number of Pending Request </p>
+                                                    <p> Total Number for registered Corn Crops</p>
                                                 </div>
                                                 <div class="icon">
                                                     <i class="fas fa-hourglass-start" aria-hidden="true"></i>
@@ -441,7 +373,7 @@
                                             <div class="card-box bg-red">
                                                 <div class="inner">
                                                     <h3> 723 </h3>
-                                                    <p> Total Number of Declined Request </p>
+                                                    <p> Total Number for registered High Value Crops </p>
                                                 </div>
                                                 <div class="icon">
                                                     <i class="fas fa-user-minus"></i>
@@ -482,7 +414,7 @@
                                                         <td><span x-text="get_farmer_sex(row.user_id)"></span></td>
                                                         <td><span x-text="row.date_requested"></span></td>
                                                         <td>
-                                                            <!-- <button class="btn btn-success" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="delete_request(row.request_id, row.user_id, 'Crop')">View</button> -->
+                                                            <!-- <button class="btn btn-success" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="decline_request(row.request_id, row.user_id, 'Crop')">View</button> -->
                                                             <button class="btn btn-success" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="show_farmer_request_form = true, get_farmer_records(row.user_id)">View</button>
                                                         </td>
                                                     </tr>
@@ -510,6 +442,7 @@
         Alpine.data('admin_side', () => ({
                 // MODAL-FORMS
                 show_personnel_registration_form: false,
+                show_farmer_registration_form: false,
                 update_personnel_registration_form: false,
                 update_farmer_registration_form: false,
                 show_crops_form: false,
@@ -726,6 +659,7 @@
                     this.show_personnel_registration_form = false;
                     this.update_personnel_registration_form = false;
                     this.update_farmer_registration_form = false;
+                    this.show_farmer_registration_form = false;
                 },
                 
                 exit_edit_home_features(){
@@ -840,6 +774,105 @@
                     else{
                         this.error_admin = true;
                         this.$refs.submit_personnel_button.disabled = false;
+                        this.admin_error_msg = 'Please fill in all required fields!';
+
+                        setTimeout(() => {
+                            this.error_admin = false;
+                            this.admin_error_msg = '';
+                        }, 2000);
+                    }
+                },
+
+                async register_farmer_details(){
+                    this.$refs.submit_personnel_button.disabled = false;
+                    if(this.$refs.f_first_name.value && this.$refs.f_middle_name.value && this.$refs.f_last_name.value && this.$refs.f_role_service.value && this.$refs.f_birth_date.value && this.$refs.f_civil_status.value && this.$refs.f_seggs.value && this.$refs.f_contact_no.value && this.$refs.f_rel.value && this.$refs.f_birth_place.value && this.$refs.f_address_street.value && this.$refs.f_address_barangay.value && this.$refs.f_address_municipality.value && this.$refs.f_address_zip.value && this.$refs.f_guardian_fname.value && this.$refs.f_guardian_contact.value && this.$refs.f_farm_type.value && this.$refs.f_farm_barangay.value && this.$refs.f_farm_municipality.value && this.$refs.f_farm_area.value && this.$refs.f_username.value && this.$refs.f_password.value && this.$refs.secret_phrase.value){
+                        if(this.$refs.f_password.value == this.$refs.f_confirmPassword.value){
+                            const options = {
+                                xsrfHeaderName: 'X-XSRF-TOKEN',
+                                xsrfCookieName: 'XSRF-TOKEN',
+                            }
+                            let data = {
+                                first_name: this.$refs.f_first_name.value,
+                                middle_name: this.$refs.f_middle_name.value,
+                                last_name: this.$refs.f_last_name.value,
+                                role_service: this.$refs.f_role_service.value,
+                                birth_date: this.$refs.f_birth_date.value,
+                                civil_status: this.$refs.f_civil_status.value,
+                                sex: this.$refs.f_seggs.value,
+                                contact_no: this.$refs.f_contact_no.value,
+                                religion: this.$refs.f_rel.value,
+                                birth_place: this.$refs.f_birth_place.value,
+                                address_street: this.$refs.f_address_street.value,
+                                address_barangay: this.$refs.f_address_barangay.value,
+                                address_municipality: this.$refs.f_address_municipality.value,
+                                address_zip: this.$refs.f_address_zip.value,
+                                guardian_fname: this.$refs.f_guardian_fname.value,
+                                guardian_contact: this.$refs.f_guardian_contact.value,
+                                farm_type: this.$refs.f_farm_type.value,
+                                farm_barangay: this.$refs.f_farm_barangay.value,
+                                farm_municipality: this.$refs.f_farm_municipality.value,
+                                farm_area: this.$refs.f_farm_area.value,
+                                username: this.$refs.f_username.value,
+                                password: this.$refs.f_password.value,
+                                secret_phrase: this.$refs.secret_phrase.value,
+                                role: this.$refs.f_role.value,
+                                status: this.$refs.f_status.value,
+                            }
+
+                            await axios.post('../../controller/admin/register_farmer.php', data, options)
+                            .then((response) => {
+                                console.log(response.data);
+                                this.$refs.submit_register_farmer_button.disabled = false;
+                                // console.log('Kini: ' + (response.data == true));
+                                if(response.data.status == 2) {
+                                    this.error_admin = true;
+                                    this.admin_error_msg = 'Email already taken!';
+                                    setTimeout(() => {
+                                        this.error_admin = false;
+                                        this.admin_error_msg = '';
+                                    }, 2000);
+                                }
+                                else if(response.data.status == 3){
+                                    this.error_admin = true;
+                                    this.admin_error_msg = 'Contact No. should start from 09 and eleven digit max!';
+                                    setTimeout(() => {
+                                        this.error_admin = false;
+                                        this.admin_error_msg = '';
+                                    }, 2000);
+                                }
+                                else if(response.data.status == 4){
+                                    this.error_admin = true;
+                                    this.admin_error_msg = 'Invalid email format!';
+                                    setTimeout(() => {
+                                        this.error_admin = false;
+                                        this.admin_error_msg = '';
+                                    }, 2000);
+                                }
+                                else if(response.data.status == 'true'){
+                                    this.info_no = 1;
+                                    this.show_farmer_registration_form = false;
+                                    this.show_success_registration_form = true;
+                                    this.user_details = response.data.farmer_update;
+                                }
+                            },
+                            (error) => {
+                                console.log(error);
+                            });
+
+                        }
+                        else{
+                            this.error_admin = true;
+                            this.admin_error_msg = 'Password do not match!';
+                            this.$refs.submit_register_farmer_button.disabled = false;
+                            setTimeout(() => {
+                                this.error_admin = false;
+                                this.admin_error_msg = '';
+                            }, 2000);
+                        }
+                    }
+                    else{
+                        this.error_admin = true;
+                        this.$refs.submit_register_farmer_button.disabled = false;
                         this.admin_error_msg = 'Please fill in all required fields!';
 
                         setTimeout(() => {
@@ -1110,8 +1143,8 @@
                     }); 
                 },
 
-                async delete_request(request_id, user_id, request_type){
-                    console.log(request_id);
+                async decline_request(request_id, user_id, request_type){
+                    this.$refs.declinerequest_button.disabled = true;
                     const options = {
                         xsrfHeaderName: 'X-XSRF-TOKEN',
                         xsrfCookieName: 'XSRF-TOKEN',
@@ -1120,20 +1153,40 @@
                         request_id: request_id,
                         user_id: user_id,
                         request_type: request_type,
-
+                        decline_message: this.$refs.decline_message.value,
                     };
 
-                    await axios.post('../../controller/admin/delete_farmer_request.php', data, options)
+                    let mail_data = {
+                        user_id: user_id,
+                        subject: request_type + ' REQUEST',
+                        message: this.$refs.decline_message.value,
+                    };
+                    this.show_loading_form = true;
+                    await axios.post('../../controller/admin/decline_farmer_request.php', data, options)
                     .then((response) => {
-                        // console.log(response.data.requests);
-                        if(response.data.requests.length == 0){
-
-                            window.location = '<?php echo LOCATION; ?>modules/admin/admin_dash_body.php';
-                        }
-                        else{
+                        if(response.data.status == 'true'){
                             this.farmer_records = response.data.requests;
                             this.show_decline_request_form = false;
+
+                            axios.post('../../controller/sendmail/sendmail.php', mail_data, options)
+                            .then((mail_response) => {
+                                console.log(mail_response.data);
+                                this.farmer_records = response.data.requests;
+                                setTimeout(() => {
+                                    this.show_loading_form = false;
+                                    this.$refs.declinerequest_button.disabled = false;
+                                    this.$refs.decline_message.value = '';
+                                }, 2000);
+                            });
                         }
+                        // if(response.data.requests.length == 0){
+
+                        //     window.location = '<?php echo LOCATION; ?>modules/admin/admin_dash_body.php';
+                        // }
+                        // else{
+                        //     this.farmer_records = response.data.requests;
+                        //     this.show_decline_request_form = false;
+                        // }
                         
                     }); 
                     // return crop_name ? crop_name : '';
@@ -1265,7 +1318,7 @@
                     };
 
                     // console.log(program_id, status, type);
-
+                    
                     await axios.post('../../controller/admin/update_farmer_request_status.php', data, options)
                     .then((response) => {
                         // console.log(response.data);
@@ -1273,7 +1326,7 @@
                             if(type == 'Crops'){
                                 this.crops = response.data.programs;
                             }
-                            else {
+                            else{
                                 this.services = response.data.programs;
                             }
                             // Success Messages
@@ -1871,22 +1924,6 @@
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-
-    <!-- <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script> -->
-
-    <!-- <script>
-        $(document).ready(function () {
-            $('#admintable').DataTable({
-                "aaSorting": [],
-                columnDefs: [{
-                orderable: false,
-                targets: [0,1,2,3,4,5,6,7,8,9]
-                }]
-            });
-            $('.dataTables_length').addClass('bs-select');
-        });
-    </script> -->
 
 <?php
     include_once('../../includes/footer.php');

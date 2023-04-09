@@ -1035,7 +1035,7 @@
                     <h1>Welcome Back!</h1>
                     <p>Login to continue your account.</p>
                     <span>
-                        <h3 style="color: red" x-text="landing_page_msg"></h3>
+                        <h3 style="color: red" x-text="landing_page_msg_error"></h3>
                     </span>
                         <div class="input-box">
                             <i class="fas fa-envelope"></i>
@@ -1074,7 +1074,7 @@
                 <div class="popup-child1">
                     <form>
                     <span>
-                        <h3 style="color: red" x-text="landing_page_msg"></h3>
+                        <h3 style="color: red" x-text="landing_page_msg_error"></h3>
                     </span>
                     <h1>Sign Up?</h1>
                         <div class="formG" style="display: flex; flex-direction: row; gap: 40px; justify-content: center" x-show="info_no == 1" style="display: none;">
@@ -1470,7 +1470,7 @@
                     <h1>Welcome Back!</h1>
                     <p>Let us verify your account.</p>
                     <span>
-                        <h3 style="color: red" x-text="landing_page_msg"></h3>
+                        <h3 style="color: red" x-text="landing_page_msg_error"></h3>
                     </span>
                     <div class="input-box">
                         <i class="fas fa-envelope"></i><input type="text" placeholder="Username" class="popIn" name="username_request" x-ref="username_request" required="">
@@ -1498,6 +1498,7 @@
                         <div style="display: flex; flex-direction: row; gap: 40px; justify-content: center">
                             <div style="width: 100%">
                                 <div class="row" style="text-align: left; display: flex; justify-content: center">
+                                    
                                     <div class="row">
                                     <div class="col-xs-12 col-sm-12 col-md-12" style="margin: 10px 0 10px;">
                                         <h2 style="font-weight: bold">Select one request</h2>
@@ -1532,7 +1533,8 @@
                             <h2 style="font-weight: bold">Request for crops</h2>
                             <hr>
                             <span>
-                                <h3 style="color: red" x-text="landing_page_msg"></h3>
+                                <h3 style="color: red" x-text="landing_page_msg_error"></h3>
+                                <h3 style="color: green" x-text="landing_page_msg_success"></h3>
                             </span>
                             <div class="row" style="text-align: left; display: flex; justify-content: center">
                                 <div class="column">
@@ -1588,7 +1590,8 @@
                             <h2 style="font-weight: bold">Request for services</h2>
                             <hr>
                             <span>
-                                <h3 style="color: red" x-text="landing_page_msg"></h3>
+                                <h3 style="color: red" x-text="landing_page_msg_error"></h3>
+                                <h3 style="color: green" x-text="landing_page_msg_success"></h3>
                             </span>
                             <div style="text-align: left; display: flex; justify-content: center; flex-direction: column; gap: 20px">
                                 <div>
@@ -1633,7 +1636,7 @@
                     <h1>Forgot your password?</h1><h3 class="xB-2" id="xB-2" style="position: absolute; top: 0px; right: 20px; cursor: pointer" x-on:click="exit_forgot_pass">X</h3>
                     <p>Enter your username and secret phrase to reset your password.</p>
                     <span>
-                        <h3 style="color: red" x-text="landing_page_msg"></h3>
+                        <h3 style="color: red" x-text="landing_page_msg_error"></h3>
                     </span>
                     <form>
                         <div class="input-box" style="width: 80%">
@@ -1664,7 +1667,7 @@
                     <h1>Reset your password.</h1> <h3 class="xB-1" id="xB-1" style="position: absolute; top: 0px; right: 20px; cursor: pointer" x-on:click="exit_forgot_pass">X</h3>
                     <p>Enter a new password for your account.</p>
                     <span>
-                        <h3 style="color: red" x-text="landing_page_msg"></h3>
+                        <h3 style="color: red" x-text="landing_page_msg_error"></h3>
                     </span>
                     <div class="input-box">
                         <i class="fas fa-key"></i><input type="password" placeholder="New password" id="inPass1-1" class="popIn-1" name="" x-ref="confirm_password" required>
@@ -1868,7 +1871,8 @@
                 show_success_registrationForm: false,
                 
                 error_landing: false,
-                landing_page_msg: '',
+                landing_page_msg_error: '',
+                landing_page_msg_success: '',
                 user_id: 0,
 
                 crops: [],
@@ -1974,26 +1978,26 @@
                                 console.log(response.data);
                                 if(response.data == 2) {
                                     this.error_landing = true;
-                                    this.landing_page_msg = 'Username already taken!';
+                                    this.landing_page_msg_error = 'Username already taken!';
                                     setTimeout(() => {
                                         this.error_landing = false;
-                                        this.landing_page_msg = '';
+                                        this.landing_page_msg_error = '';
                                     }, 2000);
                                 }
                                 else if(response.data == 3){
                                     this.error_landing = true;
-                                    this.landing_page_msg = 'Contact No. should start from 09 and eleven digit max!';
+                                    this.landing_page_msg_error = 'Contact No. should start from 09 and eleven digit max!';
                                     setTimeout(() => {
                                         this.error_landing = false;
-                                        this.landing_page_msg = '';
+                                        this.landing_page_msg_error = '';
                                     }, 2000);
                                 }
                                 else if(response.data == 4){
                                     this.error_landing = true;
-                                    this.landing_page_msg = 'Invalid email format!';
+                                    this.landing_page_msg_error = 'Invalid email format!';
                                     setTimeout(() => {
                                         this.error_landing = false;
-                                        this.landing_page_msg = '';
+                                        this.landing_page_msg_error = '';
                                     }, 2000);
                                 }
                                 else if(response.data == true){
@@ -2009,21 +2013,21 @@
                         }
                         else{
                             this.error_landing = true;
-                            this.landing_page_msg = 'Password do not match!';
+                            this.landing_page_msg_error = 'Password do not match!';
                             this.$refs.submit_farmer_button.disabled = true;
                             setTimeout(() => {
                                 this.error_landing = false;
-                                this.landing_page_msg = '';
+                                this.landing_page_msg_error = '';
                             }, 2000);
                         }
                     }
                     else{
                         this.error_landing = true;
-                        this.landing_page_msg = 'Please fill in all required fields!';
+                        this.landing_page_msg_error = 'Please fill in all required fields!';
 
                         setTimeout(() => {
                             this.error_landing = false;
-                            this.landing_page_msg = '';
+                            this.landing_page_msg_error = '';
                         }, 2000);
                     }
                 },
@@ -2044,42 +2048,43 @@
                         .then((response) => {
                             if (response.data == false) {
                                 this.$refs.login_button.disabled = false;
-                                this.landing_page_msg = 'Invalid Username or Password';
+                                this.landing_page_msg_error = 'Invalid Username or Password';
                                 
                                 setTimeout(() => {
-                                    this.landing_page_msg = '';
+                                    this.landing_page_msg_error = '';
                                 }, 2000);
                             }
                             else if(response.data == 1){
                                 window.location = 'modules/admin/admin_dash_body.php';
                             }
                             else if(response.data == 2){
-                                // window.location = '';
                                 window.location = 'modules/personnel/personnel_dash_body.php';
                             }
                             else if(response.data == 3){
                                 window.location = 'modules/personnel/personnel_dash_body.php';
-                                // this.$refs.login_button.disabled = false;
-                                // this.landing_page_msg = 'Account successfully Logged in!';
-
-                                // setTimeout(() => {
-                                //     this.landing_page_msg = '';
-                                // }, 2000);
                             }
                             else if(response.data == 4){
                                 this.$refs.login_button.disabled = false;
-                                this.landing_page_msg = 'Account is not yet verified!';
+                                this.landing_page_msg_error = 'Account is not yet verified!';
 
                                 setTimeout(() => {
-                                    this.landing_page_msg = '';
+                                    this.landing_page_msg_error = '';
+                                }, 2000);
+                            }
+                            else if(response.data == 5){
+                                this.$refs.login_button.disabled = false;
+                                this.landing_page_msg_error = 'Account is deactivated!';
+
+                                setTimeout(() => {
+                                    this.landing_page_msg_error = '';
                                 }, 2000);
                             }
                         });
                     }
                     else{
-                        this.landing_page_msg = 'Please fill in all required fields!';
+                        this.landing_page_msg_error = 'Please fill in all required fields!';
                         setTimeout(() => {
-                            this.landing_page_msg = '';
+                            this.landing_page_msg_error = '';
                         }, 2000);
                     };
                 },
@@ -2100,42 +2105,42 @@
                         .then((response) => {
                             this.$refs.verify_req_login_button.disabled = false;
                             if (response.data.return_status == 'false') {
-                                this.landing_page_msg = 'Invalid Username or Password!';
+                                this.landing_page_msg_error = 'Invalid Username or Password!';
                                 
                                 setTimeout(() => {
-                                    this.landing_page_msg = '';
+                                    this.landing_page_msg_error = '';
                                 }, 2000);
                             }
                             else if(response.data.return_status == true){
-                                this.landing_page_msg = 'Account successfully Logged in!';
+                                this.landing_page_msg_error = 'Account successfully Logged in!';
                                 this.show_login_requestForm = false;
                                 this.show_services_form = true;
                                 this.user_id = response.data.user_id; 
                                 setTimeout(() => {
-                                    this.landing_page_msg = '';
+                                    this.landing_page_msg_error = '';
                                 }, 2000);
                             }
                             else if(response.data.return_status == 2){
-                                this.landing_page_msg = 'You are not allowed to request!';
+                                this.landing_page_msg_error = 'You are not allowed to request!';
                                 
                                 setTimeout(() => {
-                                    this.landing_page_msg = '';
+                                    this.landing_page_msg_error = '';
                                 }, 2000);
                             }
                             else if(response.data.return_status == 3){
-                                this.landing_page_msg = 'You are not yet verified!';
+                                this.landing_page_msg_error = 'You are not yet verified!';
                                 
                                 setTimeout(() => {
-                                    this.landing_page_msg = '';
+                                    this.landing_page_msg_error = '';
                                 }, 2000);
                             }
                             console.log(response.data)
                         });
                     }
                     else{
-                        this.landing_page_msg = 'Please fill in all required fields!';
+                        this.landing_page_msg_error = 'Please fill in all required fields!';
                         setTimeout(() => {
-                            this.landing_page_msg = '';
+                            this.landing_page_msg_error = '';
                         }, 2000);
                     };
                     
@@ -2171,17 +2176,17 @@
                             }
                             else {
                                 this.$refs.verify_secret_phrase_button.disabled = false;
-                                this.landing_page_msg = 'Invalid Secret Phrase or Username!';      
+                                this.landing_page_msg_error = 'Invalid Secret Phrase or Username!';      
                                 setTimeout(() => {
-                                    this.landing_page_msg = '';
+                                    this.landing_page_msg_error = '';
                                 }, 2000);
                             }
                         });
                     }
                     else{
-                        this.landing_page_msg = 'Please fill in all required fields!';
+                        this.landing_page_msg_error = 'Please fill in all required fields!';
                         setTimeout(() => {
-                            this.landing_page_msg = '';
+                            this.landing_page_msg_error = '';
                         }, 2000);
                     }
                 },
@@ -2210,17 +2215,17 @@
                             });
                         }
                         else{
-                            this.landing_page_msg = 'New Password do not match!';
+                            this.landing_page_msg_error = 'New Password do not match!';
                             setTimeout(() => {
-                                this.landing_page_msg = '';
+                                this.landing_page_msg_error = '';
                             }, 2000);
                         }
                         
                     }
                     else{
-                        this.landing_page_msg = 'Please fill in all required fields!';
+                        this.landing_page_msg_error = 'Please fill in all required fields!';
                         setTimeout(() => {
-                            this.landing_page_msg = '';
+                            this.landing_page_msg_error = '';
                         }, 2000);
                     }
                 },
@@ -2244,20 +2249,20 @@
                         .then((response) => {
                             this.$refs.request_crop_button.disabled = false;
                             // console.log(response.data)
-                            this.landing_page_msg = 'Crops Successfully Requested!';
+                            this.landing_page_msg_success = 'Crops Successfully Requested!';
                             setTimeout(() => {
-                                this.landing_page_msg = '';
+                                this.landing_page_msg_error = '';
                                 this.show_requestCrops_form = false;
                                 this.show_services_form = true;
                                 // this.user_id = 0;
-                            }, 4000);
+                            }, 2000);
                             
                         });
                     }
                     else{
-                        this.landing_page_msg = 'Please fill in all required fields!';
+                        this.landing_page_msg_error = 'Please fill in all required fields!';
                         setTimeout(() => {
-                            this.landing_page_msg = '';
+                            this.landing_page_msg_error = '';
                         }, 2000);
                     }
                 },
@@ -2281,20 +2286,20 @@
                         .then((response) => {
                             this.$refs.request_service_button.disabled = false;
                             // console.log(response.data)
-                            this.landing_page_msg = 'Service Successfully Requested!';
+                            this.landing_page_msg_success = 'Service Successfully Requested!';
                             setTimeout(() => {
-                                this.landing_page_msg = '';
+                                this.landing_page_msg_error = '';
                                 this.show_requestServices_form = false;
                                 this.show_services_form = true;
                                 // this.user_id = 0;
-                            }, 4000);
+                            }, 2000);
                             
                         });
                     }
                     else{
-                        this.landing_page_msg = 'Please fill in all required fields!';
+                        this.landing_page_msg_error = 'Please fill in all required fields!';
                         setTimeout(() => {
-                            this.landing_page_msg = '';
+                            this.landing_page_msg_error = '';
                         }, 2000);
                     }
                 },
@@ -2330,17 +2335,17 @@
                             }
                             else {
                                 this.$refs.verify_secret_phrase_button.disabled = false;
-                                this.landing_page_msg = 'Invalid Secret Phrase or Username!';      
+                                this.landing_page_msg_error = 'Invalid Secret Phrase or Username!';      
                                 setTimeout(() => {
-                                    this.landing_page_msg = '';
+                                    this.landing_page_msg_error = '';
                                 }, 2000);
                             }
                         });
                     }
                     else{
-                        this.landing_page_msg = 'Please fill in all required fields!';
+                        this.landing_page_msg_error = 'Please fill in all required fields!';
                         setTimeout(() => {
-                            this.landing_page_msg = '';
+                            this.landing_page_msg_error = '';
                         }, 2000);
                     }
                 }

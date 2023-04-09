@@ -46,6 +46,9 @@
                                                 <template x-if="row.request_status == 0">
                                                     <h4 style="color: red; font-weight: bold">Pending</h4>
                                                 </template>
+                                                <template x-if="row.request_status == 2">
+                                                    <h4 style="color: red; font-weight: bold">Declined</h4>
+                                                </template>
                                                 <!-- <button class="btn btn-danger" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="delete_request(row.request_id, row.user_id, 'Crop')">Delete</button> -->
                                             </td>
                                             <td style="min-width: 150px; text-align: center">

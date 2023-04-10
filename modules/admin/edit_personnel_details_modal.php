@@ -124,13 +124,13 @@
                         <h3 style="font-weight: bold">Coordinators Login Information</h3>
                         <hr>
                         <div class="row" style="text-align: left">
-                            <div class="col-xs-12 col-sm-6 col-md-6">
+                            <div class="col-xs-12 col-sm-6 col-md-12">
                             <div class="form-group">
                                 <label for="p_username">Email:</label>
                                 <input type="text" name="p_username" id="p_username" x-ref="p_username" x-model="p_user_n" class="form-control input-lg" placeholder="Email" disable>
                             </div>
                             </div>
-                            <div class="col-xs-12 col-sm-6 col-md-6">
+                            <div class="col-xs-12 col-sm-6 col-md-6"  style="display: none">
                                 <div class="form-group">
                                     <label for="p_secret_phrase">Secret Phrase:</label>
                                     <div class="buttonIn">
@@ -143,7 +143,6 @@
                                 <label for="p_user_role">Change Role: </label>
                                 <select class="selectD" name="p_user_role" id="p_user_role" x-ref="p_user_role" x-model="p_role" style="width: 100%; height: auto; margin-bottom: 0; padding: 5px; border-radius: 3px">
                                     <option value="" disabled selected hidden>Choose Role</option>
-                                    <option value="Farmer">Farmer</option>
                                     <option value="Personnel">Personnel</option>
                                     <option value="Admin">Admin</option>
                                 </select>

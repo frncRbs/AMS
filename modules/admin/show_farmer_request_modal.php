@@ -5,7 +5,9 @@
             <div style="display: flex; flex-direction: column;">
                 <h1 style="font-weight: bolder">Farmer Requests</h1>
                     <hr>
-                    <div style="display: flex; align-self: flex-end">
+                    <a :href="export_url" style="float: right; padding: 5px">Generate Report</a>
+                    <!-- <a href="../../controller/exports/export_farmer_request.php" style="float: right; padding: 5px" x-on:click="test_session">Generate Report</a> -->
+                    <div style="display: flex; align-self: flex-end; width: 100%">
                         <select class="selectD" x-model="search_program" x-on:keyup="search_program_func()" x-on:keyup.backspace="search_program_func()" style="width: 100%; height: auto; margin-bottom: 0; padding: 5px; border-radius: 3px">
                             <option value="" disabled selected hidden>Select Program</option>
                             <option value="1">Crops</option>

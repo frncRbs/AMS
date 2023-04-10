@@ -1419,7 +1419,6 @@
                             <template x-if="info_no != 1">
                                 <button type="button" class="loginB" style="width: 25%" x-on:click="back">Back</button>
                             </template>
-                            
                             <template x-if="info_no != 4">
                                 <button type="button" class="loginB" style="width: 25%" x-on:click="next">Next</button>
                             </template>
@@ -1470,6 +1469,7 @@
                     <h1>Welcome Back!</h1>
                     <p>Let us verify your account.</p>
                     <span>
+                        <h3 style="color: red" x-text="landing_page_msg_success"></h3>
                         <h3 style="color: red" x-text="landing_page_msg_error"></h3>
                     </span>
                     <div class="input-box">
@@ -1529,7 +1529,7 @@
                 <div class="popup-child3">
                     <form role="form">
                         <div class="formG" style="display: flex; flex-direction: row; gap: 40px; justify-content: center">
-                            <div style="width: 100%">
+                            <div style="width: 100%; max-width: 900px">
                             <h2 style="font-weight: bold">Request for crops</h2>
                             <hr>
                             <span>
@@ -1540,7 +1540,7 @@
                                 <div class="column">
                                 <div class="col-xs-12 col-sm-6 col-md-12" style="margin: 10px 0 10px;">
                                     <label for="cropSel" style="font-weight: bold">Crops: </label>
-                                    <select name="cropSel" style="width: 100%; height: auto; margin-bottom: 0; padding: 10px; border-radius: 3px" x-ref="crop_id" >
+                                    <select name="cropSel" style="width: 100%; height: auto; margin-bottom: 0; padding: 10px; border-radius: 3px; max-width: 750px; font-size: 16px" x-ref="crop_id" >
                                         <option disabled selected hidden>Choose crop</option>
                                         <template x-for="crop in crops">
                                             <option :value="crop.crop_id" x-text="crop.crop_name" x-ref="crop_type"></option>
@@ -1559,7 +1559,7 @@
                                     <div class="col-xs-12 col-sm-6 col-md-12" style="margin: 10px 0 10px;">
                                         <div class="form-group" >
                                             <label for="last_name" style="font-weight: bold">Kilo:</label>
-                                                <input type="number" name="last_name" id="last_name" class="form-control input-lg" x-ref="crop_kilo" placeholder="Kilo">
+                                                <input type="number" name="last_name" id="last_name" class="form-control input-lg" x-ref="crop_kilo" style="max-width: 100px" placeholder="Kilo">
                                         </div>
                                     </div>
                                 </div>
@@ -1596,7 +1596,7 @@
                             <div style="text-align: left; display: flex; justify-content: center; flex-direction: column; gap: 20px">
                                 <div>
                                     <label for="selectD" style="font-weight: bold">Services:</label>
-                                    <select class="selectD" style="width: 100%; height: auto; margin-bottom: 0; padding: 5px; border-radius: 3px" x-ref="service_id">
+                                    <select class="selectD" style="width: 100%; height: auto; margin-bottom: 0; padding: 5px; border-radius: 3px; max-width: 750px; font-size: 16px" x-ref="service_id">
                                         <option disabled selected hidden>Choose services</option>
                                         <template x-for="service in services">
                                             <option :value="service.service_id" x-text="service.service_name"></option>
@@ -2061,7 +2061,7 @@
                                 window.location = 'modules/personnel/personnel_dash_body.php';
                             }
                             else if(response.data == 3){
-                                window.location = 'modules/personnel/personnel_dash_body.php';
+                                window.location = 'modules/farmer/farmer_dash_body.php';
                             }
                             else if(response.data == 4){
                                 this.$refs.login_button.disabled = false;
@@ -2112,12 +2112,12 @@
                                 }, 2000);
                             }
                             else if(response.data.return_status == true){
-                                this.landing_page_msg_error = 'Account successfully Logged in!';
+                                this.landing_page_msg_success = 'Account successfully Logged in!';
                                 this.show_login_requestForm = false;
                                 this.show_services_form = true;
                                 this.user_id = response.data.user_id; 
                                 setTimeout(() => {
-                                    this.landing_page_msg_error = '';
+                                    this.landing_page_msg_success = '';
                                 }, 2000);
                             }
                             else if(response.data.return_status == 2){

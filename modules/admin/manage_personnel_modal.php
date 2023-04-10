@@ -9,6 +9,7 @@
                 <div class="row-fluid" style="background-color: white; min-height: 400px; padding:10px;">
                 <hr>
                     <div style="position: relative; display: flex; justify-content: flex-end">
+                        <a href="../../controller/exports/export_personnel.php" style="float: right; padding: 5px">Generate Report</a>
                         <input type="text" placeholder="Enter details..." x-model="search_personnel" x-on:keyup="search_personnel_func()" x-on:keyup.backspace="search_personnel_func()" placeholder="Search Personnel">
                     </div>
                     <div class="span12">

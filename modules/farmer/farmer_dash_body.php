@@ -2,22 +2,11 @@
     include_once('../../includes/header.php');
     // session_start();
 ?>
-<div x-data="admin_side" x-init="get_services_crops(), initialize_registry(), initialize_farmer_details(), initialize_home_title_details(), initialize_personnel_details()">
+<div x-data="farmer_side" x-init="get_services_crops(), initialize_registry(), initialize_farmer_details(), initialize_home_title_details(), initialize_personnel_details();">
 
-        <?php include('show_farmer_request_modal.php'); ?>
-        <?php include('add_crop_modal.php'); ?>
-        <?php include('add_service_modal.php'); ?>
-        <?php include('manage_farmer_modal.php'); ?>
-        <?php include('manage_personnel_modal.php'); ?>
-        <?php include('edit_home_title_modal.php'); ?>
-        <?php include('edit_home_image_modal.php'); ?>
-        <?php include('edit_personnel_details_modal.php'); ?>
-        <?php include('edit_farmer_details_modal.php'); ?>
-        <?php include('show_user_profile_modal.php'); ?>
-        <?php include('loading_modal.php'); ?>
-        <?php include('decline_request_modal.php'); ?>
-        <?php include('register_farmer_modal.php'); ?>
-
+    <?php include('show_user_profile_modal.php'); ?>
+    <?php include('show_crop_request_form.php'); ?>
+    <?php include('show_service_request_form.php'); ?>
     <!-- <div> -->
         <div class="sidebar">
             <center>
@@ -31,7 +20,7 @@
                     <li class="dash" style="z-index: 10;">
                         <a href="#"><i class="fas fa-cogs"></i><span>Features</span></a>
                         <ul>
-                            <template x-if="<?php echo $_SESSION["user_role"] == 'Personnel' || $_SESSION["user_role"] == 'Admin'?>">
+                            <template x-if="<?php echo $_SESSION["user_role"] == 'Personnel'?>">
                                 <li><a type="button" x-on:click="show_farmer_registration_form = true"  style="color: white"><i class="fas fa-user-plus"></i><span>Register Farmer</span></a></li>
                             </template>
 
@@ -52,7 +41,7 @@
                         <li><a type="button" x-on:click="show_manage_personnel_form = true" style="color: white"><i class="fa fa-user-secret"></i><span style="font-size: 16px">Manage Personnels Account</span></a></li>
                     </template>
 
-                    <template x-if="<?php echo $_SESSION["user_role"] == 'Admin'?>">
+                    <template x-if="<?php echo $_SESSION["user_role"] == 'Personnel'?>">
                         <li><a type="button" x-on:click="show_manage_farmer_form = true" style="color: white"><i class="fa fa-users"></i><span style="font-size: 16px">Manage Farmers Account</span></a></li>
                     </template>
                 </template>
@@ -77,8 +66,8 @@
                     <li class="dropdown">
                     <a type="button" style="color: white"><i class="fas fa-tools"></i><span>Request Services</span></a>
                         <ul>
-                            <li><a type="button" x-on:click="show_request_crop_form = true" style="color: white"><i class="fas fa-wrench"></i><span style="font-size: 20px">Request Crop</span></a></li>
-                            <li><a type="button" x-on:click="show_request_service_form = true" style="color: white"><i class="fas fa-wrench"></i><span style="font-size: 20px">Request Service</span></a></li>
+                            <li><a type="button" x-on:click="show_request_crop_form = true" style="color: white"><i class="fas fa-wrench"></i><span style="font-size: 18px">Request Crop</span></a></li>
+                            <li><a type="button" x-on:click="show_request_service_form = true" style="color: white"><i class="fas fa-wrench"></i><span style="font-size: 18px">Request Service</span></a></li>
                         </ul>
                     </li>
                 </template>
@@ -86,22 +75,6 @@
         </nav>
         </div>
         
-        <!-- Success Registration Prompt -->
-        <div class="popupSuccess_register" x-show="show_success_registration_form" style="display: none">
-            <div class="popup-contentSuccess_register">
-                <div class="popup-child1" style="margin-bottom: 5px">
-                    <div style="display: flex;  ">
-                        <h1 style="font-weight: bolder">Account Successfully Created!</h1>
-                    </div>
-                </div>
-                <br>
-                <button type="button" class="btn btn-success" style="width: 50%" x-on:click="confirm_reset">Confirm</button>
-                <div class="popup-child2">
-                    <a id="errorClose" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="confirm_reset">X</a>
-                </div>
-            </div>
-        </div>
-
         <!-- Success Update Prompt Personnel/Farmer -->
         <div class="popupSuccess_register" x-show="show_success_update_form" style="display: none">
             <div class="popup-contentSuccess_register">
@@ -112,234 +85,6 @@
                 </div>
                 <br>
                 <button type="button" class="btn btn-success" style="width: 50%" x-on:click="confirm_reset">Confirm</button>
-                <div class="popup-child2">
-                    <a id="errorClose" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="confirm_reset">X</a>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Farmer Registration Form -->      
-        <div class="popup3" x-show="show_personnel_registration_form" style="display: none;">
-            <div class="popup-content3">
-                <div class="popup-child1">
-                    <form>
-                    <span>
-                        <h3 style="color: red" x-text="admin_error_msg"></h3>
-                    </span>
-                    <h1 style="font-weight: bolder">Register Coordinators Account</h1>
-                        <br>
-                        <div class="formG" style="display: flex; flex-direction: row; gap: 40px; justify-content: center" x-show="info_no == 1" style="display: none;">
-                            <div style="width: 100%; padding: 0 20px 0 20px">
-                            <h3 style="font-weight: bold">Coordinators Information</h3>
-                            
-                            <div class="row" style="text-align: left">
-                                <div class="column">
-                                <hr>
-                                    <div class="col-xs-12 col-sm-6 col-md-12" style="margin-bottom: 10px;">
-                                        <label for="role_service">Register for: </label>
-                                        <select class="selectD" name="role_service" id="role_service" x-ref="role_service" style="width: 100%; height: auto; margin-bottom: 0; padding: 5px; border-radius: 3px">
-                                            <option value="" disabled selected hidden>Choose Services</option>
-                                            <option value="1">High Value Crops</option>
-                                            <option value="2">Corn Value Crop</option>
-                                            <option value="3">Rice Crop</option>
-                                        </select>
-                                    </div>
-                                <hr>
-                                </div>
-                                
-                                <div class="col-xs-12 col-sm-6 col-md-6">
-                                    <div class="form-group">
-                                        <label for="first_name">First Name:</label>
-                                            <input type="text" name="first_name" id="first_name" x-ref="first_name" class="form-control input-lg" tabindex="2" placeholder="First Name" required>
-                                        </div>
-                                    </div>
-                                <div class="col-xs-12 col-sm-6 col-md-6">
-                                    <div class="form-group" >
-                                        <label for="last_name">Last Name:</label>
-                                            <input type="text" name="last_name" id="last_name" x-ref="last_name" class="form-control input-lg" tabindex="1" placeholder="Last Name" required>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                
-                                <div class="row" style="text-align: left">
-                                    <div class="col-xs-12 col-sm-6 col-md-6">
-                                        <div class="form-group">
-                                            <label for="middle_name">Middle Name:</label>
-                                            <input type="text" name="middle_name" id="middle_name" x-ref="middle_name" class="form-control input-lg" tabindex="5" placeholder="Middle Name" required>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-12 col-sm-6 col-md-6">
-                                        <div class="form-group">
-                                            <label for="contact_no">Contact Number:</label>
-                                            
-                                            <input type="number" name="contact_no" id="contact_no" x-ref="contact_no" class="form-control input-lg" tabindex="6" placeholder="Contact Number" required="" autocomplete="off" pattern="\d{11}">
-                                        </div>
-                                    </div>
-                                </div>
-                                <hr>
-                                
-                                <div class="row" style="text-align: left">
-                                    <div class="col-xs-12 col-sm-6 col-md-6">
-                                        <div class="inputC">
-                                            <label for="birth_date">Birth Date:</label>
-                                            <input type="date" name="birth_date" id="birth_date" name="trip-start"
-                                                value="2000-01-01" x-ref="birth_date"
-                                                min="1900-01-01" max="2050-12-31" style="width: 100%; padding: 3px;">
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-12 col-sm-6 col-md-6">
-                                        <div class="form-group">
-                                            <label for="birth_place">Place of Birth:</label>
-                                            <input type="text" name="birth_place" id="birth_place" x-ref="birth_place" class="form-control input-lg" placeholder="Place of Birth">
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="row" style="text-align: left">
-                                    <div class="col-xs-12 col-sm-6 col-md-6">
-                                    <label for="sex">Sex: </label>
-                                    <select class="selectD" name="sex" id="sex" x-ref="sex" style="width: 100%; height: auto; margin-bottom: 0; padding: 5px; border-radius: 3px">
-                                        <option value="" disabled selected hidden>Choose Sex</option>
-                                        <option value="1">Male</option>
-                                        <option value="2">Female</option>
-                                    </select>
-                                    </div>
-                                    <div class="col-xs-12 col-sm-6 col-md-6">
-                                        <div class="form-group">
-                                            <label for="religion">Religion:</label>
-                                            <input type="text" name="religion" id="religion" x-ref="religion" class="form-control input-lg" value="Religion">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- PAGE 2 -->
-                        <div class="formG" style="display: none; flex-direction: row; gap: 40px; justify-content: center" x-show="info_no == 2" style="display: none;">
-                            <div style="width: 100%; padding: 0 20px 0 20px">
-                                <h3 style="font-weight: bold">Coordinators Address</h3>
-                                <hr>
-                                <div class="row" style="text-align: left">
-                                <div class="column">
-                                    <div class="col-xs-12 col-sm-6 col-md-12">
-                                            <div class="form-group" >
-                                            <label for="address_street">Provincial Address:</label>
-                                                <input type="text" name="address_street" id="address_street"  x-ref="address_street" class="form-control input-lg" placeholder="Street/Subdiv/Sitio">
-                                            </div>
-                                    </div>
-                                </div>
-                                    <div class="col-xs-12 col-sm-6 col-md-6">
-                                        <div class="form-group" >
-                                        <label for="address_barangay">Barangay:</label>
-                                            <input type="text" name="address_barangay" id="address_barangay" x-ref="address_barangay" class="form-control input-lg" placeholder="Barangay">
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-12 col-sm-6 col-md-6">
-                                        <div class="form-group" >
-                                        <label for="address_municipality">Municipality:</label>
-                                            <input type="text" name="address_municipality" id="address_municipality" x-ref="address_municipality" class="form-control input-lg" placeholder="Municipality">
-                                        </div>
-                                    </div>
-                                </div>
-                                <br>
-                                <h3 style="font-weight: bold">Coordinators Login Information</h3>
-                                <hr>
-                                <div class="row" style="text-align: left">
-                                    <div class="col-xs-12 col-sm-6 col-md-6">
-                                    <div class="form-group">
-                                        <label for="username">Email:</label>
-                                        <input type="username" name="username" id="username" x-ref="username" class="form-control input-lg" placeholder="Email">
-                                    </div>
-                                    </div>
-                                    <div class="col-xs-12 col-sm-6 col-md-6">
-                                        <div class="form-group">
-                                            <label for="secret_phrase">Secret Phrase:</label>
-                                            <div class="buttonIn">
-                                                <input type="text" id="enter" name="secret_phrase" x-ref="secret_phrase" class="form-control input-lg" placeholder="Secret Phrase" autocomplete=off>
-                                                <button type="button" id="clear" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em; display: inline" x-on:click="generate_secret_phrase">Generate</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-12 col-sm-6 col-md-6">
-                                        <div class="form-group">
-                                            <label for="password">Password:</label>
-                                            <input type="password" name="password" id="password" x-ref="password" class="form-control input-lg" placeholder="Password">
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-12 col-sm-6 col-md-6">
-                                        <div class="form-group">
-                                            <label for="confirmPassword">Confirm Password:</label>
-                                            <input type="password" name="confirmPassword" id="confirmPassword" x-ref="confirmPassword" class="form-control input-lg" placeholder="Confirm Password">
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-12 col-sm-6 col-md-6" style="display: none">
-                                        <div class="form-group">
-                                            <label for="role">Role:</label>
-                                            <input type="password" name="role" id="role" x-ref="role" class="form-control input-lg" placeholder="Confirm Password">
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-12 col-sm-6 col-md-6" style="display: none">
-                                        <div class="form-group">
-                                            <label for="status">Status:</label>
-                                            <input type="password" name="status" id="status" x-ref="status" class="form-control input-lg" placeholder="Confirm Password">
-                                        </div>
-                                    </div>
-                                </div>
-                            <br>
-                            </div>
-                            <button type="button" class="btn btn-success" style="width: 50%" x-ref="submit_personnel_button" x-on:click="submit_personnel_form">Submit</button>
-                            <br>
-                        </div>
-                        <hr>
-                        <div class="column" style="text-align: center">
-                            <template x-if="info_no != 1">
-                                <button type="button" class="btn btn-success" style="width: 25%; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="back">Back</button>
-                            </template>
-                            
-                            <template x-if="info_no != 2">
-                                <button type="button" class="btn btn-success" style="width: 25%; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em " x-on:click="next">Next</button>
-                            </template>
-                        </div>
-                    </form>
-                </div>
-                <div class="popup-child2">
-                    <button type="button" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="exit_register">X</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Deactivate Personnel/Farmer Service Request Prompt -->
-        <div class="popupDecline_request" x-show="show_deactivate_personnel_account_form" style="display: none">
-            <div class="popup-contentDecline_request">
-                <div class="popup-child1" style="margin-bottom: 5px; display: flex; flex-direction: column">
-                    <div>
-                        <h2 style="font-weight: bolder">Are you sure you want to deactivate? <span x-text="p_fn"></span></h2>
-                    </div>
-                    <hr>
-                    <div style="display: flex; justify-content: space-around">
-                        <button type="button" class="btn btn-success" style="max-width: 100%" x-on:click="deactivate_personnel_account">Yes</button>
-                        <button type="button" class="btn btn-danger" style="max-width: 100%" x-on:click="confirm_reset">No</button>
-                    </div>
-                </div>
-                <div class="popup-child2">
-                    <a id="errorClose" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="confirm_reset">X</a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Deactivate Personnel/Farmer Service Request Prompt -->
-        <div class="popupDecline_request" x-show="show_deactivate_farmer_account_form" style="display: none">
-            <div class="popup-contentDecline_request">
-                <div class="popup-child1" style="margin-bottom: 5px; display: flex; flex-direction: column">
-                    <div>
-                        <h2 style="font-weight: bolder">Are you sure you want to deactivate? <span x-text="f_firstname"></span></h2>
-                    </div>
-                    <hr>
-                    <div style="display: flex; justify-content: space-around">
-                        <button type="button" class="btn btn-success" style="max-width: 100%" x-on:click="deactivate_farmer_account">Yes</button>
-                        <button type="button" class="btn btn-danger" style="max-width: 100%" x-on:click="confirm_reset">No</button>
-                    </div>
-                </div>
                 <div class="popup-child2">
                     <a id="errorClose" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="confirm_reset">X</a>
                 </div>
@@ -420,32 +165,48 @@
                                     <table class="table table-hover table-sm" id="admintable">
                                         <thead>
                                             <tr>
-                                                <th>No.</th>
-                                                <th>First Name</th>
-                                                <th>Middle Name</th>
-                                                <th>Last Name</th>
-                                                <th>Commodity</th>
-                                                <th>Sex</th>
-                                                <th>Date Requested</th>
-                                                <th>View</th>
+                                            <th style="min-width: 150px; text-align: center">Program</th>
+                                            <th style="min-width: 150px; text-align: center">Request Type</th>
+                                            <th style="min-width: 150px; text-align: center">Service Remarks</th>
+                                            <th style="min-width: 150px; text-align: center">Crops Kilo</th>
+                                            <th style="min-width: 150px; text-align: center">Date Requested</th>
+                                            <th style="min-width: 150px; text-align: center">Status</th>
+                                            <th style="min-width: 150px; text-align: center">Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <template x-if="registry_records">
-                                                <template x-for="(row, index) in custom_pagination(registry_records)">
-                                                    <tr>
-                                                        <th scope="row"><span x-text="(index + 1)"></span></th>
-                                                        <td><span x-text="get_farmer_first_name(row.user_id)"></span></td>
-                                                        <td><span x-text="get_farmer_middle_name(row.user_id)"></span></td>
-                                                        <td><span x-text="get_farmer_last_name(row.user_id)"></span></td>
-                                                        <td><span x-text="get_farmer_role_service(row.user_id)"></span></td>
-                                                        <td><span x-text="get_farmer_sex(row.user_id)"></span></td>
-                                                        <td><span x-text="row.date_requested"></span></td>
-                                                        <td>
-                                                            <!-- <button class="btn btn-success" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="decline_request(row.request_id, row.user_id, 'Crop')">View</button> -->
-                                                            <button class="btn btn-success" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="show_farmer_request_form = true, get_farmer_records(row.user_id), f_user_id = row.user_id">View</button>
-                                                        </td>
-                                                    </tr>
+                                            <template x-if="c_farmer_requests">
+                                                <template x-for="(row, index) in custom_pagination(c_farmer_requests)">
+                                                <tr>
+                                                    <!-- <th scope="row"><span x-text="(index + 1)"></span></th> -->
+                                                    <!-- <td><span x-text="row.request_id"></span></td> -->
+                                                    <td style="min-width: 150px; text-align: center"><span x-text="row.request_type"></span></td>
+                                                    <td style="min-width: 150px; text-align: center"><span x-text="get_service_name(row.crop_id, row.service_id)"></span></td>
+                                                    <td style="min-width: 150px; text-align: center"><span x-text="row.service_remarks ? row.service_remarks : 'N/A'"></span></td>
+                                                    <td style="min-width: 150px; text-align: center"><span x-text="row.crops_kilo ? row.crops_kilo : 'N/A'"></span></td>
+                                                    <td style="min-width: 150px; text-align: center"><span x-text="row.date_requested"></span></td>
+                                                    
+                                                    <td style="min-width: 150px; text-align: center">
+                                                        <template x-if="row.request_status == 1">
+                                                            <h4 style="color: green; font-weight: bold">Approved</h4>
+                                                        </template>
+                                                        <template x-if="row.request_status == 0">
+                                                            <h4 style="color: red; font-weight: bold">Pending</h4>
+                                                        </template>
+                                                        <template x-if="row.request_status == 2">
+                                                            <h4 style="color: red; font-weight: bold">Declined</h4>
+                                                        </template>
+                                                        <template x-if="row.is_cancelled == 1">
+                                                            <h4 style="color: red; font-weight: bold">Cancelled</h4>
+                                                        </template>
+                                                        <!-- <button class="btn btn-danger" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="delete_request(row.request_id, row.user_id, 'Crop')">Delete</button> -->
+                                                    </td>
+                                                    <td style="min-width: 150px; text-align: center">
+                                                        <template x-if="row.is_cancelled == 0">
+                                                            <button class="btn btn-danger" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="approve_farmer_request(row)">Cancel</button>
+                                                        </template>
+                                                    </td>
+                                                </tr>
                                                 </template>
                                             </template>
                                         </tbody>
@@ -467,7 +228,7 @@
     </div>
     <script>
         document.addEventListener('alpine:init', () => {
-        Alpine.data('admin_side', () => ({
+        Alpine.data('farmer_side', () => ({
                 // MODAL-FORMS
                 show_personnel_registration_form: false,
                 show_farmer_registration_form: false,
@@ -490,6 +251,8 @@
                 show_home_image_form: false,
                 show_user_profile_form: false,
                 show_loading_form: false,
+                show_request_crop_form: false,
+                show_request_service_form: false,
                 admin_error_msg: '',
                 admin_success_msg: '',
                 
@@ -501,13 +264,15 @@
                 farmer_records_backup: [],
                 registry_records: [],
                 registry_records_backup: [],
-                user_details: [],
+                c_farmer_requests: [],
                 user_details_backup: [],
                 personnel_details: [],
                 personnel_details_backup: [],
                 crops: [],
                 services: [],
                 search_request: '',
+                landing_page_msg_error: '',
+                landing_page_msg_success: '',
 
                 // CURRENT USER DETAILS
                 r_request_id: 0,
@@ -615,20 +380,21 @@
                 },
 
                 initialize_farmer_details(){
-                    this.user_details  = '<?php  
+                    this.c_farmer_requests  = '<?php  
                         $database = new Connection();
                         $db = $database->open();
-                        $sql = $db->prepare("SELECT * FROM user WHERE role = 'Farmer' ORDER BY date_registered DESC");
-                        $sql->execute();
+                        $c_user_id = $_SESSION["login_user_id"];
+                        $sql = $db->prepare("SELECT * FROM requests_registry WHERE user_id = :user_id");
+                        $sql->execute(array(':user_id' => $c_user_id));
                         $results = $sql->fetchAll();
                         $database->close();
 
                         echo json_encode($results);
                     ?>';
-                    this.user_details = JSON.parse(this.user_details);
-                    this.user_details_backup = this.user_details;
+                    this.c_farmer_requests = JSON.parse(this.c_farmer_requests);
+                    this.c_farmer_requests_backup = this.c_farmer_requests;
                     // setTimeout(() => {
-                    //     console.log(JSON.parse(this.user_details));
+                    //     console.log(JSON.parse(this.c_farmer_requests));
                     // }, 1500);
                 },
 
@@ -646,7 +412,7 @@
                     this.personnel_details = JSON.parse(this.personnel_details);
                     this.personnel_details_backup = this.personnel_details;
                     // setTimeout(() => {
-                    //     console.log(JSON.parse(this.user_details));
+                    //     console.log(JSON.parse(this.c_farmer_requests));
                     // }, 1500);
                 },
 
@@ -690,6 +456,13 @@
                     this.update_personnel_registration_form = false;
                     this.update_farmer_registration_form = false;
                     this.show_farmer_registration_form = false;
+                },
+
+                exit_services(){
+                    this.show_request_service_form = false;
+                    this.show_request_crop_form = false;
+                    this.show_services_form = false;
+                    // this.user_id = 0;
                 },
                 
                 exit_edit_home_features(){
@@ -882,7 +655,7 @@
                                     this.info_no = 1;
                                     this.show_farmer_registration_form = false;
                                     this.show_success_registration_form = true;
-                                    this.user_details = response.data.farmer_update;
+                                    this.c_farmer_requests = response.data.farmer_update;
                                 }
                             },
                             (error) => {
@@ -1117,7 +890,7 @@
                 },
 
                 async get_services_crops(){
-                    await axios.get("../../controller/admin/get_crops_services.php")
+                    await axios.get("../../controller/farmer/get_crops_services.php")
                     .then((response)=>{
                         this.crops = (response.data.crops);
                         this.services = (response.data.services);
@@ -1133,7 +906,7 @@
                         crop_id: crop_id,
                         service_id: service_id,
                     };
-                    await axios.post('../../controller/admin/get_service_name.php', data, options)
+                    await axios.post('../../controller/farmer/get_service_name.php', data, options)
                     .then((response) => {
                         // console.log(response.data);
                         service_name = response.data;
@@ -1537,7 +1310,7 @@
                         // console.log(response.data);
                         if(response.data.status = 'true'){
                             this.info_no = 1;
-                            this.user_details = response.data.farmer_update;
+                            this.c_farmer_requests = response.data.farmer_update;
                             this.show_deactivate_farmer_account_form = false;
 
                             this.admin_success_msg = 'Farmer registration successfully declined!';
@@ -1600,7 +1373,7 @@
                         // console.log(response.data);
                         if(response.data.status = 'true'){
                             this.info_no = 1;
-                            this.user_details = response.data.farmer_update;
+                            this.c_farmer_requests = response.data.farmer_update;
                             this.admin_success_msg = 'Account successfully activated!';
                             setTimeout(() => {
                                 this.error_admin = false;
@@ -1697,7 +1470,7 @@
                             id: this.cu_id,
                         };
                         
-                        await axios.post('../../controller/admin/update_current_user_details.php', data, options)
+                        await axios.post('../../controller/farmer/update_current_user_details.php', data, options)
                         .then((response) => {
                             console.log(response.data);
                             if(response.data.status == 'true') {
@@ -1776,7 +1549,7 @@
                             console.log(response.data);
                             if(response.data.status == 'true') {
                                 this.info_no = 1;
-                                this.user_details = response.data.farmer_update;
+                                this.c_farmer_requests = response.data.farmer_update;
                                 this.update_farmer_registration_form = false;
                                 this.show_success_update_form = true;
                             }
@@ -1826,7 +1599,7 @@
                         // console.log(response.data);
                         if(response.data.status = 'true'){
                             this.info_no = 1;
-                            this.user_details = response.data.farmer_update;
+                            this.c_farmer_requests = response.data.farmer_update;
                             this.admin_success_msg = 'Farmer registration approved!';
 
                             setTimeout(() => {
@@ -1859,6 +1632,83 @@
                     }); 
                 },
 
+                async request_service(){
+                    
+                    if(this.$refs.service_id.value && this.$refs.service_remarks.value){
+                        this.$refs.request_service_button.disabled = true;
+                        const options = {
+                            xsrfHeaderName: 'X-XSRF-TOKEN',
+                            xsrfCookieName: 'XSRF-TOKEN',
+                        }
+                        let data = {
+                            service_id: this.$refs.service_id.value,
+                            crop_id: null,
+                            crop_kilo: null,
+                            service_remarks: this.$refs.service_remarks.value,
+                            user_id: this.user_id,
+                            request_type: 'Service',
+                        };
+                        await axios.post('../../controller/farmer/request_service.php', data, options)
+                        .then((response) => {
+                            this.$refs.request_service_button.disabled = false;
+                            // console.log(response.data)
+                            this.landing_page_msg_success = 'Service Successfully Requested!';
+                            setTimeout(() => {
+                                this.landing_page_msg_error = '';
+                                this.show_request_service_form = false;
+                                this.show_services_form = true;
+                                // this.user_id = 0;
+                            }, 2000);
+                            
+                        });
+                    }
+                    else{
+                        this.landing_page_msg_error = 'Please fill in all required fields!';
+                        setTimeout(() => {
+                            this.landing_page_msg_error = '';
+                        }, 2000);
+                    }
+                },
+
+                async request_crop(){
+                    
+                    if(this.$refs.r_crop_id.value && this.$refs.r_crop_kilo.value){
+                        this.$refs.request_crop_button.disabled = true;
+                        const options = {
+                            xsrfHeaderName: 'X-XSRF-TOKEN',
+                            xsrfCookieName: 'XSRF-TOKEN',
+                        }
+                        let data = {
+                            crop_id: this.$refs.r_crop_id.value,
+                            service_id: null,
+                            crop_kilo: this.$refs.r_crop_kilo.value,
+                            user_id: this.user_id,
+                            service_remarks: null,
+                            request_type: 'Crop',
+                        };
+                        await axios.post('../../controller/farmer/request_crop.php', data, options)
+                        .then((response) => {
+                            this.$refs.request_crop_button.disabled = false;
+                            // console.log(response.data)
+                            this.landing_page_msg_success = 'Crops Successfully Requested!';
+                            setTimeout(() => {
+                                this.landing_page_msg_error = '';
+                                this.show_request_crop_form = false;
+                                this.show_services_form = true;
+                                // this.user_id = 0;
+                            }, 2000);
+                            
+                        });
+
+                    }
+                    else{
+                        this.landing_page_msg_error = 'Please fill in all required fields!';
+                        setTimeout(() => {
+                            this.landing_page_msg_error = '';
+                        }, 2000);
+                    }
+                },
+
                 // Pagination Javascript
                 'search': "",
                 'pageNumber': 0,
@@ -1871,7 +1721,30 @@
 
                     // this.total = this.services.length;
                     this.total = paginate_records.length;
-                    return this.registry_records.slice(start, end);
+                    return this.c_farmer_requests.slice(start, end);
+                },
+
+                search_program: '',
+
+                async search_program_func(){
+                    const preseve_rec = this.farmer_records;
+                    this.farmer_records = [];
+
+                    if(this.search_program != ''){
+                        for (const key in preseve_rec) {
+                            if (Object.hasOwnProperty.call(preseve_rec, key)) {
+                                const element = preseve_rec[key];
+                                let row_record = ((element.request_type)).toLowerCase();
+                                
+                                if(row_record.includes(this.search_program.toLowerCase())){
+                                    this.farmer_records.push(element);
+                                };
+                            }
+                        }
+                    }
+                    else {
+                        this.farmer_records = this.farmer_records_backup;
+                    }
                 },
 
                 //Create array of all pages (for loop to display page numbers)
@@ -1918,7 +1791,6 @@
                 },
             }));
         });
-    
     </script>
     <script>
         function myFunction2() {

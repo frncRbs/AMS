@@ -12,7 +12,7 @@
         $crop_id = $obj['crop_id'];
         $service_id = $obj['service_id'];
         $crop_kilo = $obj['crop_kilo'];
-        $user_id = $obj['user_id'];
+        $user_id = $_SESSION["login_user_id"];
         $service_remarks = $obj['service_remarks'];
         $request_type = $obj['request_type'];
         
@@ -29,10 +29,19 @@
         $return_value = 'true';
         ($sql->execute()) ? $return_value = 'true' : $return_value = 'Something went wrong. Cannot saved record.';
 
+        $sql_all = $db->prepare("SELECT * FROM requests_registry WHERE user_id = :user_id ORDER BY date_requested DESC");
+        $sql_all->execute(array(':user_id'=>$user_id));
+        $records = $sql_all->fetchAll();
+
     } catch (PDOException $e) {
         $return_value = $e->getMessage();
         echo $return_value;
     }
     $database->close();
-    echo $return_value;
+    
+    $return_dict = [
+        'status' => $return_value,
+        'request_update' => $records,
+    ];
+    echo json_encode($return_dict);
 ?>

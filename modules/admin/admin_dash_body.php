@@ -2,8 +2,7 @@
     include_once('../../includes/header.php');
     // session_start();
 ?>
-<div x-data="admin_side" x-init="get_services_crops(), initialize_registry(), initialize_farmer_details(), initialize_home_title_details(), initialize_personnel_details()">
-
+    <div x-data="admin_side" x-init="get_services_crops(), initialize_registry(), initialize_farmer_details(), initialize_home_title_details(), initialize_personnel_details()">
         <?php include('show_farmer_request_modal.php'); ?>
         <?php include('add_crop_modal.php'); ?>
         <?php include('add_service_modal.php'); ?>
@@ -16,9 +15,10 @@
         <?php include('show_user_profile_modal.php'); ?>
         <?php include('loading_modal.php'); ?>
         <?php include('decline_request_modal.php'); ?>
+        <?php include('decline_registration_modal.php'); ?>
         <?php include('register_farmer_modal.php'); ?>
 
-    <!-- <div> -->
+
         <div class="sidebar">
             <center>
                 <img src="<?php echo IMAGES; ?>LOGO.png" class="profile_image" alt="">
@@ -75,7 +75,7 @@
                 </template>
                 <template x-if="<?php echo $_SESSION["user_role"] == 'Farmer'; ?>">
                     <li class="dropdown">
-                    <a type="button" style="color: white"><i class="fas fa-tools"></i><span>Request Services</span></a>
+                        <a type="button" style="color: white"><i class="fas fa-tools"></i><span>Request Services</span></a>
                         <ul>
                             <li><a type="button" x-on:click="show_request_crop_form = true" style="color: white"><i class="fas fa-wrench"></i><span style="font-size: 20px">Request Crop</span></a></li>
                             <li><a type="button" x-on:click="show_request_service_form = true" style="color: white"><i class="fas fa-wrench"></i><span style="font-size: 20px">Request Service</span></a></li>
@@ -84,7 +84,7 @@
                 </template>
             </ul>
         </nav>
-        </div>
+    </div>
         
         <!-- Success Registration Prompt -->
         <div class="popupSuccess_register" x-show="show_success_registration_form" style="display: none">
@@ -355,8 +355,10 @@
                                 <div style="left: 10px; position: absolute">
                                     <h3 style="font-weight: bolder; color: white">WELCOME <?php echo strtoupper($_SESSION["user_firstname"]); ?></h3>
                                 </div> 
-                                <div style="margin: 0 10px 0 0;">
-                                    <button class="btn btn-success">Generate Report</button>
+                                <div style="margin: 0 10px 0 0">
+                                    <button class="btn btn-success" style="color: rgba(0, 0, 0, 0);" disabled>Generate Report</button>
+                                    <button class="btn btn-success" style="color: rgba(0, 0, 0, 0);" disabled>Generate Report</button>
+                                    <button class="btn btn-success" style="color: rgba(0, 0, 0, 0);" disabled>Generate Report</button>
                                 </div>
                                 </div>
                                 <div class="container">
@@ -364,7 +366,7 @@
                                         <div class="col-lg-3 col-sm-6">
                                             <div class="card-box bg-blue">
                                                 <div class="inner">
-                                                    <h3> 13436 </h3>
+                                                    <h3> 17 </h3>
                                                     <p> Total Number of Registered Farmers</p>
                                                 </div>
                                                 <div class="icon">
@@ -376,11 +378,11 @@
                                         <div class="col-lg-3 col-sm-6">
                                             <div class="card-box bg-green">
                                                 <div class="inner">
-                                                    <h3> 185358 </h3>
+                                                    <h3> 7 </h3>
                                                     <p> Total Number for registered Rice Crops</p>
                                                 </div>
                                                 <div class="icon">
-                                                    <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                                                    <i class="fa fa-users" aria-hidden="true"></i>
                                                 </div>
                                                 <!-- <a href="#" class="card-box-footer">View More <i class="fa fa-arrow-circle-right"></i></a> -->
                                             </div>
@@ -388,11 +390,11 @@
                                         <div class="col-lg-3 col-sm-6">
                                             <div class="card-box bg-orange">
                                                 <div class="inner">
-                                                    <h3> 5464 </h3>
+                                                    <h3> 5 </h3>
                                                     <p> Total Number for registered Corn Crops</p>
                                                 </div>
                                                 <div class="icon">
-                                                    <i class="fas fa-hourglass-start" aria-hidden="true"></i>
+                                                    <i class="fa fa-users" aria-hidden="true"></i>
                                                 </div>
                                                 <!-- <a href="#" class="card-box-footer">View More <i class="fa fa-arrow-circle-right"></i></a> -->
                                             </div>
@@ -400,11 +402,11 @@
                                         <div class="col-lg-3 col-sm-6">
                                             <div class="card-box bg-red">
                                                 <div class="inner">
-                                                    <h3> 723 </h3>
+                                                    <h3> 5 </h3>
                                                     <p> Total Number for registered High Value Crops </p>
                                                 </div>
                                                 <div class="icon">
-                                                    <i class="fas fa-user-minus"></i>
+                                                    <i class="fa fa-users"></i>
                                                 </div>
                                                 <!-- <a href="#" class="card-box-footer">View More <i class="fa fa-arrow-circle-right"></i></a> -->
                                             </div>
@@ -465,6 +467,7 @@
             </div>
         </div>
     </div>
+</div>
     <script>
         document.addEventListener('alpine:init', () => {
         Alpine.data('admin_side', () => ({
@@ -481,6 +484,7 @@
                 show_personnel_requestForm: false,
                 show_farmer_request_form: false,
                 show_decline_request_form: false,
+                show_decline_registration_form: false,
                 show_decline_account_regform: false,
                 show_approve_account_regform: false,
                 show_deactivate_personnel_account_form: false,
@@ -710,6 +714,7 @@
                     this.show_deactivate_personnel_account_form = false,
                     this.show_deactivate_farmer_account_form = false,
                     this.show_decline_request_form = false;
+                    this.show_decline_registration_form = false;
                     this.show_success_update_form = false;
                 },
 
@@ -1175,7 +1180,7 @@
                     }); 
                 },
 
-                async decline_request(request_id, user_id, request_type){
+                async approve_request(request_id, user_id, request_type){
                     this.$refs.declinerequest_button.disabled = true;
                     const options = {
                         xsrfHeaderName: 'X-XSRF-TOKEN',
@@ -1211,17 +1216,127 @@
                                 }, 2000);
                             });
                         }
-                        // if(response.data.requests.length == 0){
-
-                        //     window.location = '<?php echo LOCATION; ?>modules/admin/admin_dash_body.php';
-                        // }
-                        // else{
-                        //     this.farmer_records = response.data.requests;
-                        //     this.show_decline_request_form = false;
-                        // }
-                        
                     }); 
-                    // return crop_name ? crop_name : '';
+                },
+
+                r_request_type: '',
+                async decline_request(request_id, user_id, request_type){
+                    this.$refs.declinerequest_button.disabled = true;
+                    // console.log(this.$refs.decline_message2.value);
+                    const options = {
+                        xsrfHeaderName: 'X-XSRF-TOKEN',
+                        xsrfCookieName: 'XSRF-TOKEN',
+                    };
+                    let data = {
+                        request_id: request_id,
+                        user_id: user_id,
+                        request_type: request_type,
+                        decline_message: this.$refs.decline_message2.value,
+                    };
+
+                    let mail_data = {
+                        user_id: user_id,
+                        subject: request_type + ' REQUEST',
+                        message: this.$refs.decline_message2.value,
+                    };
+                    this.show_loading_form = true;
+                    await axios.post('../../controller/admin/decline_farmer_request.php', data, options)
+                    .then((response) => {
+                        if(response.data.status == 'true'){
+                            this.farmer_records = response.data.requests;
+                            this.show_decline_request_form = false;
+
+                            axios.post('../../controller/sendmail/sendmail.php', mail_data, options)
+                            .then((mail_response) => {
+                                console.log(mail_response.data);
+                                this.farmer_records = response.data.requests;
+                                setTimeout(() => {
+                                    this.show_loading_form = false;
+                                    this.$refs.declinerequest_button.disabled = false;
+                                    this.$refs.decline_message.value = '';
+                                }, 2000);
+                            });
+                        }
+                    }); 
+                },
+
+                async decline_registration(f_id){
+                    this.$refs.declinerequest_button.disabled = true;
+                    // console.log(this.$refs.decline_message2.value);
+                    const options = {
+                        xsrfHeaderName: 'X-XSRF-TOKEN',
+                        xsrfCookieName: 'XSRF-TOKEN',
+                    };
+                    let data = {
+                        id: f_id,
+                    };
+
+                    let mail_data = {
+                        id: f_id,
+                        message: this.$refs.decline_message_reg.value,
+                    };
+                    this.show_loading_form = true;
+                    await axios.post('../../controller/admin/decline_farmer_registration.php', data, options)
+                    .then((response) => {
+                        if(response.data.status == 'true'){
+                            this.farmer_records = response.data.farmer_update;
+                            this.show_decline_registration_form = false;
+
+                            axios.post('../../controller/sendmail/sendmail_disapprove.php', mail_data, options)
+                            .then((mail_response) => {
+                                console.log(mail_response.data);
+                                this.farmer_records = response.data.requests;
+                                setTimeout(() => {
+                                    this.show_loading_form = false;
+                                    this.$refs.declinerequest_button.disabled = false;
+                                    this.$refs.decline_message.value = '';
+                                }, 2000);
+                            });
+                        }
+                    }); 
+                },
+
+                async approve_farmer(){
+                    this.$refs.declinerequest_button.disabled = true;
+                    const options = {
+                        xsrfHeaderName: 'X-XSRF-TOKEN',
+                        xsrfCookieName: 'XSRF-TOKEN',
+                    };
+                    let data = {
+                        id: this.f_id,
+                        // decline_message: this.$refs.decline_message.value,
+                    };
+
+                    let mail_data = {
+                        farmer_id: this.f_id,
+                    };
+                    this.show_loading_form = true;
+                    await axios.post('../../controller/admin/approve_farmer_registration.php', data, options)
+                    .then((response) => {
+                        if(response.data.status == 'true'){
+                            this.farmer_records = response.data.farmer_update;
+                            this.show_decline_request_form = false; 
+                            // console.log(response.data.status);
+                            axios.post('../../controller/sendmail/sendmail_approve.php', mail_data, options)
+                            .then((mail_response) => {
+                                console.log(mail_response.data);
+                                this.farmer_records = response.data.farmer_update;
+                                setTimeout(() => {
+                                    this.show_loading_form = false;
+                                    this.$refs.declinerequest_button.disabled = false;
+                                    this.$refs.decline_message.value = '';
+                                }, 2000);
+                            });
+                        }
+                        else{
+                            this.error_admin = true;
+                            this.admin_error_msg = 'Sorry cannot approve account!';
+                            setTimeout(() => {
+                                this.error_admin = false;
+                                this.admin_error_msg = '';
+                            }, 2000);
+                        }
+                    }); 
                 },
 
                 async delete_crops(crop_id){
@@ -1577,7 +1692,7 @@
                                 this.admin_success_msg = '';
                             }, 2000);
                         }else{
-                            this.admin_error_msg = 'Cannot activate the account!';
+                            this.admin_error_msg = 'Cannot activate account!';
                             setTimeout(() => {
                                 this.error_admin = false;
                                 this.admin_error_msg = '';
@@ -1821,10 +1936,15 @@
                         id: this.f_id,
                         status: this.f_status,
                     };
+                    let mail_data = {};
                     await axios.post('../../controller/admin/approve_farmer_registration.php', data, options)
                     .then((response) => {
                         // console.log(response.data);
                         if(response.data.status = 'true'){
+                            axios.post('../../controller/sendmail/sendmail_approve.php', mail_data, options)
+                            .then((response) => {
+                                console.log(response.data);
+                            });
                             this.info_no = 1;
                             this.user_details = response.data.farmer_update;
                             this.admin_success_msg = 'Farmer registration approved!';
@@ -1833,6 +1953,7 @@
                                 this.error_admin = false;
                                 this.admin_success_msg = '';
                             }, 2000);
+                            ax
                         }else{
                             this.admin_error_msg = 'Cannot approve this account!';
                             

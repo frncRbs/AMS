@@ -2,77 +2,75 @@
     include_once('../../includes/header.php');
     // session_start();
 ?>
-<div x-data="farmer_side" x-init="get_services_crops(), initialize_registry(), initialize_farmer_details(), initialize_home_title_details(), initialize_personnel_details();">
+<div x-data="farmer_side" x-init="get_services_crops(), initialize_farmer_details()">
 
     <?php include('show_user_profile_modal.php'); ?>
     <?php include('show_crop_request_form.php'); ?>
     <?php include('show_service_request_form.php'); ?>
-    <!-- <div> -->
-        <div class="sidebar">
+    <div class="sidebar">
             <center>
                 <img src="<?php echo IMAGES; ?>LOGO.png" class="profile_image" alt="">
             </center>
-            <hr style="color: white">
-            <nav class="navDash">
-            <ul>
-                <li><a href="farmer_dash_body.php" style="color: rgba(0, 255, 0, 0.8)"><i class="fas fa-desktop"></i><span>Dashboard</span></a></li>
-                <template x-if="<?php echo $_SESSION["user_role"] == 'Admin' || $_SESSION["user_role"] == 'Personnel'?>">
-                    <li class="dash" style="z-index: 10;">
-                        <a href="#"><i class="fas fa-cogs"></i><span>Features</span></a>
-                        <ul>
-                            <template x-if="<?php echo $_SESSION["user_role"] == 'Personnel'?>">
-                                <li><a type="button" x-on:click="show_farmer_registration_form = true"  style="color: white"><i class="fas fa-user-plus"></i><span>Register Farmer</span></a></li>
-                            </template>
+                <hr style="color: white">
+                <nav class="navDash">
+                <ul>
+                    <li><a href="farmer_dash_body.php" style="color: rgba(0, 255, 0, 0.8)"><i class="fas fa-desktop"></i><span>Dashboard</span></a></li>
+                    <template x-if="<?php echo $_SESSION["user_role"] == 'Admin' || $_SESSION["user_role"] == 'Personnel'?>">
+                        <li class="dash" style="z-index: 10;">
+                            <a href="#"><i class="fas fa-cogs"></i><span>Features</span></a>
+                            <ul>
+                                <template x-if="<?php echo $_SESSION["user_role"] == 'Personnel' || $_SESSION["user_role"] == 'Admin'?>">
+                                    <li><a type="button" x-on:click="show_farmer_registration_form = true"  style="color: white"><i class="fas fa-user-plus"></i><span>Register Farmer</span></a></li>
+                                </template>
 
-                            <template x-if="<?php echo $_SESSION["user_role"] == 'Admin'?>">
-                                <li><a type="button" x-on:click="show_personnel_registration_form = true"  style="color: white"><i class="fas fa-user-plus"></i><span>Register Coordinator</span></a></li>
-                            </template>
-                            
-                            <template x-if="<?php echo $_SESSION["user_role"] == 'Admin'?>">
-                                <li class="dash_two split"><a href="#"><i class="fas fa-plus-square"></i><span>Set Program</span></a>
-                                <ul>
-                                    <li><a type="button" x-on:click="show_crops_form = true" style="color: white"><i class="fas fa-plus-square"></i><span>Crops</span></a></li>
-                                    <li><a type="button" x-on:click="show_services_form = true" style="color: white"><i class="fas fa-plus-square"></i><span>Services</span></a></li>
-                                </ul>
-                            </template>
+                                <template x-if="<?php echo $_SESSION["user_role"] == 'Admin'?>">
+                                    <li><a type="button" x-on:click="show_personnel_registration_form = true"  style="color: white"><i class="fas fa-user-plus"></i><span>Register Coordinator</span></a></li>
+                                </template>
+                                
+                                <template x-if="<?php echo $_SESSION["user_role"] == 'Admin'?>">
+                                    <li class="dash_two split"><a href="#"><i class="fas fa-plus-square"></i><span>Set Program</span></a>
+                                    <ul>
+                                        <li><a type="button" x-on:click="show_crops_form = true" style="color: white"><i class="fas fa-plus-square"></i><span>Crops</span></a></li>
+                                        <li><a type="button" x-on:click="show_services_form = true" style="color: white"><i class="fas fa-plus-square"></i><span>Services</span></a></li>
+                                    </ul>
+                                </template>
+                        </li>
+                        <template x-if="<?php echo $_SESSION["user_role"] == 'Admin'?>">
+                            <li><a type="button" x-on:click="show_manage_personnel_form = true" style="color: white"><i class="fa fa-user-secret"></i><span style="font-size: 16px">Manage Personnels Account</span></a></li>
+                        </template>
+
+                        <template x-if="<?php echo $_SESSION["user_role"] == 'Admin'?>">
+                            <li><a type="button" x-on:click="show_manage_farmer_form = true" style="color: white"><i class="fa fa-users"></i><span style="font-size: 16px">Manage Farmers Account</span></a></li>
+                        </template>
+                    </template>
+                    </ul>
                     </li>
-
-                    <template x-if="<?php echo $_SESSION["user_role"] == 'Admin'?>">
-                        <li><a type="button" x-on:click="show_manage_personnel_form = true" style="color: white"><i class="fa fa-user-secret"></i><span style="font-size: 16px">Manage Personnels Account</span></a></li>
-                    </template>
-
-                    <template x-if="<?php echo $_SESSION["user_role"] == 'Personnel'?>">
-                        <li><a type="button" x-on:click="show_manage_farmer_form = true" style="color: white"><i class="fa fa-users"></i><span style="font-size: 16px">Manage Farmers Account</span></a></li>
-                    </template>
-                </template>
                 </ul>
-                </li>
-            </ul>
-            <hr style="color: white">
+                <hr style="color: white">
+                </nav>
+                <nav class="nav2">
+                <ul>
+                    <li><a type="button" style="color: white" x-on:click="get_current_user_details()"><i class="fas fa-user-circle"></i><span>Profile</span></a></li>
+                    <template x-if="<?php echo $_SESSION["user_role"] == 'Admin'; ?>">
+                        <li class="dropdown">
+                        <a type="button" style="color: white"><i class="fas fa-tools"></i><span>Home Features</span></a>
+                            <ul>
+                                <li><a type="button" x-on:click="show_home_image_form = true" style="color: white"><i class="fas fa-wrench"></i><span style="font-size: 14px">Manage Home Image Carousell</span></a></li>
+                                <li><a type="button" x-on:click="show_home_content_form = true" style="color: white"><i class="fas fa-wrench"></i><span style="font-size: 14px">Manage Home Title Content</span></a></li>
+                            </ul>
+                        </li>
+                    </template>
+                    <template x-if="<?php echo $_SESSION["user_role"] == 'Farmer'; ?>">
+                        <li class="dropdown">
+                            <a type="button" style="color: white"><i class="fas fa-tools"></i><span>Request Services</span></a>
+                            <ul>
+                                <li><a type="button" x-on:click="show_request_crop_form = true" style="color: white"><i class="fas fa-wrench"></i><span style="font-size: 20px">Request Crop</span></a></li>
+                                <li><a type="button" x-on:click="show_request_service_form = true" style="color: white"><i class="fas fa-wrench"></i><span style="font-size: 20px">Request Service</span></a></li>
+                            </ul>
+                        </li>
+                    </template>
+                </ul>
             </nav>
-            <nav class="nav2">
-            <ul>
-                <li><a type="button" style="color: white" x-on:click="get_current_user_details()"><i class="fas fa-user-circle"></i><span>Profile</span></a></li>
-                <template x-if="<?php echo $_SESSION["user_role"] == 'Admin'; ?>">
-                    <li class="dropdown">
-                    <a type="button" style="color: white"><i class="fas fa-tools"></i><span>Home Features</span></a>
-                        <ul>
-                            <li><a type="button" x-on:click="show_home_image_form = true" style="color: white"><i class="fas fa-wrench"></i><span style="font-size: 14px">Manage Home Image Carousell</span></a></li>
-                            <li><a type="button" x-on:click="show_home_content_form = true" style="color: white"><i class="fas fa-wrench"></i><span style="font-size: 14px">Manage Home Title Content</span></a></li>
-                        </ul>
-                    </li>
-                </template>
-                <template x-if="<?php echo $_SESSION["user_role"] == 'Farmer'; ?>">
-                    <li class="dropdown">
-                    <a type="button" style="color: white"><i class="fas fa-tools"></i><span>Request Services</span></a>
-                        <ul>
-                            <li><a type="button" x-on:click="show_request_crop_form = true" style="color: white"><i class="fas fa-wrench"></i><span style="font-size: 18px">Request Crop</span></a></li>
-                            <li><a type="button" x-on:click="show_request_service_form = true" style="color: white"><i class="fas fa-wrench"></i><span style="font-size: 18px">Request Service</span></a></li>
-                        </ul>
-                    </li>
-                </template>
-            </ul>
-        </nav>
         </div>
         
         <!-- Success Update Prompt Personnel/Farmer -->
@@ -91,6 +89,26 @@
             </div>
         </div>
 
+        <!-- Deactivate Personnel/Farmer Service Request Prompt -->
+        <div class="popupDecline_request" x-show="show_cancel_farmer_request_form" style="display: none">
+            <div class="popup-contentDecline_request">
+                <div class="popup-child1" style="margin-bottom: 5px; display: flex; flex-direction: column">
+                    <div>
+                        <h2 style="font-weight: bolder">Are you sure you want to decline request? <span x-text="f_firstname"></span></h2>
+                    </div>
+                    <hr>
+                    <div style="display: flex; justify-content: space-around">
+                        <button type="button" class="btn btn-success" style="max-width: 100%" x-on:click="decline_farmer_request">Yes</button>
+                        <button type="button" class="btn btn-danger" style="max-width: 100%" x-on:click="confirm_reset">No</button>
+                    </div>
+                </div>
+                <div class="popup-child2">
+                    <a id="errorClose" class="btn btn-success" style="position:absolute; top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="confirm_reset">X</a>
+                </div>
+            </div>
+        </div>
+
+
         <div class="content">
             <div class="container-fluid">
                 <div class="row-fluid" style="background-color: white; min-height: 600px; padding:10px;">
@@ -100,65 +118,15 @@
                                 <div style="left: 10px; position: absolute">
                                     <h3 style="font-weight: bolder; color: white">WELCOME <?php echo strtoupper($_SESSION["user_firstname"]); ?></h3>
                                 </div> 
-                                <div style="margin: 0 10px 0 0;">
-                                    <button class="btn btn-success">Generate Report</button>
+                                <div style="margin: 0 10px 0 0">
+                                    <button class="btn btn-success" style="color: rgba(0, 0, 0, 0);" disabled>Generate Report</button>
+                                    <button class="btn btn-success" style="color: rgba(0, 0, 0, 0);" disabled>Generate Report</button>
+                                    <button class="btn btn-success" style="color: rgba(0, 0, 0, 0);" disabled>Generate Report</button>
                                 </div>
-                                </div>
-                                <div class="container">
-                                    <div class="row">
-                                        <div class="col-lg-3 col-sm-6">
-                                            <div class="card-box bg-blue">
-                                                <div class="inner">
-                                                    <h3> 13436 </h3>
-                                                    <p> Total Number of Registered Farmers</p>
-                                                </div>
-                                                <div class="icon">
-                                                    <i class="fa fa-users" aria-hidden="true"></i>
-                                                </div>
-                                                <!-- <a href="#" class="card-box-footer">View More <i class="fa fa-arrow-circle-right"></i></a> -->
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3 col-sm-6">
-                                            <div class="card-box bg-green">
-                                                <div class="inner">
-                                                    <h3> 185358 </h3>
-                                                    <p> Total Number for registered Rice Crops</p>
-                                                </div>
-                                                <div class="icon">
-                                                    <i class="fa fa-thumbs-up" aria-hidden="true"></i>
-                                                </div>
-                                                <!-- <a href="#" class="card-box-footer">View More <i class="fa fa-arrow-circle-right"></i></a> -->
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3 col-sm-6">
-                                            <div class="card-box bg-orange">
-                                                <div class="inner">
-                                                    <h3> 5464 </h3>
-                                                    <p> Total Number for registered Corn Crops</p>
-                                                </div>
-                                                <div class="icon">
-                                                    <i class="fas fa-hourglass-start" aria-hidden="true"></i>
-                                                </div>
-                                                <!-- <a href="#" class="card-box-footer">View More <i class="fa fa-arrow-circle-right"></i></a> -->
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3 col-sm-6">
-                                            <div class="card-box bg-red">
-                                                <div class="inner">
-                                                    <h3> 723 </h3>
-                                                    <p> Total Number for registered High Value Crops </p>
-                                                </div>
-                                                <div class="icon">
-                                                    <i class="fas fa-user-minus"></i>
-                                                </div>
-                                                <!-- <a href="#" class="card-box-footer">View More <i class="fa fa-arrow-circle-right"></i></a> -->
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
                                 <hr>
                                 <div style="display: flex; align-self: flex-end">
-                                    <input type="search_farmer" placeholder="Search Request" x-model="search_request" x-on:keyup="search_request_func()" x-on:keyup.backspace="search_request_func()">
+                                    <input type="text" placeholder="Search Request" x-model="search_service" x-on:keyup="search_farmer_func()" x-on:keyup.backspace="search_farmer_func()">
                                 </div>
                                 <br>
                                 <div class="table-responsive">
@@ -178,8 +146,6 @@
                                             <template x-if="c_farmer_requests">
                                                 <template x-for="(row, index) in custom_pagination(c_farmer_requests)">
                                                 <tr>
-                                                    <!-- <th scope="row"><span x-text="(index + 1)"></span></th> -->
-                                                    <!-- <td><span x-text="row.request_id"></span></td> -->
                                                     <td style="min-width: 150px; text-align: center"><span x-text="row.request_type"></span></td>
                                                     <td style="min-width: 150px; text-align: center"><span x-text="get_service_name(row.crop_id, row.service_id)"></span></td>
                                                     <td style="min-width: 150px; text-align: center"><span x-text="row.service_remarks ? row.service_remarks : 'N/A'"></span></td>
@@ -190,7 +156,7 @@
                                                         <template x-if="row.request_status == 1">
                                                             <h4 style="color: green; font-weight: bold">Approved</h4>
                                                         </template>
-                                                        <template x-if="row.request_status == 0">
+                                                        <template x-if="row.request_status == 0 && row.is_cancelled == 0">
                                                             <h4 style="color: red; font-weight: bold">Pending</h4>
                                                         </template>
                                                         <template x-if="row.request_status == 2">
@@ -202,8 +168,8 @@
                                                         <!-- <button class="btn btn-danger" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="delete_request(row.request_id, row.user_id, 'Crop')">Delete</button> -->
                                                     </td>
                                                     <td style="min-width: 150px; text-align: center">
-                                                        <template x-if="row.is_cancelled == 0">
-                                                            <button class="btn btn-danger" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="approve_farmer_request(row)">Cancel</button>
+                                                        <template x-if="row.is_cancelled == 0 && row.request_status == 0">
+                                                            <button class="btn btn-danger" style="top:0; right:0; text-decoration: none; z-index: 1; cursor: pointer; border-radius: 5em" x-on:click="show_cancel_farmer_request_form = true, r_id = row.request_id, r_is_cancelled = row.is_cancelled">Cancel</button>
                                                         </template>
                                                     </td>
                                                 </tr>
@@ -226,6 +192,7 @@
             </div>
         </div>
     </div>
+</div>
     <script>
         document.addEventListener('alpine:init', () => {
         Alpine.data('farmer_side', () => ({
@@ -241,11 +208,11 @@
                 show_services_form: false,
                 show_personnel_requestForm: false,
                 show_farmer_request_form: false,
-                show_decline_request_form: false,
+                show_cancel_farmer_request_form: false,
                 show_decline_account_regform: false,
                 show_approve_account_regform: false,
                 show_deactivate_personnel_account_form: false,
-                show_deactivate_farmer_account_form: false,
+                show_decline_farmer_account_form: false,
                 show_success_update_form: false,
                 show_home_content_form: false,
                 show_home_image_form: false,
@@ -265,12 +232,11 @@
                 registry_records: [],
                 registry_records_backup: [],
                 c_farmer_requests: [],
-                user_details_backup: [],
+                c_farmer_requests_backup: [],
                 personnel_details: [],
                 personnel_details_backup: [],
                 crops: [],
                 services: [],
-                search_request: '',
                 landing_page_msg_error: '',
                 landing_page_msg_success: '',
 
@@ -278,6 +244,8 @@
                 r_request_id: 0,
                 r_user_id: 0,
                 f_user_id: 0,
+                r_id: 0,
+                r_is_cancelled: 0,
 
                 // CURRENT PERSONNEL DETAILS
                 p_id: 0,
@@ -384,7 +352,7 @@
                         $database = new Connection();
                         $db = $database->open();
                         $c_user_id = $_SESSION["login_user_id"];
-                        $sql = $db->prepare("SELECT * FROM requests_registry WHERE user_id = :user_id");
+                        $sql = $db->prepare("SELECT * FROM requests_registry WHERE user_id = :user_id ORDER BY date_requested DESC");
                         $sql->execute(array(':user_id' => $c_user_id));
                         $results = $sql->fetchAll();
                         $database->close();
@@ -481,8 +449,8 @@
                     this.show_services_form = false;
                     this.show_success_registration_form = false;
                     this.show_deactivate_personnel_account_form = false,
-                    this.show_deactivate_farmer_account_form = false,
-                    this.show_decline_request_form = false;
+                    this.show_decline_farmer_account_form = false,
+                    this.show_cancel_farmer_request_form = false;
                     this.show_success_update_form = false;
                 },
 
@@ -948,447 +916,6 @@
                     }); 
                 },
 
-                async decline_request(request_id, user_id, request_type){
-                    this.$refs.declinerequest_button.disabled = true;
-                    const options = {
-                        xsrfHeaderName: 'X-XSRF-TOKEN',
-                        xsrfCookieName: 'XSRF-TOKEN',
-                    };
-                    let data = {
-                        request_id: request_id,
-                        user_id: user_id,
-                        request_type: request_type,
-                        decline_message: this.$refs.decline_message.value,
-                    };
-
-                    let mail_data = {
-                        user_id: user_id,
-                        subject: request_type + ' REQUEST',
-                        message: this.$refs.decline_message.value,
-                    };
-                    this.show_loading_form = true;
-                    await axios.post('../../controller/admin/decline_farmer_request.php', data, options)
-                    .then((response) => {
-                        if(response.data.status == 'true'){
-                            this.farmer_records = response.data.requests;
-                            this.show_decline_request_form = false;
-
-                            axios.post('../../controller/sendmail/sendmail.php', mail_data, options)
-                            .then((mail_response) => {
-                                console.log(mail_response.data);
-                                this.farmer_records = response.data.requests;
-                                setTimeout(() => {
-                                    this.show_loading_form = false;
-                                    this.$refs.declinerequest_button.disabled = false;
-                                    this.$refs.decline_message.value = '';
-                                }, 2000);
-                            });
-                        }
-                        // if(response.data.requests.length == 0){
-
-                        //     window.location = '<?php echo LOCATION; ?>modules/admin/admin_dash_body.php';
-                        // }
-                        // else{
-                        //     this.farmer_records = response.data.requests;
-                        //     this.show_decline_request_form = false;
-                        // }
-                        
-                    }); 
-                    // return crop_name ? crop_name : '';
-                },
-
-                async delete_crops(crop_id){
-                    // console.log(crop_id);
-                    const options = {
-                        xsrfHeaderName: 'X-XSRF-TOKEN',
-                        xsrfCookieName: 'XSRF-TOKEN',
-                    };
-                    let data = {
-                        crop_id: crop_id,
-                    };
-                    await axios.post('../../controller/admin/delete_crop.php', data, options)
-                    .then((response) => {
-                        // console.log(response.data.requests);
-                        if(response.data.status != 'true'){
-                            this.admin_error_msg = response.data.status;
-                            setTimeout(() => {
-                                this.admin_error_msg = '';
-                            }, 2000);
-                        }
-                        else {
-                            if(response.data.crops.length == 0){
-                                window.location = '<?php echo LOCATION; ?>modules/admin/admin_dash_body.php';
-                            }
-                            else{
-                                this.crops = response.data.crops;
-                            }
-                        }
-                        
-                    }); 
-                    // return crop_name ? crop_name : '';
-                },
-
-                async delete_services(service_id){
-                    console.log(service_id);
-                    const options = {
-                        xsrfHeaderName: 'X-XSRF-TOKEN',
-                        xsrfCookieName: 'XSRF-TOKEN',
-                    };
-                    let data = {
-                        service_id: service_id,
-                    };
-                    await axios.post('../../controller/admin/delete_service.php', data, options)
-                    .then((response) => {
-                        console.log(response.data.services);
-                        if(response.data.status != 'true'){
-                            this.admin_error_msg = response.data.status;
-                            setTimeout(() => {
-                                this.admin_error_msg = '';
-                            }, 2000);
-                        }
-                        else {
-                            if(response.data.services.length == 0){
-                                window.location = '<?php echo LOCATION; ?>modules/admin/admin_dash_body.php';
-                            }
-                            else{
-                                this.services = response.data.services;
-                            }
-                        }
-                        
-                    }); 
-                    // return crop_name ? crop_name : '';
-                },
-
-                async search_request_func(){
-                    const preseve_rec = this.registry_records;
-                    this.registry_records = [];
-
-                    if(this.search_request != ''){
-                        for (const key in preseve_rec) {
-                            if (Object.hasOwnProperty.call(preseve_rec, key)) {
-                                const element = preseve_rec[key];
-                                let row_record = (await this.get_farmer_first_name(element.user_id) +' '+ await this.get_farmer_middle_name(element.user_id) +' '+ await this.get_farmer_last_name(element.user_id) +' '+ await this.get_farmer_role_service(element.user_id) +' '+ await this.get_farmer_sex(element.user_id)).toLowerCase();
-                                
-                                if(row_record.includes(this.search_request.toLowerCase())){
-                                    this.registry_records.push(element);
-                                };
-                            }
-                        }
-                    }
-                    else {
-                        this.registry_records = this.registry_records_backup;
-                    }
-                },
-
-                async update_program_status(program_id, status, type){
-                    const options = {
-                        xsrfHeaderName: 'X-XSRF-TOKEN',
-                        xsrfCookieName: 'XSRF-TOKEN',
-                    };
-                    let data = {
-                        program_id: program_id,
-                        status: status,
-                        type: type.toLowerCase(),
-                    };
-
-                    // console.log(program_id, status, type);
-
-                    await axios.post('../../controller/admin/update_program_status.php', data, options)
-                    .then((response) => {
-                        // console.log(response.data);
-                        if(response.data.status == 'true'){
-                            if(type == 'Crops'){
-                                this.crops = response.data.programs;
-                            }
-                            else {
-                                this.services = response.data.programs;
-                            }
-                            // Success Messages
-                        }
-                        else {
-                            // Error Messages
-                        }
-                    }); 
-                },
-
-                async update_farmer_request_status(crop_id, service_id, type){
-                    const options = {
-                        xsrfHeaderName: 'X-XSRF-TOKEN',
-                        xsrfCookieName: 'XSRF-TOKEN',
-                    };
-                    let data = {
-                        crop_id: crop_id,
-                        service_id: service_id,
-                        type: type.toLowerCase(),
-                    };
-
-                    // console.log(program_id, status, type);
-                    
-                    await axios.post('../../controller/admin/update_farmer_request_status.php', data, options)
-                    .then((response) => {
-                        // console.log(response.data);
-                        if(response.data.status == 'true'){
-                            if(type == 'Crops'){
-                                this.crops = response.data.programs;
-                            }
-                            else{
-                                this.services = response.data.programs;
-                            }
-                            // Success Messages
-                        }
-                        else {
-                            // Error Messages
-                        }
-                    }); 
-                }, 
-
-                async update_home_title_form(){
-                    this.$refs.submit_home_title_button.disabled = false;
-                    if(this.$refs.title11.value && this.$refs.title12.value && this.$refs.title21.value && this.$refs.title22.value && this.$refs.title31.value && this.$refs.title31.value){
-                        const options = {
-                            xsrfHeaderName: 'X-XSRF-TOKEN',
-                            xsrfCookieName: 'XSRF-TOKEN',
-                        }
-                        let data = {
-                            content11: this.$refs.title11.value,
-                            content12: this.$refs.title12.value,
-                            content21: this.$refs.title21.value,
-                            content22: this.$refs.title22.value,
-                            content31: this.$refs.title31.value,
-                            content32: this.$refs.title32.value,
-                            id: this.$refs.title_id.value,
-                        };
-
-                        await axios.post('../../controller/admin/update_home_title.php', data, options)
-                        .then((response) => {
-                            // console.log(response.data);
-                            this.$refs.submit_home_title_button.disabled = true;
-
-                            if(response.data.status == 'false') {
-                                this.error_admin = true;
-                                this.admin_error_msg = 'Something went wrong cannot update title!';
-                                setTimeout(() => {
-                                    this.error_admin = false;
-                                    this.admin_error_msg = '';
-                                }, 2000);
-                            }
-                            else if(response.data.status == 'true'){
-                                this.admin_success_msg = 'Titles successfully updated!';
-                                this.home_title_records = response.data.title;
-                                setTimeout(() => {
-                                    this.$refs.submit_home_title_button.disabled = false;
-                                    this.error_admin = false;
-                                    this.admin_success_msg = '';
-                                }, 2000);
-                            }
-                        },
-                        (error) => {
-                            console.log(error);
-                        });
-                    }
-                    else{
-                        this.error_admin = true;
-                        this.$refs.submit_home_title_button.disabled = false;
-                        this.admin_error_msg = 'Please fill in all required fields!';
-
-                        setTimeout(() => {
-                            this.error_admin = false;
-                            this.admin_error_msg = '';
-                        }, 2000);
-                    }
-                },
-
-                async update_personnel_details(){
-                    if(this.p_role_s && this.p_fn && this.p_mn && this.p_ln && this.p_c_no && this.p_b_date && this.p_b_place && this.p_seggs && this.p_rel && this.p_a_street && this.p_a_barangay && this.p_a_municipality && this.p_user_n && this.p_role){
-                        const options = {
-                        xsrfHeaderName: 'X-XSRF-TOKEN',
-                        xsrfCookieName: 'XSRF-TOKEN',
-                        };
-                        let data = {
-                            first_name: this.p_fn,
-                            middle_name: this.p_mn,
-                            last_name: this.p_ln,
-                            role_service: this.p_role_s,
-                            birth_date: this.p_b_date,
-                            civil_status: this.p_c_status,
-                            sex: this.p_seggs,
-                            contact_no: this.p_c_no,
-                            religion: this.p_rel,
-                            birth_place: this.p_b_place,
-                            address_street: this.p_a_street,
-                            address_barangay: this.p_a_barangay,
-                            address_municipality: this.p_a_municipality,
-                            username: this.p_user_n,
-                            role: this.p_role,
-                            id: this.p_id,
-                            // p_secret_phrase: true,
-                        };
-                        // this.admin_error_msg = 'Pasok sa database!';
-                        await axios.post('../../controller/admin/update_personnel_details.php', data, options)
-                        .then((response) => {
-                            console.log(response.data);
-                            if(response.data.status == 'true') {
-                                this.info_no = 1;
-                                this.personnel_details = response.data.personnel_update;
-                                this.update_personnel_registration_form = false;
-                                this.show_success_update_form = true;
-                            }
-                            else if(response.data.status == 2){
-                                //error msg
-                                this.admin_error_msg = 'Contact No. should start from 09 and eleven digit max!';
-                                setTimeout(() => {
-                                    this.error_admin = false;
-                                    this.admin_error_msg = '';
-                                }, 2000);
-                            }
-                            else if(response.data.status == 3){
-                                //error msg
-                                this.error_admin = true;
-                                this.admin_error_msg = 'Invalid email format!';
-                                setTimeout(() => {
-                                    this.error_admin = false;
-                                    this.admin_error_msg = '';
-                                }, 2000);
-                            }
-                        });
-                    }
-                    else{
-                        this.error_admin = true;
-                        this.$refs.submit_home_title_button.disabled = false;
-                        this.admin_error_msg = 'Please fill in all required fields!';
-
-                        setTimeout(() => {
-                            this.error_admin = false;
-                            this.admin_error_msg = '';
-                        }, 2000);
-                    }
-                },
-
-                async deactivate_personnel_account(){
-                    const options = {
-                        xsrfHeaderName: 'X-XSRF-TOKEN',
-                        xsrfCookieName: 'XSRF-TOKEN',
-                    };
-                    let data = {
-                        id: this.p_id,
-                        is_active: this.p_is_active,
-                    };
-                    await axios.post('../../controller/admin/deactivate_personnel_account.php', data, options)
-                    .then((response) => {
-                        // console.log(response.data);
-                        if(response.data.status = 'true'){
-                            this.info_no = 1;
-                            this.personnel_details = response.data.personnel_update;
-                            this.show_deactivate_personnel_account_form = false;
-
-                            this.admin_success_msg = 'Personnel account successfully deactivated!';
-                            setTimeout(() => {
-                                this.error_admin = false;
-                                this.admin_success_msg = '';
-                            }, 2000);
-                        }else{
-                            this.admin_error_msg = 'Cannot deactivate the account!';
-                            setTimeout(() => {
-                                this.error_admin = false;
-                                this.admin_error_msg = '';
-                            }, 2000);
-                        }
-                    });
-                },
-
-                async deactivate_farmer_account(){
-                    const options = {
-                        xsrfHeaderName: 'X-XSRF-TOKEN',
-                        xsrfCookieName: 'XSRF-TOKEN',
-                    };
-                    let data = {
-                        id: this.f_id,
-                        is_active: this.f_is_active,
-                    };
-                    await axios.post('../../controller/admin/deactivate_farmer_account.php', data, options)
-                    .then((response) => {
-                        // console.log(response.data);
-                        if(response.data.status = 'true'){
-                            this.info_no = 1;
-                            this.c_farmer_requests = response.data.farmer_update;
-                            this.show_deactivate_farmer_account_form = false;
-
-                            this.admin_success_msg = 'Farmer registration successfully declined!';
-                            setTimeout(() => {
-                                this.error_admin = false;
-                                this.admin_success_msg = '';
-                            }, 2000);
-                        }else{
-                            this.admin_error_msg = 'Cannot decline the account!';
-                            setTimeout(() => {
-                                this.error_admin = false;
-                                this.admin_error_msg = '';
-                            }, 2000);
-                        }
-                    }); 
-                },
-
-                async activate_personnel_account(){
-                    const options = {
-                        xsrfHeaderName: 'X-XSRF-TOKEN',
-                        xsrfCookieName: 'XSRF-TOKEN',
-                    };
-                    let data = {
-                        id: this.p_id,
-                        is_active: this.p_is_active,
-                    };
-                    await axios.post('../../controller/admin/activate_personnel_account.php', data, options)
-                    .then((response) => {
-                        // console.log(response.data);
-                        if(response.data.status = 'true'){
-                            this.info_no = 1;
-                            this.personnel_details = response.data.personnel_update;
-
-                            this.admin_success_msg = 'Account successfully activated!';
-                            setTimeout(() => {
-                                this.error_admin = false;
-                                this.admin_success_msg = '';
-                            }, 2000);
-                        }else{
-                            this.admin_error_msg = 'Cannot activate the account!';
-                            setTimeout(() => {
-                                this.error_admin = false;
-                                this.admin_error_msg = '';
-                            }, 2000);
-                        }
-                    }); 
-                },
-
-                async activate_farmer_account(){
-                    const options = {
-                        xsrfHeaderName: 'X-XSRF-TOKEN',
-                        xsrfCookieName: 'XSRF-TOKEN',
-                    };
-                    let data = {
-                        id: this.f_id,
-                        is_active: this.f_is_active,
-                    };
-                    await axios.post('../../controller/admin/activate_farmer_account.php', data, options)
-                    .then((response) => {
-                        // console.log(response.data);
-                        if(response.data.status = 'true'){
-                            this.info_no = 1;
-                            this.c_farmer_requests = response.data.farmer_update;
-                            this.admin_success_msg = 'Account successfully activated!';
-                            setTimeout(() => {
-                                this.error_admin = false;
-                                this.admin_success_msg = '';
-                            }, 2000);
-                        }else{
-                            this.admin_error_msg = 'Cannot activate the account!';
-                            setTimeout(() => {
-                                this.error_admin = false;
-                                this.admin_error_msg = '';
-                            }, 2000);
-                        }
-                    }); 
-                },
-
                 async get_current_user_details(){
                     this.show_user_profile_form = true;
                     const options = {
@@ -1511,127 +1038,6 @@
                     }
                 },
 
-                async update_farmer_details(){
-                    
-                    if(this.f_firstname && this.f_middlename && this.f_lastname && this.f_contact && this.f_role_s && this.f_birth_d && this.f_birth_p && this.f_sex && this.f_religion && this.f_address_s && this.f_address_b && this.f_address_m && this.f_address_z && this.f_guardian_fn && this.f_guardian_c && this.f_farm_t && this.f_farm_b && this.f_farm_m && this.f_farm_a && this.f_user_n && this.f_civil_s){
-                        const options = {
-                        xsrfHeaderName: 'X-XSRF-TOKEN',
-                        xsrfCookieName: 'XSRF-TOKEN',
-                        };
-                        let data = {
-                            first_name: this.f_firstname,
-                            middle_name: this.f_middlename,
-                            last_name: this.f_lastname,
-                            role_service: this.f_role_s,
-                            birth_date: this.f_birth_d,
-                            civil_status: this.f_civil_s,
-                            sex: this.f_sex,
-                            contact_no: this.f_contact,
-                            religion: this.f_religion,
-                            birth_place: this.f_birth_p,
-                            address_street: this.f_address_s,
-                            address_barangay: this.f_address_b,
-                            address_municipality: this.f_address_m,
-                            address_zip: this.f_address_z,
-                            guardian_fname: this.f_guardian_fn,
-                            guardian_contact: this.f_guardian_c,
-                            farm_type: this.f_farm_t,
-                            farm_barangay: this.f_farm_b,
-                            farm_municipality: this.f_farm_m, 
-                            farm_area: this.f_farm_a, 
-                            username: this.f_user_n,
-                            // secret_phrase: this.f_secret_p,
-                            id: this.f_id,
-                        };
-                        
-                        await axios.post('../../controller/admin/update_farmer_details.php', data, options)
-                        .then((response) => {
-                            console.log(response.data);
-                            if(response.data.status == 'true') {
-                                this.info_no = 1;
-                                this.c_farmer_requests = response.data.farmer_update;
-                                this.update_farmer_registration_form = false;
-                                this.show_success_update_form = true;
-                            }
-                            else if(response.data.status == 2){
-                                //error msg
-                                this.admin_error_msg = 'Contact No. should start from 09 and eleven digit max!';
-
-                                setTimeout(() => {
-                                    this.error_admin = false;
-                                    this.admin_error_msg = '';
-                                }, 2000);
-                            }
-                            else if(response.data.status == 3){
-                                //error msg
-                                this.error_admin = true;
-                                this.admin_error_msg = 'Invalid email format!';
-                                setTimeout(() => {
-                                    this.error_admin = false;
-                                    this.admin_error_msg = '';
-                                }, 2000);
-                            }
-                        });
-                    }
-                    else{
-                        // console.log(response.data);
-                        this.error_admin = true;
-                        this.admin_error_msg = 'Please fill in all required fields!';
-
-                        setTimeout(() => {
-                            this.error_admin = false;
-                            this.admin_error_msg = '';
-                        }, 2000);
-                    }
-                },
-
-                async approve_farmer_account(){
-                    const options = {
-                        xsrfHeaderName: 'X-XSRF-TOKEN',
-                        xsrfCookieName: 'XSRF-TOKEN',
-                    };
-                    let data = {
-                        id: this.f_id,
-                        status: this.f_status,
-                    };
-                    await axios.post('../../controller/admin/approve_farmer_registration.php', data, options)
-                    .then((response) => {
-                        // console.log(response.data);
-                        if(response.data.status = 'true'){
-                            this.info_no = 1;
-                            this.c_farmer_requests = response.data.farmer_update;
-                            this.admin_success_msg = 'Farmer registration approved!';
-
-                            setTimeout(() => {
-                                this.error_admin = false;
-                                this.admin_success_msg = '';
-                            }, 2000);
-                        }else{
-                            this.admin_error_msg = 'Cannot approve this account!';
-                            
-                            setTimeout(() => {
-                                this.error_admin = false;
-                                this.admin_error_msg = '';
-                            }, 2000);
-                        }
-                    }); 
-                },
-
-                async generate_farmer_request_report(){
-                    const options = {
-                        xsrfHeaderName: 'X-XSRF-TOKEN',
-                        xsrfCookieName: 'XSRF-TOKEN',
-                    };
-                    let data = {
-                        user_id: this.f_user_id,
-                    };
-                    await axios.post('../../controller/exports/export_farmer_request.php', data, options)
-                    .then((response) => {
-                        console.log(response.data);
-                        // location.reload();
-                    }); 
-                },
-
                 async request_service(){
                     
                     if(this.$refs.service_id.value && this.$refs.service_remarks.value){
@@ -1654,7 +1060,8 @@
                             // console.log(response.data)
                             this.landing_page_msg_success = 'Service Successfully Requested!';
                             setTimeout(() => {
-                                this.landing_page_msg_error = '';
+                                this.landing_page_msg_success = '';
+                                this.c_farmer_requests = response.data.request_update;
                                 this.show_request_service_form = false;
                                 this.show_services_form = true;
                                 // this.user_id = 0;
@@ -1671,7 +1078,6 @@
                 },
 
                 async request_crop(){
-                    
                     if(this.$refs.r_crop_id.value && this.$refs.r_crop_kilo.value){
                         this.$refs.request_crop_button.disabled = true;
                         const options = {
@@ -1691,8 +1097,10 @@
                             this.$refs.request_crop_button.disabled = false;
                             // console.log(response.data)
                             this.landing_page_msg_success = 'Crops Successfully Requested!';
+                            
                             setTimeout(() => {
-                                this.landing_page_msg_error = '';
+                                this.landing_page_msg_success = '';
+                                this.c_farmer_requests = response.data.request_update;
                                 this.show_request_crop_form = false;
                                 this.show_services_form = true;
                                 // this.user_id = 0;
@@ -1709,10 +1117,64 @@
                     }
                 },
 
+                search_service: '',
+
+                async search_farmer_func(){
+                    const preseve_req = this.c_farmer_requests;
+                    this.c_farmer_requests = [];
+                    
+                    if(this.search_service != ''){
+                        for (const key in preseve_req) {
+                            if (Object.hasOwnProperty.call(preseve_req, key)) {
+                                const element = preseve_req[key];
+                                let row_record = (element.request_type +' '+ (element.crops_kilo ? element.crops_kilo : '') +' '+ (element.service_remarks ? element.service_remarks : '')).toLowerCase();
+                                if(row_record.includes(this.search_service.toLowerCase())){
+                                    this.c_farmer_requests.push(element);
+                                };
+                            }
+                        }
+                    }
+                    else {
+                        this.c_farmer_requests = this.c_farmer_requests_backup;
+                    }
+                },
+
+                async decline_farmer_request(){
+                    const options = {
+                        xsrfHeaderName: 'X-XSRF-TOKEN',
+                        xsrfCookieName: 'XSRF-TOKEN',
+                    };
+                    let data = {
+                        request_id: this.r_id,
+                        is_cancelled: this.r_is_cancelled,
+                    };
+                    await axios.post('../../controller/farmer/decline_farmer_request.php', data, options)
+                    .then((response) => {
+                        // console.log(response.data);
+                        if(response.data.status = 'true'){
+                            this.info_no = 1;
+                            this.c_farmer_requests = response.data.request_update;
+                            this.show_cancel_farmer_request_form = false;
+
+                            this.admin_success_msg = 'Request successfully cancelled!';
+                            setTimeout(() => {
+                                this.error_admin = false;
+                                this.admin_success_msg = '';
+                            }, 2000);
+                        }else{
+                            this.admin_error_msg = 'Cannot cancel request!';
+                            setTimeout(() => {
+                                this.error_admin = false;
+                                this.admin_error_msg = '';
+                            }, 2000);
+                        }
+                    }); 
+                },
+
                 // Pagination Javascript
                 'search': "",
                 'pageNumber': 0,
-                'size': 5,
+                'size': 10,
                 'total': "",
 
                 custom_pagination(paginate_records) {
@@ -1722,29 +1184,6 @@
                     // this.total = this.services.length;
                     this.total = paginate_records.length;
                     return this.c_farmer_requests.slice(start, end);
-                },
-
-                search_program: '',
-
-                async search_program_func(){
-                    const preseve_rec = this.farmer_records;
-                    this.farmer_records = [];
-
-                    if(this.search_program != ''){
-                        for (const key in preseve_rec) {
-                            if (Object.hasOwnProperty.call(preseve_rec, key)) {
-                                const element = preseve_rec[key];
-                                let row_record = ((element.request_type)).toLowerCase();
-                                
-                                if(row_record.includes(this.search_program.toLowerCase())){
-                                    this.farmer_records.push(element);
-                                };
-                            }
-                        }
-                    }
-                    else {
-                        this.farmer_records = this.farmer_records_backup;
-                    }
                 },
 
                 //Create array of all pages (for loop to display page numbers)

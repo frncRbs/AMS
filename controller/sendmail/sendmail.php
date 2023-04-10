@@ -21,9 +21,10 @@
     $sql->execute(array(':id' => $obj['user_id']));
     $farmer = $sql->fetch();
 
+    $message = $obj['message'];
     $request_email = $farmer['username'];
     $mail_subject= $obj['subject'];
-    $mail_message = '<b> Hello '.$farmer['first_name'].',</b> <br/><br/>'.$obj['message'].'<br/><br/> Regards, <br/> <b>Ayala District Agriculture Office</b>' ;
+    $mail_message = '<b> Hello '.$farmer['first_name'].',</b> <br/><br/>'.$message.'<br/><br/> Regards, <br/> <b>Ayala District Agriculture Office</b>' ;
 
     $mail = new PHPMailer(true);
 
@@ -43,6 +44,8 @@
     $mail->Subject = $mail_subject;
     $mail->AddEmbeddedImage('../../assets/images/LOGO.png', 'ADAO_image',);
     $mail->Body = '<img src="cid:ADAO_image">'.$mail_message;
+    
+    $database->close();
     
     if($mail->send()){
         echo 'true';

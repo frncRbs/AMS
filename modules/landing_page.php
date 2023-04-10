@@ -1800,58 +1800,11 @@
             </div>
         </div>
         <hr id="contact" style="width: 1000px; background: green; border: 2px solid green; border-radius: 1em; margin-top: 80px">
-        <div class="contact" id="#">
-            <div class="contact-form">
-                <div class="container">
-                <form>
-                <div class="row">
-                <div class="col-lg-4 col-md-4 col-sm-12">
-                    <h1 style="color: green;" >Get in Touch</h1> 
-                </div>
-                <div class="col-lg-8 col-md-8 col-sm-12 right">
-                    <div class="form-group">
-                        <input type="text" class="form-control form-control-lg" placeholder="Your Name" name="">
-                    </div>
-                    <div class="form-group">
-                        <input type="email" class="form-control form-control-lg" placeholder="YourEmail@email.com" name="email">
-                    </div>
-                    <div class="form-group">
-                        <textarea class="form-control form-control-lg">
-                        </textarea>
-                    </div>
-                    <input type="submit" class="btn4" value="Send" name="">
-                </div>
-                </div>
-                </form>
-                </div>
-            </div>
-        </div>
     </section>
     <footer>
-        <main>
-            <div class="box1">
-                <h3>LOGO</h3>
-                <p>Lorem Ipsum.</p>
-                <p>Lorem Ipsum.</p>
-                <p>Lorem Ipsum.</p>
-            </div>
-            <div class="box2">
-                <h3>ABOUT</h3>
-                <p>Lorem Ipsum.</p>
-                <p>Lorem Ipsum.</p>
-                <p>Lorem Ipsum.</p>
-            </div>
-            <div class="box3">
-                <h3>QUICK LINKS</h3>
-                <p>Lorem Ipsum.</p>
-                <p>Lorem Ipsum.</p>
-                <p>Lorem Ipsum.</p>
-            </div>
-            <div class="box4">
-                <h4>RiseTech</h4>
-            </div>
+        <div class="box4">
+            <h4 style="font-weight: bold; color white">RiseTech</h4>
         </div>
-        </main>
     </footer>
 
     <script>

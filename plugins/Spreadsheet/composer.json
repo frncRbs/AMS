@@ -1,0 +1,17 @@
+{
+    "name": "france/spreadsheet",
+    "autoload": {
+        "psr-4": {
+            "France\\Spreadsheet\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "France Rebollos",
+            "email": "frncerebollos@gmail.com"
+        }
+    ],
+    "require": {
+        "phpoffice/phpspreadsheet": "^1.28"
+    }
+}
